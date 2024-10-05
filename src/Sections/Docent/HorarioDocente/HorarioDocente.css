@@ -1,0 +1,443 @@
+.container-horario-docente {
+  padding: 20px;
+  max-width: 100%;
+  background-color: #f5f5f5;
+}
+
+.container-horario-docente h2 {
+  text-align: center;
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.container-horario-docente table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* Permitir scroll horizontal */
+}
+
+.container-horario-docente th,
+.container-horario-docente td {
+  padding: 15px;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.container-horario-docente th {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.container-horario-docente tr:hover {
+  background-color: #f2f2f2;
+}
+
+
+.loading-message-horario-docente,
+.error-message-horario-docente {
+  color: #ff0000;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.modal-horarios-horario-docente,
+.modal-add-alumno-horario-docente {
+  max-width: 400px;
+  width: 100%;
+  margin: 40px auto;
+  background-image: linear-gradient(rgb(11, 99, 48), rgb(0, 0, 0));
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.363);
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.modal-overlay-horarios-horario-docente {
+  position: fixed;
+  top: 10%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.404);
+}
+
+.modal-overlay-horarios-horario-docente .h2 {
+  color: white;
+}
+
+.modal-add-alumno-docente-horario-docente {
+  max-width: 500px;
+  width: 90%;
+  margin: 40px auto;
+  background-image: linear-gradient(rgb(11, 99, 48), rgb(0, 0, 0));
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.363);
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.modal-overlay-horarios-docente-horario-docente {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.404);
+}
+
+.modal-overlay-horarios-docente-horario-docente h2 {
+  color: white;
+}
+
+.modal-content-horario-docente {
+  padding: 20px;
+}
+
+.alumnos-table-horario-docente {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.alumnos-table-horario-docente th,
+.alumnos-table-horario-docente td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.alumnos-table-horario-docente th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.add-alumno-form-horario-docente {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-alumno-form-horario-docente label {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #fff;
+}
+
+.add-alumno-form-horario-docente input {
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.start-button-horario-docente {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-button-horario-docente:hover {
+  background-color: #45a049;
+}
+
+.attendance-form-horario-docente {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+
+.attendance-form-horario-docente .header {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+  align-items: center;
+}
+
+.student-photo-aws-horario-docente {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 50%;
+}
+
+.student-name-horario-docente {
+  margin-left: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.student-details-horario-docente {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.attendance-options-horario-docente {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.attendance-options-horario-docente label {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.attendance-options-horario-docente input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  margin-right: 10px;
+  position: relative;
+}
+
+.attendance-options-horario-docente input[type="radio"]:checked {
+  background-color: blue;
+  border-color: blue;
+}
+
+.attendance-options-horario-docente input[type="radio"]:checked::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.attendance-buttons-horario-docente {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.attendance-buttons-horario-docente button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.attendance-buttons-horario-docente button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.attendance-buttons-horario-docente .save-button-horario-docente {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.attendance-buttons-horario-docente .save-button-horario-docente:hover {
+  background-color: #45a049;
+}
+
+.attendance-buttons-horario-docente button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.attendance-buttons-horario-docente button:not([disabled]) {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.attendance-buttons-horario-docente button:not([disabled]):hover {
+  background-color: #45a049;
+}
+
+.attendance-form-horario-docente input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+}
+
+.attendance-form-horario-docente input[type="text"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Estilo responsive adaptado desde 1000px hasta 120px */
+@media (max-width: 1000px) {
+  .container-horario-docente th,
+  .container-horario-docente td {
+    font-size: 12px;
+    padding: 10px;
+  }
+  
+  .modal-horarios-horario-docente,
+  .modal-add-alumno-horario-docente,
+  .modal-add-alumno-docente-horario-docente {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-horario-docente th,
+  .container-horario-docente td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .modal-horarios-horario-docente,
+  .modal-add-alumno-horario-docente,
+  .modal-add-alumno-docente-horario-docente {
+    width: 90%;
+  }
+
+  .alumnos-table-horario-docente th,
+  .alumnos-table-horario-docente td {
+    font-size: 12px;
+  }
+}
+
+/* Cambios en pantallas pequeñas: usar tarjetas en vez de tabla */
+@media (max-width: 600px) {
+  .container-horario-docente table,
+  .container-horario-docente thead,
+  .container-horario-docente tbody,
+  .container-horario-docente th,
+  .container-horario-docente td,
+  .container-horario-docente tr {
+    display: block;
+  }
+
+  .container-horario-docente tr {
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .container-horario-docente th {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .container-horario-docente td {
+    padding: 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+  }
+
+  /* Diseño de las tarjetas */
+  .container-horario-docente td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #007bff;
+  }
+
+  .container-horario-docente td {
+    padding-left: 120px; /* Para alinear el contenido con el label */
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .container-horario-docente th,
+  .container-horario-docente td {
+    text-align: left;
+    padding: 12px;
+    display: block;
+  }
+
+  .container-horario-docente td:last-child {
+    border-bottom: 0;
+    text-align: center;
+  }
+
+  /* Ajustar los botones */
+  .save-button, .edit-button {
+    width: 45%;
+    margin: 5px 2.5%;
+    font-size: 14px;
+  }
+}
+
+/* Estilos adicionales para mejorar el diseño */
+.container-horario-docente tr:hover {
+  background-color: #f9f9f9;
+}
+
+.save-button, .edit-button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover, .edit-button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 320px) {
+  .container-horario-docente th,
+  .container-horario-docente td {
+    font-size: 8px;
+    padding: 4px;
+  }
+
+  .modal-horarios-horario-docente,
+  .modal-add-alumno-horario-docente,
+  .modal-add-alumno-docente-horario-docente {
+    width: 100%;
+  }
+
+  .alumnos-table-horario-docente th,
+  .alumnos-table-horario-docente td {
+    font-size: 8px;
+  }
+}

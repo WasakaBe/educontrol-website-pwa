@@ -1,0 +1,180 @@
+/* Estilo para el botón flotante de ayuda */
+.floating-help-button {
+ position: fixed;
+ bottom: 20px;
+ right: 20px;
+ background-color: #007bff;
+ color: white;
+ border: none;
+ border-radius: 50%;
+ width: 60px;
+ height: 60px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 24px;
+ cursor: pointer;
+ box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.856);
+ z-index: 1000;
+}
+
+.floating-help-button:hover {
+ background-color: #052b53;
+}
+
+/* Estilo para el contenido del modal de ayuda */
+.help-modal-content {
+ position: relative;
+ padding: 20px;
+ background-color: rgb(237, 248, 242);
+ border-radius: 8px;
+}
+
+.help-modal-content h2 {
+ margin-bottom: 20px;
+ font-size: 24px;
+ font-weight: bold;
+}
+
+.help-modal-content p {
+ margin-bottom: 20px;
+ font-size: 16px;
+ color: black;
+}
+
+.help-modal-content ul {
+ margin-bottom: 20px;
+ padding-left: 20px;
+}
+
+.help-modal-content li {
+ font-size: 16px;
+ margin-bottom: 10px;
+}
+
+.help-modal-content a {
+ display: inline-block;
+ margin-top: 10px;
+ padding: 10px 20px;
+ background-color: #007bff;
+ color: white;
+ text-decoration: none;
+ border-radius: 4px;
+ transition: background-color 0.3s;
+}
+
+.help-modal-content a:hover {
+ background-color: #0056b3;
+}
+
+/* Estilo para el botón de cierre del modal */
+.help-modal-close {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ background: none;
+ border: none;
+ font-size: 20px;
+ cursor: pointer;
+}
+
+.help-modal-close:hover {
+ color: red;
+ font-size: 40px;
+ transition: 2s all ease;
+}
+
+/* Responsivo desde 1000px hasta 100px */
+@media (max-width: 1000px) {
+ .floating-help-button {
+   width: 50px;
+   height: 50px;
+   font-size: 20px;
+ }
+
+ .help-modal-content {
+   padding: 15px;
+ }
+
+ .help-modal-content h2 {
+   font-size: 22px;
+ }
+
+ .help-modal-content p,
+ .help-modal-content li {
+   font-size: 14px;
+ }
+
+ .help-modal-content a {
+   padding: 8px 16px;
+   font-size: 14px;
+ }
+
+ .help-modal-close {
+   font-size: 18px;
+ }
+}
+
+@media (max-width: 600px) {
+ .floating-help-button {
+   width: 40px;
+   height: 40px;
+   font-size: 18px;
+   bottom: 10px;
+   right: 10px;
+ }
+
+ .help-modal-content {
+   padding: 10px;
+ }
+
+ .help-modal-content h2 {
+   font-size: 20px;
+ }
+
+ .help-modal-content p,
+ .help-modal-content li {
+   font-size: 12px;
+ }
+
+ .help-modal-content a {
+   padding: 6px 12px;
+   font-size: 12px;
+ }
+
+ .help-modal-close {
+   font-size: 16px;
+ }
+}
+
+@media (max-width: 320px) {
+ .floating-help-button {
+   width: 35px;
+   height: 35px;
+   font-size: 16px;
+   bottom: 5px;
+   right: 5px;
+ }
+
+ .help-modal-content {
+   padding: 5px;
+ }
+
+ .help-modal-content h2 {
+   font-size: 18px;
+ }
+
+ .help-modal-content p,
+ .help-modal-content li {
+   font-size: 10px;
+ }
+
+ .help-modal-content a {
+   padding: 5px 10px;
+   font-size: 10px;
+ }
+
+ .help-modal-close {
+   font-size: 14px;
+ }
+}

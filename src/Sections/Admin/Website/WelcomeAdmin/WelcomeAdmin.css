@@ -1,0 +1,168 @@
+.welcome-admin-container {
+ width: 100%;
+ padding: 20px;
+ height: 100vh;
+ box-sizing: border-box;
+}
+
+.welcome-admin-table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 20px;
+ font-size: 16px;
+}
+
+.welcome-admin-table th, 
+.welcome-admin-table td {
+ border: 1px solid #ddd;
+ padding: 8px;
+ text-align: left;
+}
+
+.welcome-admin-table th {
+ background-color: #f2f2f2;
+ color: black;
+}
+
+.welcome-admin-table tr:hover {
+ background-color: #f1f1f1;
+}
+
+.welcome-admin-image {
+ max-width: 100px;
+ display: block;
+}
+
+.add-welcome-admin-form {
+ margin-bottom: 20px;
+}
+
+.add-welcome-admin-form input {
+ display: block;
+ margin-bottom: 10px;
+ width: 100%;
+ padding: 8px;
+ box-sizing: border-box;
+}
+
+.add-welcome-admin-form button {
+ display: block;
+ padding: 10px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ cursor: pointer;
+ width: 100%;
+}
+
+.add-welcome-admin-form button:hover {
+ background-color: #45a049;
+}
+
+.edit-button {
+ border: none;
+ padding: 10px 20px;
+ background-color: rgb(38, 104, 217);
+ color: white;
+ border-radius: 10px;
+ cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+ .welcome-admin-table {
+   font-size: 14px;
+ }
+
+ .welcome-admin-image {
+   max-width: 80px;
+ }
+
+ .edit-button {
+   padding: 8px 16px;
+   font-size: 14px;
+ }
+}
+
+@media (max-width: 768px) {
+ .welcome-admin-table, 
+ thead, 
+ tbody, 
+ th, 
+ td, 
+ tr {
+   display: block;
+ }
+
+ .welcome-admin-table {
+   overflow-x: auto;
+   white-space: nowrap;
+   border: none;
+ }
+
+ .welcome-admin-table th {
+   display: none;
+ }
+
+ .welcome-admin-table td {
+   display: flex;
+   justify-content: space-between;
+   padding: 10px;
+   border: none;
+   border-bottom: 1px solid #ddd;
+ }
+
+ .welcome-admin-table td::before {
+   content: attr(data-label);
+   font-weight: bold;
+   width: 50%;
+   display: inline-block;
+ }
+
+ .welcome-admin-image {
+   max-width: 60px;
+ }
+}
+
+@media (max-width: 480px) {
+ .welcome-admin-container {
+   padding: 10px;
+ }
+
+ .welcome-admin-image {
+   max-width: 50px;
+ }
+
+ .welcome-admin-table td {
+   font-size: 12px;
+ }
+
+ .edit-button {
+   padding: 6px 12px;
+   font-size: 12px;
+ }
+
+ .add-welcome-admin-form input {
+   padding: 6px;
+   margin-bottom: 8px;
+ }
+
+ .add-welcome-admin-form button {
+   padding: 8px;
+ }
+}
+
+@media (max-width: 320px) {
+ .welcome-admin-table td {
+   font-size: 10px;
+   padding: 6px;
+ }
+
+ .welcome-admin-image {
+   max-width: 40px;
+ }
+
+ .edit-button {
+   padding: 4px 8px;
+   font-size: 10px;
+ }
+}

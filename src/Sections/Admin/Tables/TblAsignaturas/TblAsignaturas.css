@@ -1,0 +1,192 @@
+/* TblAsignaturas.css */
+.container-asignaturas {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  height: 100vh;
+}
+
+.container-asignaturas h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.container-asignaturas .insert-section {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-asignaturas .insert-section input {
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.container-asignaturas .button-insert {
+  background-color: #004d00;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.container-asignaturas table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.container-asignaturas thead {
+  background-color: #004d00;
+  color: #fff;
+}
+
+.container-asignaturas th, .container-asignaturas td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.container-asignaturas tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.container-asignaturas tbody tr:hover {
+  background-color: #e0e0e0;
+}
+
+.button-update {
+  background-color: #004d00;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button-notification {
+  background-color: #ffcc00;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button-update:hover, .button-notification:hover {
+  opacity: 0.8;
+}
+
+.container-asignaturas .error {
+  color: red;
+  text-align: center;
+}
+
+.container-asignaturas .loading {
+  text-align: center;
+  font-size: 1.2em;
+  color: #004d00;
+}
+
+/* Estilos responsivos */
+@media (max-width: 1000px) {
+  .container-asignaturas {
+    padding: 15px;
+  }
+  
+  .container-asignaturas h1 {
+    font-size: 1.8rem;
+  }
+
+  .container-asignaturas .insert-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .container-asignaturas .insert-section input, .container-asignaturas .button-insert {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .container-asignaturas th, .container-asignaturas td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 800px) {
+  .container-asignaturas {
+    padding: 10px;
+  }
+
+  .container-asignaturas h1 {
+    font-size: 1.5rem;
+  }
+
+  .container-asignaturas .insert-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .container-asignaturas .insert-section input, .container-asignaturas .button-insert {
+    margin-bottom: 8px;
+    width: 100%;
+  }
+
+  .container-asignaturas th, .container-asignaturas td {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .button-update, .button-notification {
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .container-asignaturas h1 {
+    font-size: 1.2rem;
+  }
+
+  .container-asignaturas .insert-section input, .container-asignaturas .button-insert {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .container-asignaturas th, .container-asignaturas td {
+    padding: 6px;
+    font-size: 10px;
+  }
+
+  .button-update, .button-notification {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 220px) {
+  .container-asignaturas h1 {
+    font-size: 1rem;
+  }
+
+  .container-asignaturas .insert-section input, .container-asignaturas .button-insert {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .container-asignaturas th, .container-asignaturas td {
+    padding: 4px;
+    font-size: 8px;
+  }
+
+  .button-update, .button-notification {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+}

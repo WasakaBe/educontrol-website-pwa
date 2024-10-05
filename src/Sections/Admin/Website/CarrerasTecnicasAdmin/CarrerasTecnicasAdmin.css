@@ -1,0 +1,269 @@
+.carreras-tecnicas-admin-container {
+ width: 100%;
+ margin: 0 auto;
+ padding: 20px;
+ background-color: #f9f9f9;
+ border-radius: 8px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ box-sizing: border-box;
+}
+
+.carreras-tecnicas-admin-table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 20px;
+ font-size: 16px;
+}
+
+.carreras-tecnicas-admin-table th,
+.carreras-tecnicas-admin-table td {
+ border: 1px solid #ddd;
+ padding: 12px;
+ text-align: left;
+}
+
+.carreras-tecnicas-admin-table th {
+ background-color: #4CAF50;
+ color: white;
+}
+
+.carreras-tecnicas-admin-table tr:hover {
+ background-color: #f1f1f1;
+}
+
+.carreras-tecnicas-admin-imagen {
+ max-width: 80px;
+ display: block;
+ border-radius: 4px;
+}
+
+.add-button-carreras-tecnicas-admin {
+ margin-bottom: 20px;
+ padding: 10px 20px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.add-button-carreras-tecnicas-admin:hover {
+ background-color: #45a049;
+}
+
+.edit-button-carreras-tecnicas-admin,
+.delete-button-carreras-tecnicas-admin {
+ border: none;
+ padding: 8px 16px;
+ border-radius: 4px;
+ cursor: pointer;
+ margin-right: 5px;
+}
+
+.edit-button-carreras-tecnicas-admin {
+ background-color: #3b82f6;
+ color: white;
+}
+
+.delete-button-carreras-tecnicas-admin {
+ background-color: #f43f5e;
+ color: white;
+}
+
+.edit-button-carreras-tecnicas-admin:hover {
+ background-color: #2563eb;
+}
+
+.delete-button-carreras-tecnicas-admin:hover {
+ background-color: #dc2626;
+}
+
+.pagination-carreras-tecnicas-admin {
+ text-align: center;
+ margin-top: 20px;
+}
+
+.pagination-carreras-tecnicas-admin button {
+ margin: 0 5px;
+ padding: 8px 16px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.pagination-carreras-tecnicas-admin button[disabled] {
+ background-color: #ccc;
+}
+
+.pagination-carreras-tecnicas-admin span {
+ margin: 0 10px;
+ font-weight: bold;
+}
+
+.register-modal-overlay-carreras-tecnicas-admin {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: rgba(0, 0, 0, 0.5);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 999;
+}
+
+.register-modal-content-carreras-tecnicas-admin {
+ background-color: white;
+ padding: 20px;
+ border-radius: 8px;
+ max-width: 400px;
+ width: 100%;
+ position: relative;
+}
+
+.register-modal-content-carreras-tecnicas-admin h3 {
+ margin-bottom: 20px;
+}
+
+.form-group-carreras-tecnicas-admin input,
+.form-group-carreras-tecnicas-admin textarea {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 10px;
+ border: 1px solid #ddd;
+ border-radius: 4px;
+ box-sizing: border-box;
+}
+
+.save-button-carreras-tecnicas-admin {
+ width: 100%;
+ padding: 10px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.save-button-carreras-tecnicas-admin:hover {
+ background-color: #45a049;
+}
+
+.cancel-button-carreras-tecnicas-admin {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ cursor: pointer;
+ font-size: 24px;
+ color: #ccc;
+}
+
+.cancel-button-carreras-tecnicas-admin:hover {
+ color: #999;
+}
+
+@media (max-width: 1000px) {
+ .carreras-tecnicas-admin-table {
+   font-size: 14px;
+ }
+
+ .carreras-tecnicas-admin-imagen {
+   max-width: 60px;
+ }
+
+ .edit-button-carreras-tecnicas-admin,
+ .delete-button-carreras-tecnicas-admin {
+   padding: 6px 12px;
+ }
+
+ .add-button-carreras-tecnicas-admin {
+   padding: 8px 16px;
+ }
+}
+
+@media (max-width: 768px) {
+ .carreras-tecnicas-admin-table,
+ thead,
+ tbody,
+ th,
+ td,
+ tr {
+   display: block;
+ }
+
+ .carreras-tecnicas-admin-table {
+   overflow-x: auto;
+   white-space: nowrap;
+   border: none;
+ }
+
+ .carreras-tecnicas-admin-table th {
+   display: none;
+ }
+
+ .carreras-tecnicas-admin-table td {
+   display: flex;
+   justify-content: space-between;
+   padding: 10px;
+   border: none;
+   border-bottom: 1px solid #ddd;
+ }
+
+ .carreras-tecnicas-admin-table td::before {
+   content: attr(data-label);
+   font-weight: bold;
+   width: 50%;
+   display: inline-block;
+ }
+
+ .carreras-tecnicas-admin-imagen {
+   max-width: 50px;
+ }
+
+ .pagination-carreras-tecnicas-admin button {
+   padding: 6px 12px;
+ }
+}
+
+@media (max-width: 480px) {
+ .carreras-tecnicas-admin-container {
+   padding: 10px;
+ }
+
+ .carreras-tecnicas-admin-table td {
+   font-size: 12px;
+ }
+
+ .carreras-tecnicas-admin-imagen {
+   max-width: 40px;
+ }
+
+ .edit-button-carreras-tecnicas-admin,
+ .delete-button-carreras-tecnicas-admin {
+   padding: 5px 10px;
+ }
+
+ .add-button-carreras-tecnicas-admin {
+   padding: 6px 12px;
+ }
+}
+
+@media (max-width: 320px) {
+ .carreras-tecnicas-admin-table td {
+   font-size: 10px;
+   padding: 6px;
+ }
+
+ .carreras-tecnicas-admin-imagen {
+   max-width: 30px;
+ }
+
+ .edit-button-carreras-tecnicas-admin,
+ .delete-button-carreras-tecnicas-admin {
+   padding: 4px 8px;
+   font-size: 10px;
+ }
+}

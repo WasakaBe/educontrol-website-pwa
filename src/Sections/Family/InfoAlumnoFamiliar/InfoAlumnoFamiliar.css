@@ -1,0 +1,310 @@
+.info-alumno-familiar {
+ padding: 20px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ height: 100% !important;
+}
+
+.search-section {
+ display: flex;
+ gap: 10px;
+ margin-bottom: 20px;
+}
+
+.search-section input {
+ padding: 10px;
+ font-size: 16px;
+ width: 200px;
+ border-radius: 10px;
+ border: 1px solid #ddd;
+ outline: none;
+ transition: all 0.3s ease;
+}
+
+.search-section input:focus {
+ border-color: #007BFF;
+}
+
+.search-section button {
+ padding: 10px;
+ font-size: 16px;
+ cursor: pointer;
+ border: none;
+ background-color: #007BFF;
+ color: white;
+ border-radius: 10px;
+ transition: all 0.3s ease;
+}
+
+.search-section button:hover {
+ background-color: #0056b3;
+}
+
+.error {
+ color: red;
+ font-size: 14px;
+}
+
+.card {
+ background: white;
+ border-radius: 10px;
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ width: 100%;
+ max-width: 300px;
+ padding: 10px;
+ text-align: center;
+ position: relative;
+}
+
+/* Imagen del alumno */
+.card-header {
+ background-size: cover;
+ background-repeat: no-repeat;
+ background-position: center;
+ width: 150px;
+ height: 150px;
+ margin: 0 auto 15px auto;
+ border-radius: 50%;
+ border: 2px solid #278860;
+}
+
+.card-body {
+ padding: 20px;
+ background: linear-gradient(#042718, #278860);
+ color: white;
+}
+
+.card-body h2 {
+ font-size: 20px;
+ font-weight: bold;
+ margin-bottom: 8px;
+ color: #ffffff;
+}
+
+.title {
+ color: white;
+ font-size: 14px;
+}
+
+.card-body p {
+ margin: 5px 0;
+ color: white;
+}
+
+.info-section {
+ margin: 20px 0;
+ text-align: center;
+}
+
+.info-section p {
+ font-size: 2em;
+}
+
+.modal-familiar-info {
+ background: white;
+ border-radius: 10px;
+ max-width: 350px;
+ width: 90%;
+ margin: 0 auto;
+ padding: 20px;
+ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+ text-align: center;
+}
+
+.overlay-familiar-info {
+ background: rgba(0, 0, 0, 0.75);
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.modal-noti-info {
+ background: white;
+ border-radius: 10px;
+ max-width: 550px;
+ width: 70%;
+ margin: auto;
+ padding: 30px;
+ position: relative;
+ top: 10%;
+ transform: translateY(-50%);
+}
+
+.modal-noti-info2 {
+ background: white;
+ border-radius: 15px;
+ max-width: 600px;
+ width: 70%;
+ padding: 30px;
+ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+ text-align: left;
+ position: relative;
+ top: 30%;
+ transform: translateY(-30%);
+}
+
+.asignatura-card {
+ background: #f8f9fa;
+ border: 1px solid #ccc;
+ border-radius: 8px;
+ padding: 20px;
+ margin-bottom: 20px;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.asignatura-card h3 {
+ font-size: 20px;
+ color: #333;
+ font-weight: bold;
+}
+
+.asignatura-card p {
+ font-size: 16px;
+ color: #555;
+ margin: 5px 0;
+}
+
+.notificacion-card {
+ background: #fff;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ padding: 16px;
+ margin-bottom: 16px;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notificacion-card h3 {
+ margin-top: 0;
+ font-size: 18px;
+}
+
+.notificacion-card p {
+ margin: 8px 0;
+}
+
+.slick-prev,
+.slick-next {
+ background-color: #1f4d7e;
+ border-radius: 50%;
+ width: 40px;
+ height: 40px;
+ display: flex !important;
+ justify-content: center;
+ align-items: center;
+ color: white;
+ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.slick-prev:before,
+.slick-next:before {
+ background-color: #119c34;
+ border-radius: 50%;
+ width: 40px;
+ height: 40px;
+ display: flex !important;
+ justify-content: center;
+ align-items: center;
+ color: white;
+ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.473);
+}
+
+.alumnos-agregados {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+ grid-gap: 20px;
+ width: 100%;
+ padding: 20px;
+ justify-items: center;
+}
+
+/* Media Queries */
+@media (max-width: 1000px) {
+ .card {
+   max-width: 250px;
+ }
+
+ .info-section p {
+   font-size: 1.8em;
+ }
+
+ .search-section input {
+   width: 180px;
+   font-size: 14px;
+ }
+
+ .search-section button {
+   font-size: 14px;
+   padding: 8px;
+ }
+}
+
+@media (max-width: 600px) {
+ .card {
+   max-width: 200px;
+ }
+
+ .info-section p {
+   font-size: 1.5em;
+ }
+
+ .search-section {
+   flex-direction: column;
+   align-items: center;
+ }
+
+ .search-section input {
+   width: 150px;
+   font-size: 12px;
+ }
+
+ .search-section button {
+   font-size: 12px;
+   padding: 6px;
+ }
+}
+
+@media (max-width: 400px) {
+ .card {
+   max-width: 180px;
+ }
+
+ .info-section p {
+   font-size: 1.2em;
+ }
+
+ .search-section input {
+   width: 120px;
+   font-size: 10px;
+ }
+
+ .search-section button {
+   font-size: 10px;
+   padding: 5px;
+ }
+}
+
+@media (max-width: 320px) {
+ .card {
+   max-width: 150px;
+ }
+
+ .info-section p {
+   font-size: 1em;
+ }
+
+ .search-section input {
+   width: 100px;
+   font-size: 9px;
+ }
+
+ .search-section button {
+   font-size: 9px;
+   padding: 4px;
+ }
+}

@@ -1,0 +1,112 @@
+.container-footer{
+  height: auto;
+  width: 100%;
+  background-image: linear-gradient(150deg,#222,#222 50%,#165a18 0,#165a18);
+}
+.sect-footer{
+  display: flex;
+  justify-content: space-between;
+  text-align: justify;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.footer-info{
+  padding: 0 20px;
+  margin-left: 20px;
+}
+.footer-info,
+.footer-enlaces,
+.footer-icons{
+  margin-bottom: 12px;
+}
+.footer-info h1,
+.footer-enlaces h1,
+.footer-icons h1{
+  color: white;
+  margin-top: 12px;
+}
+.footer-info ul li, 
+.footer-enlaces ul li,
+.footer-icons ul li{
+  list-style: none;
+}
+.footer-info ul li p{
+  color:white;
+  margin-top: 10px;
+}
+.footer-info ul li  span{
+  color: green;
+}
+
+.footer-enlaces ul li{
+  margin-top: 20px;
+}
+
+.footer-enlaces ul li:hover{
+  text-decoration-color: white;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  
+}
+.footer-enlaces ul li a{
+  text-decoration: none;
+  color: white;
+}
+
+.footer-icons ul{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.footer-icons ul li a ion-icon{
+  color:white;
+  width: 30px;
+  height: 30px;
+  margin-top: 20px;
+}
+.icon1 ion-icon:hover{
+  color: var(--fb);
+}
+.icon2 ion-icon:hover{
+  color: var(--tw);
+}
+.icon3 ion-icon:hover{
+  color: var(--yt);
+}
+.icon4 ion-icon:hover{
+  color: var(--ins);
+}
+.sect-footer-end p{
+  color: black;
+  text-align: center;
+  background-color:white;
+  height: auto;
+}
+@media (max-width: 1000px) {
+  .footer-info ,
+.footer-enlaces ,
+.footer-icons {
+ padding: 1px 20px;
+ text-align: left;
+}
+}
+@media (max-width: 600px) {
+  .footer-info h1,
+.footer-enlaces h1,
+.footer-icons h1{
+  font-size: 1.4em;
+}
+  .sect-footer {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .footer-info,
+  .footer-enlaces,
+  .footer-icons {
+    margin-left: 0;
+  }
+  .footer-icons ul{
+    justify-content: left;
+  }
+}

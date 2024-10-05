@@ -1,0 +1,144 @@
+.mision-vision-container {
+ width: 100%;
+ margin: 0 auto;
+ height: 100vh;
+ padding: 20px;
+ background-color: #f9f9f9;
+ border-radius: 8px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ box-sizing: border-box;
+}
+
+.mision-vision-container h2 {
+ text-align: center;
+ margin-bottom: 20px;
+}
+
+.table-container {
+ margin-bottom: 40px;
+}
+
+.mision-table,
+.vision-table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 20px;
+ font-size: 16px;
+}
+
+.mision-table th,
+.vision-table th,
+.mision-table td,
+.vision-table td {
+ border: 1px solid #ddd;
+ padding: 8px;
+ text-align: left;
+}
+
+.mision-table th,
+.vision-table th {
+ background-color: #4CAF50;
+ color: white;
+}
+
+.pagination {
+ text-align: center;
+}
+
+.page-button {
+ margin: 0 5px;
+ padding: 10px 20px;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+ background-color: #4CAF50;
+ color: white;
+}
+
+.page-button.active {
+ background-color: #45a049;
+}
+
+.page-button:hover {
+ background-color: #45a049;
+}
+
+@media (max-width: 1000px) {
+ .mision-table,
+ .vision-table {
+   font-size: 14px;
+ }
+
+ .page-button {
+   padding: 8px 16px;
+ }
+}
+
+@media (max-width: 768px) {
+ .mision-table,
+ .vision-table,
+ thead,
+ tbody,
+ th,
+ td,
+ tr {
+   display: block;
+ }
+
+ .mision-table,
+ .vision-table {
+   overflow-x: auto;
+   white-space: nowrap;
+   border: none;
+ }
+
+ .mision-table th,
+ .vision-table th {
+   display: none;
+ }
+
+ .mision-table td,
+ .vision-table td {
+   display: flex;
+   justify-content: space-between;
+   padding: 10px;
+   border: none;
+   border-bottom: 1px solid #ddd;
+ }
+
+ .mision-table td::before,
+ .vision-table td::before {
+   content: attr(data-label);
+   font-weight: bold;
+   width: 50%;
+   display: inline-block;
+ }
+}
+
+@media (max-width: 480px) {
+ .mision-vision-container {
+   padding: 10px;
+ }
+
+ .mision-table td,
+ .vision-table td {
+   font-size: 12px;
+ }
+
+ .page-button {
+   padding: 6px 12px;
+ }
+}
+
+@media (max-width: 320px) {
+ .mision-table td,
+ .vision-table td {
+   font-size: 10px;
+   padding: 6px;
+ }
+
+ .page-button {
+   padding: 4px 8px;
+   font-size: 10px;
+ }
+}

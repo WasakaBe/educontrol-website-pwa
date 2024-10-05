@@ -1,0 +1,152 @@
+.welcome-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.welcome-image {
+  flex: 1;
+  max-width: 50%;
+  padding: 40px;
+}
+
+.welcome-image img {
+  width: 100%;
+  height: 500px;
+  border-radius: 10px;
+}
+
+.welcome-text {
+  flex: 1;
+  padding: 70px;
+}
+
+.welcome-text h1 {
+  color: #343a40;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.welcome-text p {
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-view {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0a4c3a;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-view:hover {
+  background-color: #063b2a;
+}
+
+.modal-mision {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content-mision {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+.modal-content-mision h2 {
+  text-align: center;
+  font-size: 32px;
+  padding: 5px;
+}
+
+.close-button {
+  position: relative;
+  top: 0%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: black;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 800px) {
+  .welcome-item {
+    flex-direction: column;
+  }
+
+  .welcome-image {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .welcome-text {
+    padding: 40px;
+  }
+
+  .welcome-text h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-text p {
+    font-size: 14px;
+  }
+
+  .btn-view {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .welcome-image {
+    display: none;
+  }
+
+  .welcome-text {
+    padding: 20px;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .welcome-text p {
+    font-size: 12px;
+  }
+
+  .btn-view {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}

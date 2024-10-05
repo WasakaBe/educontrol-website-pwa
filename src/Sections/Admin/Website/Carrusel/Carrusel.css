@@ -1,0 +1,42 @@
+.carrusel-container {
+ padding: 20px;
+ width: 100%;
+ height: 100vh;
+}
+
+.add-image-button {
+ background-color: #4CAF50; /* Green */
+ border: none;
+ color: white;
+ padding: 10px 20px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 16px;
+ margin-bottom: 20px;
+ cursor: pointer;
+ border-radius: 5px;
+}
+
+.carrusel-table {
+ width: 100%;
+ border-collapse: collapse;
+ margin: 20px 0;
+}
+
+.carrusel-table th,
+.carrusel-table td {
+ border: 1px solid #ddd;
+ padding: 8px;
+ text-align: center;
+}
+
+.carrusel-table th {
+ background-color: #f2f2f2;
+ color: black;
+}
+
+.carrusel-image {
+ max-width: 100px;
+ height: auto;
+}

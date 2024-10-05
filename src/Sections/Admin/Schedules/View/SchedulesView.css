@@ -1,0 +1,146 @@
+.schedules-view-container {
+ width: 100%;
+ height: 100vh;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ padding: 20px;
+ background-color: #f9f9f9;
+}
+
+.schedules-view-container h2 {
+ margin-bottom: 20px;
+}
+
+.schedules-table-schedules-view {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 20px;
+}
+
+.schedules-table-schedules-view th,
+.schedules-table-schedules-view td {
+ border: 1px solid #ddd;
+ padding: 8px;
+ text-align: center;
+}
+
+.schedules-table-schedules-view th {
+ background-color: #f2f2f2;
+}
+
+.pagination-schedules-view {
+ display: flex;
+ justify-content: center;
+ margin-top: 20px;
+}
+
+.page-button-schedules-view {
+ background-color: #136472;
+ color: white;
+ border: none;
+ padding: 10px;
+ margin: 0 5px;
+ cursor: pointer;
+ border-radius: 5px;
+}
+
+.page-button-schedules-view.active {
+ background-color: #0e4a57;
+}
+
+.page-button-schedules-view:hover {
+ background-color: #0e4a57;
+}
+
+.modal-schedules-view {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ padding: 20px;
+ background-color: #ffffff;
+ border-radius: 10px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ width: 80%;
+ max-width: 400px;
+ margin: 0 auto;
+ top: 14%;
+ position: relative;
+ z-index: 10000;
+}
+
+.modal-schedules-view h2 {
+ margin-bottom: 20px;
+}
+
+.modal-schedules-view form {
+ display: flex;
+ flex-direction: column;
+ width: 100%;
+}
+
+.modal-schedules-view form label {
+ display: flex;
+ flex-direction: column;
+ margin-bottom: 15px;
+}
+
+.modal-schedules-view form input {
+ padding: 10px;
+ border: 1px solid #ddd;
+ border-radius: 5px;
+ width: 100%;
+ box-sizing: border-box;
+}
+
+.modal-schedules-view form div {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.modal-schedules-view form div label {
+ width: 48%;
+}
+
+.modal-schedules-view button {
+ background-color: #136472;
+ color: white;
+ border: none;
+ padding: 10px;
+ margin-top: 20px;
+ cursor: pointer;
+ border-radius: 5px;
+}
+
+.modal-schedules-view button:hover {
+ background-color: #0e4a57;
+}
+
+.modal-schedules-view .close-button-schedules-view {
+ background-color: #ccc;
+ color: #333;
+ border: none;
+ padding: 10px;
+ cursor: pointer;
+ border-radius: 5px;
+ margin-top: 10px;
+}
+
+.modal-schedules-view .close-button-schedules-view:hover {
+ background-color: #bbb;
+}
+
+.send-notification-button {
+ background-color: #ffcc00;
+ color: #333;
+ border: none;
+ padding: 10px;
+ cursor: pointer;
+ border-radius: 5px;
+ margin-left: 10px;
+}
+
+.send-notification-button:hover {
+ background-color: #e6b800;
+}

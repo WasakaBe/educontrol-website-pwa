@@ -1,0 +1,323 @@
+.info-alumn-admin-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.info-alumn-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.info-alumn-admin-table th,
+.info-alumn-admin-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.info-alumn-admin-table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.info-alumn-admin-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.info-alumn-admin-imagen {
+  max-width: 80px;
+  display: block;
+  border-radius: 4px;
+}
+
+.add-button-info-alumn-admin {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-button-info-alumn-admin:hover {
+  background-color: #45a049;
+}
+
+.save-button-info-alumn-admin,
+.update-button-info-alumn-admin,
+.info-button-info-alumn-admin {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.save-button-info-alumn-admin {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.update-button-info-alumn-admin {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.info-button-info-alumn-admin {
+  background-color: #10b981;
+  color: white;
+}
+
+.save-button-info-alumn-admin:hover {
+  background-color: #2563eb;
+}
+
+.update-button-info-alumn-admin:hover {
+  background-color: #d97706;
+}
+
+.info-button-info-alumn-admin:hover {
+  background-color: #059669;
+}
+
+.modal-info-alumn-admin {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+}
+
+.modal-overlay-info-alumn-admin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.register-section-info-alumn-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.register-input-container-info-alumn-admin input,
+.register-input-container-info-alumn-admin select,
+.register-input-container-info-alumn-admin textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.register-input-container-info-alumn-admin label {
+  font-weight: bold;
+}
+
+.button-group-info-alumn-admin {
+  display: flex;
+  justify-content: space-between;
+}
+
+.save-button-info-alumn-admin,
+.next-button-info-alumn-admin,
+.previous-button-info-alumn-admin,
+.cancel-button-info-alumn-admin {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-button-info-alumn-admin {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancel-button-info-alumn-admin {
+  background-color: #f44336;
+  color: white;
+}
+
+.save-button-info-alumn-admin:hover,
+.next-button-info-alumn-admin:hover,
+.previous-button-info-alumn-admin:hover,
+.cancel-button-info-alumn-admin:hover {
+  background-color: #45a049;
+}
+
+.pagination-info-alumn-admin {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pagination-info-alumn-admin button {
+  margin: 0 5px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination-info-alumn-admin button[disabled] {
+  background-color: #ccc;
+}
+
+.pagination-info-alumn-admin span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.floating-help-button-info-alumn-admin {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.floating-help-button-info-alumn-admin:hover {
+  background-color: #45a049;
+}
+
+.close-button-info-alumn-admin {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.close-button-info-alumn-admin:hover {
+  background-color: #e53935;
+}
+
+@media (max-width: 1000px) {
+  .info-alumn-admin-table {
+    font-size: 14px;
+  }
+
+  .info-alumn-admin-imagen {
+    max-width: 60px;
+  }
+
+  .save-button-info-alumn-admin,
+  .update-button-info-alumn-admin,
+  .info-button-info-alumn-admin {
+    padding: 6px 12px;
+  }
+
+  .add-button-info-alumn-admin {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-alumn-admin-table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  .info-alumn-admin-table {
+    overflow-x: auto;
+    white-space: nowrap;
+    border: none;
+  }
+
+  .info-alumn-admin-table th {
+    display: none;
+  }
+
+  .info-alumn-admin-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .info-alumn-admin-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 50%;
+    display: inline-block;
+  }
+
+  .info-alumn-admin-imagen {
+    max-width: 50px;
+  }
+
+  .pagination-info-alumn-admin button {
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-alumn-admin-container {
+    padding: 10px;
+  }
+
+  .info-alumn-admin-table td {
+    font-size: 12px;
+  }
+
+  .info-alumn-admin-imagen {
+    max-width: 40px;
+  }
+
+  .save-button-info-alumn-admin,
+  .update-button-info-alumn-admin,
+  .info-button-info-alumn-admin {
+    padding: 5px 10px;
+  }
+
+  .add-button-info-alumn-admin {
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 320px) {
+  .info-alumn-admin-table td {
+    font-size: 10px;
+    padding: 6px;
+  }
+
+  .info-alumn-admin-imagen {
+    max-width: 30px;
+  }
+
+  .save-button-info-alumn-admin,
+  .update-button-info-alumn-admin,
+  .info-button-info-alumn-admin {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}

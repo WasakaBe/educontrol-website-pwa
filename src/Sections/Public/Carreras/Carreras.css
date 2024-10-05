@@ -1,0 +1,69 @@
+.carreras-container {
+ text-align: center;
+ padding: 4px;
+}
+
+.titulo-centrado {
+ font-size: 2em;
+ margin-bottom: 20px;
+}
+
+.carreras-list {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ gap: 20px;
+}
+
+.carrera-card {
+ cursor: pointer;
+ padding: 10px;
+ text-align: center;
+ transition: transform 0.2s;
+}
+
+.carrera-card:hover {
+ transform: scale(1.05);
+}
+
+.carrera-imagen {
+ width: 150px;
+ height: 150px;
+ object-fit: cover;
+ border-radius: 50%; /* Hacer las imágenes circulares */
+}
+
+.modal-carreras {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-color: rgba(0, 0, 0, 0.5);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ z-index: 1000;
+}
+
+.modal-content-carreras {
+ background-color: white;
+ padding: 20px;
+ border-radius: 10px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ max-width: 500px;
+ width: 90%;
+ text-align: left;
+}
+.modal-content-carreras h2, .modal-content-carreras p{
+ text-align: center;
+ padding: 10px;
+}
+
+.close-button-carreras {
+ position: relative;
+ font-size: 1.5rem;
+ cursor: pointer;
+ color: black;
+ padding: 10px;
+}

@@ -1,0 +1,114 @@
+.modal-overlay-custom {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: rgba(0, 0, 0, 0.8);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ z-index: 1000;
+ width: 100%;
+}
+
+.modal-custom {
+ background: white;
+ padding: 20px;
+ border-radius: 10px;
+ width: 80%;
+ overflow-y: auto;
+ max-height: 90vh;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+ animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+ from {
+   transform: translateY(-50px);
+   opacity: 0;
+ }
+ to {
+   transform: translateY(0);
+   opacity: 1;
+ }
+}
+
+.becas-container-custom {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 20px;
+}
+
+.beca-card-custom {
+ background: #f9f9f9;
+ padding: 15px;
+ border-radius: 10px;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ flex: 1;
+ width: 100%;
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+}
+
+.beca-content-custom {
+ margin-bottom: 15px;
+ display: flex;
+
+}
+
+.beca-card-custom h3 {
+ margin-top: 0;
+ color: #333;
+ padding: 10px;
+}
+
+.beca-card-custom h4 {
+ color: #555;
+ margin-bottom: 5px;
+ padding: 10px;
+}
+
+.beca-card-custom ul {
+ padding-left: 20px;
+ list-style-type: disc;
+}
+.beca-card-custom p{
+ padding-left: 20px;
+ list-style-type: disc;
+}
+
+.beca-image-container-custom {
+ display: flex;
+ justify-content: center;
+ width: 700px;
+}
+
+.beca-image-custom {
+ width: 100%;
+ height: auto;
+ border-radius: 5px;
+}
+
+.no-records-custom {
+ text-align: center;
+ color: #999;
+ width: 100%;
+}
+
+.close-button-custom {
+ background-color: #f44336;
+ color: white;
+ border: none;
+ padding: 10px 20px;
+ margin-top: 20px;
+ cursor: pointer;
+ border-radius: 5px;
+ display: block;
+ margin-left: auto;
+}
+
+.close-button-custom:hover {
+ background-color: #d32f2f;
+}

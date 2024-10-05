@@ -1,0 +1,134 @@
+.navbar {
+  background-color: #000000;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-size: 29px;
+}
+
+.navbar-logo-img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-item {
+  position: relative;
+  font-size: 1.4em;
+}
+
+.navbar-item a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-item:hover a,
+.navbar-item a:hover {
+  background-color: #575757;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  min-width: 160px;
+  z-index: 1;
+  list-style: none;
+}
+
+.dropdown-item a {
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item a:hover {
+  background-color: #4CAF50; /* Color de resalte para dropdowns */
+}
+
+.navbar-item:hover .dropdown-menu,
+.dropdown-submenu:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: 0;
+}
+
+.navbar-toggler {
+  display: none;
+  font-size: 24px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 870px) {
+  .navbar-container {
+    flex-wrap: wrap;
+  }
+  .navbar-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+  .navbar-menu.active {
+    display: flex;
+  }
+  .navbar-item {
+    width: 100%;
+    text-align: center;
+  }
+  .navbar-toggler {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-logo span {
+    font-size: 20px;
+  }
+  .navbar-logo-img {
+    width: 25px;
+    height: 25px;
+  }
+  .navbar-item a {
+    padding: 10px;
+  }
+}

@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Tajawal", sans-serif;
+  font-style: normal;
+}
+
+.align{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.align2{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.buttons{
+  display: flex;
+  gap: 20px;
+}
+/* Estilos para Google Chrome, Microsoft Edge y Safari */
+::-webkit-scrollbar {
+  width: 12px; /* Ancho de la barra de desplazamiento */
+}
+
+/* Track (la parte de fondo del scrollbar) */
+::-webkit-scrollbar-track {
+  background: #3970a7; /* Color azul para la barra */
+}
+
+/* Thumb (la parte que se desplaza) */
+::-webkit-scrollbar-thumb {
+  background-color: #269410; /* Color azul del "thumb" */
+  border-radius: 6px; /* Bordes redondeados para el thumb */
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+/* Hover en el thumb */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #074d17; /* Color verde en hover */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin; /* Define el ancho del scrollbar en Firefox */
+  scrollbar-color: #004080 #d3d3d3; /* Color del thumb y del track */
+}
+
+.custom-toast-container {
+  border-radius: 20px; /* Bordes redondeados */
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo para la notificación offline */
+.custom-toast-container.offline {
+  background-color: #ffcccc; /* Fondo rojo claro */
+  border-left: 5px solid #ff4d4d; /* Borde rojo */
+}
+
+/* Estilo para la notificación online */
+.custom-toast-container.online {
+  background-color: #ccffcc; /* Fondo verde claro */
+  border-left: 5px solid #4dff4d; /* Borde verde */
+}
+/* Estilo del icono */
+.toast-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}

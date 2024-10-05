@@ -1,0 +1,268 @@
+.actividad-cultural-admin-container {
+ width: 100%;
+ margin: 0 auto;
+ padding: 20px;
+ background-color: #f9f9f9;
+ border-radius: 8px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ box-sizing: border-box;
+}
+
+.actividad-cultural-admin-table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 20px;
+ font-size: 16px;
+}
+
+.actividad-cultural-admin-table th,
+.actividad-cultural-admin-table td {
+ border: 1px solid #ddd;
+ padding: 12px;
+ text-align: left;
+}
+
+.actividad-cultural-admin-table th {
+ color: white;
+}
+
+.actividad-cultural-admin-table tr:hover {
+ background-color: #f1f1f1;
+}
+
+.actividad-cultural-admin-imagen {
+ max-width: 80px;
+ display: block;
+ border-radius: 4px;
+}
+
+.add-button-actividad-cultural-admin {
+ margin-bottom: 20px;
+ padding: 10px 20px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.add-button-actividad-cultural-admin:hover {
+ background-color: #45a049;
+}
+
+.edit-button-actividad-cultural-admin,
+.delete-button-actividad-cultural-admin {
+ border: none;
+ padding: 8px 16px;
+ border-radius: 4px;
+ cursor: pointer;
+ margin-right: 5px;
+}
+
+.edit-button-actividad-cultural-admin {
+ background-color: #3b82f6;
+ color: white;
+}
+
+.delete-button-actividad-cultural-admin {
+ background-color: #f43f5e;
+ color: white;
+}
+
+.edit-button-actividad-cultural-admin:hover {
+ background-color: #2563eb;
+}
+
+.delete-button-actividad-cultural-admin:hover {
+ background-color: #dc2626;
+}
+
+.pagination-actividad-cultural-admin {
+ text-align: center;
+ margin-top: 20px;
+}
+
+.pagination-actividad-cultural-admin button {
+ margin: 0 5px;
+ padding: 8px 16px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.pagination-actividad-cultural-admin button[disabled] {
+ background-color: #ccc;
+}
+
+.pagination-actividad-cultural-admin span {
+ margin: 0 10px;
+ font-weight: bold;
+}
+
+.register-modal-overlay-actividad-cultural-admin {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: rgba(0, 0, 0, 0.5);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 999;
+}
+
+.register-modal-content-actividad-cultural-admin {
+ background-color: white;
+ padding: 20px;
+ border-radius: 8px;
+ max-width: 400px;
+ width: 100%;
+ position: relative;
+}
+
+.register-modal-content-actividad-cultural-admin h3 {
+ margin-bottom: 20px;
+}
+
+.form-group-actividad-cultural-admin input,
+.form-group-actividad-cultural-admin textarea {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 10px;
+ border: 1px solid #ddd;
+ border-radius: 4px;
+ box-sizing: border-box;
+}
+
+.save-button-actividad-cultural-admin {
+ width: 100%;
+ padding: 10px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.save-button-actividad-cultural-admin:hover {
+ background-color: #45a049;
+}
+
+.cancel-button-actividad-cultural-admin {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ cursor: pointer;
+ font-size: 24px;
+ color: #ccc;
+}
+
+.cancel-button-actividad-cultural-admin:hover {
+ color: #999;
+}
+
+@media (max-width: 1000px) {
+ .actividad-cultural-admin-table {
+   font-size: 14px;
+ }
+
+ .actividad-cultural-admin-imagen {
+   max-width: 60px;
+ }
+
+ .edit-button-actividad-cultural-admin,
+ .delete-button-actividad-cultural-admin {
+   padding: 6px 12px;
+ }
+
+ .add-button-actividad-cultural-admin {
+   padding: 8px 16px;
+ }
+}
+
+@media (max-width: 768px) {
+ .actividad-cultural-admin-table, 
+ thead, 
+ tbody, 
+ th, 
+ td, 
+ tr {
+   display: block;
+ }
+
+ .actividad-cultural-admin-table {
+   overflow-x: auto;
+   white-space: nowrap;
+   border: none;
+ }
+
+ .actividad-cultural-admin-table th {
+   display: none;
+ }
+
+ .actividad-cultural-admin-table td {
+   display: flex;
+   justify-content: space-between;
+   padding: 10px;
+   border: none;
+   border-bottom: 1px solid #ddd;
+ }
+
+ .actividad-cultural-admin-table td::before {
+   content: attr(data-label);
+   font-weight: bold;
+   width: 50%;
+   display: inline-block;
+ }
+
+ .actividad-cultural-admin-imagen {
+   max-width: 50px;
+ }
+
+ .pagination-actividad-cultural-admin button {
+   padding: 6px 12px;
+ }
+}
+
+@media (max-width: 480px) {
+ .actividad-cultural-admin-container {
+   padding: 10px;
+ }
+
+ .actividad-cultural-admin-table td {
+   font-size: 12px;
+ }
+
+ .actividad-cultural-admin-imagen {
+   max-width: 40px;
+ }
+
+ .edit-button-actividad-cultural-admin,
+ .delete-button-actividad-cultural-admin {
+   padding: 5px 10px;
+ }
+
+ .add-button-actividad-cultural-admin {
+   padding: 6px 12px;
+ }
+}
+
+@media (max-width: 320px) {
+ .actividad-cultural-admin-table td {
+   font-size: 10px;
+   padding: 6px;
+ }
+
+ .actividad-cultural-admin-imagen {
+   max-width: 30px;
+ }
+
+ .edit-button-actividad-cultural-admin,
+ .delete-button-actividad-cultural-admin {
+   padding: 4px 8px;
+   font-size: 10px;
+ }
+}

@@ -3,6 +3,7 @@ import { apiUrl } from '../../../constants/Api';
 import './Carreras.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 interface CarreraTecnica {
   id_carrera_tecnica: number;
@@ -25,11 +26,25 @@ const Carreras: React.FC = () => {
       const data = await response.json();
       if (data.carreras) {
         setCarreras(data.carreras);
+
+        // Guardar los datos en IndexedDB usando la clave "carrerasTecnicasData"
+        saveDataOffline({
+          key: 'carrerasTecnicasData',
+          value: JSON.stringify(data.carreras),
+          timestamp: Date.now(),
+        });
       } else {
         toast.error('No se encontraron carreras técnicas');
       }
     } catch {
       toast.error('Error al cargar carreras técnicas');
+
+      // Intentar cargar datos desde IndexedDB si no hay conexión
+      const cachedData = await getOfflineData('carrerasTecnicasData');
+      if (cachedData) {
+        setCarreras(JSON.parse(cachedData.value));
+        console.log('Datos cargados desde IndexedDB:', cachedData);
+      }
     }
   };
 
@@ -69,7 +84,9 @@ const Carreras: React.FC = () => {
       {selectedCarrera && (
         <div className="modal-carreras" onClick={closeModal}>
           <div className="modal-content-carreras" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button-carreras" onClick={closeModal}>&times;</span>
+            <span className="close-button-carreras" onClick={closeModal}>
+              &times;
+            </span>
             <h2>{selectedCarrera.nombre_carrera_tecnica}</h2>
             <p>{selectedCarrera.descripcion_carrera_tecnica}</p>
           </div>

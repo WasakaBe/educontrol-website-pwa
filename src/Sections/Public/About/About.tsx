@@ -3,6 +3,7 @@ import { apiUrl } from '../../../constants/Api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './About.css';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 interface SobreNosotros {
   id_sobre_nosotros: number;
@@ -24,11 +25,26 @@ const About: React.FC = () => {
       const data = await response.json();
       if (data) {
         setSobreNosotros(data);
+
+        // Guardar los datos en IndexedDB usando la clave "aboutData"
+        saveDataOffline({
+          key: 'aboutData',
+          value: JSON.stringify(data),
+          timestamp: Date.now(),
+        });
       } else {
         toast.error('No se encontró información sobre nosotros');
       }
-    } catch  {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       toast.error('Error al cargar información sobre nosotros');
+
+      // Intentar cargar datos desde IndexedDB si no hay conexión
+      const cachedData = await getOfflineData('aboutData');
+      if (cachedData) {
+        setSobreNosotros(JSON.parse(cachedData.value));
+        console.log('Datos cargados desde IndexedDB:', cachedData);
+      }
     }
   };
 

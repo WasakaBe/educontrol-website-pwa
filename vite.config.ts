@@ -47,20 +47,20 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'EduControl',
+        name: 'EDUCONTROL',
         short_name: 'EDC',
-        description: 'EduControl PWA',
+        description: 'EDUCONTROL',
         theme_color: '#000',
-        background_color: '#ffffff',
+        background_color: '#074d17',
         display: 'standalone',
         icons: [
           {
-            src: '/logo_cbta_5.png',
+            src: './logo_cbta_5.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/logo_cbta_5.png',
+            src: './logo_cbta_5.png',
             sizes: '512x512',
             type: 'image/png',
           },

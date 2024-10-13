@@ -1,0 +1,153 @@
+/* Estilos generales del splash screen */
+.splash-screen {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ height: 100vh;
+ background: radial-gradient(circle, #0e0e0e, #111111, #151515);
+ color: white;
+ font-family: 'Roboto', sans-serif;
+ position: relative;
+ overflow: hidden;
+}
+
+/* Contenedor del logo con el efecto de resplandor */
+.glow-ring {
+ position: relative;
+ width: 250px;
+ height: 250px;
+ background: rgba(0, 255, 204, 0.1);
+ border-radius: 50%;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ box-shadow: 0 0 30px rgba(0, 255, 204, 0.7), 0 0 50px rgba(0, 255, 204, 0.5);
+ animation: pulseGlow 2s infinite alternate;
+}
+
+/* Animación del resplandor alrededor del logo */
+@keyframes pulseGlow {
+ 0% {
+   box-shadow: 0 0 40px rgba(0, 255, 204, 0.5), 0 0 80px rgba(0, 255, 204, 0.3);
+ }
+ 100% {
+   box-shadow: 0 0 60px rgba(0, 255, 204, 0.8), 0 0 100px rgba(0, 255, 204, 0.6);
+ }
+}
+
+/* Estilo del logo */
+.splash-logo {
+ width: 150px;
+ height: 150px;
+ z-index: 1;
+}
+
+/* Título futurista */
+.splash-title {
+ margin-top: 20px;
+ font-size: 28px;
+ text-align: center;
+ color: #00ffcc;
+ text-shadow: 0 0 20px rgba(0, 255, 204, 0.7), 0 0 30px rgba(0, 255, 204, 0.5);
+ animation: fadeInTitle 1s ease-out forwards;
+}
+
+/* Animación de entrada del título */
+@keyframes fadeInTitle {
+ 0% {
+   opacity: 0;
+   transform: translateY(20px);
+ }
+ 100% {
+   opacity: 1;
+   transform: translateY(0);
+ }
+}
+
+/* Media queries para adaptarse a diferentes pantallas */
+
+/* Pantallas grandes (1000px y mayores) */
+@media (min-width: 1000px) {
+ .splash-logo {
+   width: 200px;
+   height: 200px;
+ }
+
+ .glow-ring {
+   width: 300px;
+   height: 300px;
+ }
+
+ .splash-title {
+   font-size: 32px;
+ }
+}
+
+/* Pantallas medianas (800px a 999px) */
+@media (max-width: 999px) and (min-width: 800px) {
+ .splash-logo {
+   width: 180px;
+   height: 180px;
+ }
+
+ .glow-ring {
+   width: 250px;
+   height: 250px;
+ }
+
+ .splash-title {
+   font-size: 28px;
+ }
+}
+
+/* Pantallas pequeñas (600px a 799px) */
+@media (max-width: 799px) and (min-width: 600px) {
+ .splash-logo {
+   width: 150px;
+   height: 150px;
+ }
+
+ .glow-ring {
+   width: 220px;
+   height: 220px;
+ }
+
+ .splash-title {
+   font-size: 24px;
+ }
+}
+
+/* Pantallas muy pequeñas (400px a 599px) */
+@media (max-width: 599px) and (min-width: 400px) {
+ .splash-logo {
+   width: 130px;
+   height: 130px;
+ }
+
+ .glow-ring {
+   width: 180px;
+   height: 180px;
+ }
+
+ .splash-title {
+   font-size: 22px;
+ }
+}
+
+/* Pantallas extra pequeñas (menos de 400px) */
+@media (max-width: 399px) {
+ .splash-logo {
+   width: 100px;
+   height: 100px;
+ }
+
+ .glow-ring {
+   width: 150px;
+   height: 150px;
+ }
+
+ .splash-title {
+   font-size: 18px;
+ }
+}

@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
@@ -11,47 +11,61 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.destination === 'document' || request.destination === 'script' || request.destination === 'style',
-            handler: 'NetworkFirst',
+            urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+            handler: 'NetworkFirst',  // Intenta cargar desde la red primero, luego desde el caché
             options: {
-              cacheName: 'documents',
+              cacheName: 'api-data-cache',
               expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // Cache por 30 días
+                maxEntries: 50, // Mantén hasta 50 solicitudes en el caché
+                maxAgeSeconds: 60 * 60 * 24 * 7, // Cache de 7 días
               },
+              networkTimeoutSeconds: 10, // Si la red no responde en 10 segundos, usa el caché
             },
           },
           {
             urlPattern: ({ request }) => request.destination === 'image',
             handler: 'CacheFirst',
             options: {
-              cacheName: 'images',
+              cacheName: 'images-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 7, // Cache por 7 días
+                maxAgeSeconds: 60 * 60 * 24 * 7, // Cache de 7 días
+              },
+            },
+          },
+          {
+            urlPattern: ({ request }) => request.destination === 'script' || request.destination === 'style',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources-cache',
+              expiration: {
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // Cache de 30 días
               },
             },
           },
         ],
       },
       manifest: {
-        name: 'My PWA EDUCONTROL',
-        short_name: 'PWA EDUCONTROL',
-        description: 'This is my PWA Application EDUCONTROL',
+        name: 'EduControl',
+        short_name: 'EDC',
+        description: 'EduControl PWA',
         theme_color: '#000',
+        background_color: '#ffffff',
+        display: 'standalone',
         icons: [
           {
-            src: './logo_cbta_5.png',
+            src: '/logo_cbta_5.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
-            src: './logo_cbta_5.png',
+            src: '/logo_cbta_5.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
-    })
-  ]
-})
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
+  ],
+});

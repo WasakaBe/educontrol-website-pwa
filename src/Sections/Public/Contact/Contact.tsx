@@ -3,6 +3,7 @@ import './Contact.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { apiUrl } from '../../../constants/Api';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 const Contact: React.FC = () => {
   const MAPURL =
@@ -38,19 +39,21 @@ const Contact: React.FC = () => {
     e.preventDefault();
 
     if (nameValid && emailValid && messageValid) {
+      const fechaMensajeContacto = new Date().toISOString();
+      const messageData = {
+        nombre_mensaje_contacto: name,
+        correo_mensaje_contacto: email,
+        motivo_mensaje_contacto: message,
+        fecha_mensaje: fechaMensajeContacto,
+      };
+
       try {
-        const fechaMensajeContacto = new Date().toISOString();
         const response = await fetch(`${apiUrl}mensaje_contacto/insert`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            nombre_mensaje_contacto: name,
-            correo_mensaje_contacto: email,
-            motivo_mensaje_contacto: message,
-            fecha_mensaje: fechaMensajeContacto,
-          }),
+          body: JSON.stringify(messageData),
         });
 
         const data = await response.json();
@@ -63,13 +66,49 @@ const Contact: React.FC = () => {
         } else {
           toast.error(`Error al enviar el mensaje: ${data.error}`);
         }
-      } catch{
-        toast.error('Error al enviar el mensaje');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        // Si no hay conexión, guardamos el mensaje en IndexedDB
+        toast.error('Error al enviar el mensaje. Guardando el mensaje localmente.');
+        saveDataOffline({
+          key: 'contactMessage',
+          value: JSON.stringify(messageData),
+          timestamp: Date.now(),
+        });
       }
     } else {
       toast.error('Por favor, revise los campos ingresados');
     }
   };
+
+  // Intentar enviar los mensajes guardados en IndexedDB cuando vuelva la conexión
+  const sendOfflineMessages = async () => {
+    const offlineMessages = await getOfflineData('contactMessage');
+    if (offlineMessages) {
+      try {
+        const cachedMessages = JSON.parse(offlineMessages.value);
+        const response = await fetch(`${apiUrl}mensaje_contacto/insert`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cachedMessages),
+        });
+        if (response.ok) {
+          toast.success('Mensaje guardado localmente enviado exitosamente');
+          // Limpia los mensajes enviados de IndexedDB si fue exitoso
+        }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        toast.error('Error al enviar los mensajes guardados localmente');
+      }
+    }
+  };
+
+  // Intenta enviar los mensajes cuando el componente cargue
+  React.useEffect(() => {
+    sendOfflineMessages();
+  }, []);
 
   return (
     <div className="container-contact" id="Contact">

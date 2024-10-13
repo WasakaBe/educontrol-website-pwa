@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Cultural.css';
 import { apiUrl } from '../../../constants/Api';
+import { getOfflineData, saveDataOffline } from '../../../db';
 
 interface CulturalActivity {
   id_actividad_cultural: number;
@@ -25,8 +26,22 @@ const Cultural: React.FC = () => {
       }
       const data: CulturalActivity[] = await response.json();
       setCulturalActivities(data);
+
+      // Guardar los datos en IndexedDB usando la clave "culturalActivitiesData"
+      saveDataOffline({
+        key: 'culturalActivitiesData',
+        value: JSON.stringify(data),
+        timestamp: Date.now(),
+      });
     } catch (error) {
       console.error('Error fetching cultural activities:', error);
+
+      // Intentar cargar datos desde IndexedDB si no hay conexión
+      const cachedData = await getOfflineData('culturalActivitiesData');
+      if (cachedData) {
+        setCulturalActivities(JSON.parse(cachedData.value));
+        console.log('Datos cargados desde IndexedDB:', cachedData);
+      }
     }
   };
 
@@ -44,9 +59,16 @@ const Cultural: React.FC = () => {
       {culturalActivities.length > 0 ? (
         <div className="cultural-grid">
           {culturalActivities.map((activity) => (
-            <div key={activity.id_actividad_cultural} className="cultural-item" onClick={() => handleImageClick(activity)}>
+            <div
+              key={activity.id_actividad_cultural}
+              className="cultural-item"
+              onClick={() => handleImageClick(activity)}
+            >
               {activity.imagen_actividad_cultural ? (
-                <img src={`data:image/jpeg;base64,${activity.imagen_actividad_cultural}`} alt={activity.nombre_actividad_cultural} />
+                <img
+                  src={`data:image/jpeg;base64,${activity.imagen_actividad_cultural}`}
+                  alt={activity.nombre_actividad_cultural}
+                />
               ) : (
                 <span>No image available</span>
               )}
@@ -60,7 +82,9 @@ const Cultural: React.FC = () => {
       {selectedActivity && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
             <h2>{selectedActivity.nombre_actividad_cultural}</h2>
             <p>{selectedActivity.descripcion_actividad_cultural}</p>
           </div>

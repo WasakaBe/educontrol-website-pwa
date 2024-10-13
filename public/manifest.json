@@ -1,15 +1,15 @@
 {
- "name":"My PWA EDUCONTROL",
- "short_name": "PWA EDC",
- "description": "This is my PWA Application EDUCONTROL",
+ "name":"EDUCONTROL",
+ "short_name": "EDUCONTROL",
+ "description": "EDUCONTROL",
  "icons": [
    {
-     "src": "./logo_cbta_5.png",
+     "src": "/logo_cbta_5.png",
      "sizes": "192x192",
      "type": "image/png"
    },
    {
-    "src": "./logo_cbta_5.png",
+    "src": "/logo_cbta_5.png",
      "sizes": "512x512",
      "type": "image/png"
    }

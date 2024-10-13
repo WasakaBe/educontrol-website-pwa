@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiUrl } from '../../../constants/Api';
 import './Inscription.css';
+import { getOfflineData, saveDataOffline } from '../../../db';
 
 interface InscriptionData {
   txt_info_inscription: string;
@@ -19,23 +20,33 @@ const Inscription: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchInscriptionData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}info_inscription`);
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        const data = await response.json();
-        if (data.length > 0) {
-          setInscriptionData(data[0]);
-        }
-      } catch (error) {
-        console.error('Error fetching inscription data:', error);
-      }
-    };
-
     fetchInscriptionData();
   }, []);
+
+  const fetchInscriptionData = async () => {
+    try {
+      const response = await fetch(`${apiUrl}info_inscription`);
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      const data = await response.json();
+      if (data.length > 0) {
+        setInscriptionData(data[0]);
+
+        // Guardar los datos en IndexedDB usando la clave "inscriptionData"
+        saveDataOffline({ key: 'inscriptionData', value: JSON.stringify(data[0]), timestamp: Date.now() });
+      }
+    } catch (error) {
+      console.error('Error fetching inscription data:', error);
+
+      // Intentar cargar datos desde IndexedDB si no hay conexión
+      const cachedData = await getOfflineData('inscriptionData');
+      if (cachedData) {
+        setInscriptionData(JSON.parse(cachedData.value));
+        console.log('Datos cargados desde IndexedDB:', cachedData);
+      }
+    }
+  };
 
   if (!inscriptionData) {
     return <div>Loading...</div>;
@@ -48,7 +59,7 @@ const Inscription: React.FC = () => {
   };
 
   return (
-    <div className="inscription-container" id='Inscripcion'>
+    <div className="inscription-container" id="Inscripcion">
       <div className="inscription-text">
         <h1>REQUISITOS PARA LA INSCRIPCIÓN</h1>
         <p>{inscriptionData.txt_info_inscription}</p>
@@ -60,7 +71,7 @@ const Inscription: React.FC = () => {
         </button>
       </div>
       <div className="inscription-image">
-        <img src={`data:image/png;base64,${inscriptionData.imagen_info_inscription}`} alt="Welcome" />
+        <img src={`data:image/png;base64,${inscriptionData.imagen_info_inscription}`} alt="Inscription" />
       </div>
     </div>
   );

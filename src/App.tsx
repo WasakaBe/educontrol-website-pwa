@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import AppRoutes from "./Routes/AppRoutes";
 import { ToastContainer, toast } from 'react-toastify'; // Utilizamos react-toastify para la notificación
 import 'react-toastify/dist/ReactToastify.css';
-import { fantasma_faild, fantasma_success } from './assets/icons';
+import {  fantasma_faild, fantasma_success } from './assets/icons';
 
 const App: React.FC = () => {
 
@@ -69,6 +69,7 @@ const App: React.FC = () => {
 
   return (
     <div>
+    
       <AppRoutes />
       <ToastContainer />
     </div>

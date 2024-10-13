@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Carrusel.css';
 import { apiUrl } from '../../../constants/Api';
+import { getOfflineData, saveDataOffline } from '../../../db';
 
 interface Image {
   carrusel: string;
@@ -21,9 +22,23 @@ const Carrusel: React.FC = () => {
       if (data.carrusel_imgs) {
         const formattedImages = data.carrusel_imgs.map((image: Image) => `data:image/jpeg;base64,${image.carrusel}`);
         setImages(formattedImages);
+
+        // Guardar las imágenes en IndexedDB usando la clave "carruselImages"
+        saveDataOffline({
+          key: 'carruselImages',
+          value: JSON.stringify(formattedImages),
+          timestamp: Date.now(),
+        });
       }
     } catch (error) {
       console.error('Error fetching carrusel images:', error);
+
+      // Intentar cargar imágenes desde IndexedDB si no hay conexión
+      const cachedImages = await getOfflineData('carruselImages');
+      if (cachedImages) {
+        setImages(JSON.parse(cachedImages.value));
+        console.log('Imágenes cargadas desde IndexedDB:', cachedImages);
+      }
     }
   };
 

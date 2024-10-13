@@ -1,50 +1,73 @@
-# React + TypeScript + Vite
+# EduControl-pwa
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción: 
+es una pagina web institucional donde se realizaran creación de credenciales de una forma mas rápida, los alumnos podrán realizar registros, solicitar credenciales y también podrán tener acceso a una credencial virtual, los maestros podrán tomar asistencia, y los padres de familia podrán visualizar el registro de asistencia de los alumnos. Se busca transformar el sistema web escolar existente en una **PWA (Progressive Web App)**, mejorando la accesibilidad y funcionalidad, incluyendo la capacidad de trabajar sin conexión y un sistema de retroalimentación para los usuarios.
 
-Currently, two official plugins are available:
+## Objetivos:
+- Optimizar el rendimiento y accesibilidad de la plataforma.
+- Implementar funcionalidad offline mediante PWA.
+- Integrar un sistema de retroalimentación de usuarios.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Metodología: 
+Utilizamos la metodología **Scrum** para gestionar el desarrollo en ciclos cortos y flexibles (sprints), garantizando entregas continuas y mejoras constantes del sistema.
 
-## Expanding the ESLint configuration
+## Herramienta de Control de Versiones
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Para este proyecto utilizamos **Git** como herramienta de control de versiones, siguiendo el flujo de trabajo **GitFlow** para la gestión de ramas y versiones.
 
-- Configure the top-level `parserOptions` property like this:
+### Flujo de Trabajo:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Las ramas principales son `main` (para producción) y `develop` (para desarrollo).
+- Las nuevas funcionalidades se desarrollan en ramas `feature/*` que se crean a partir de `develop`.
+- Al estar listas, las funcionalidades se fusionan de vuelta en `develop`.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Herramientas a utilizar:
+El uso de Jira para el proyecto permitirá gestionar tareas, hacer seguimiento del progreso y controlar el flujo de trabajo de manera más eficiente. 
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Tecnologías Utilizadas
+-FrontEnd: React. js, vite
+-BackEnd: python (Flask)
+-Base de Datos: MySQL
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+ ## Estrategia de Versionamiento
+
+Utilizamos la estrategia de **versionamiento SemVer (Versionado Semántico)** y el flujo de trabajo **GitFlow**.
+
+### Ramas:
+- `main`: Contiene el código estable en producción.
+- `develop`: Contiene el código en desarrollo para la próxima versión.
+- `feature/*`: Para el desarrollo de nuevas funcionalidades.
+- `release/*`: Para preparar versiones finales antes del despliegue.
+- `hotfix/*`: Para corrección de errores críticos en producción.
+
+### Ejemplo de Versionado:
+- Versión inicial: `v1.0.0`
+- Nueva funcionalidad menor: `v1.1.0`
+- Corrección de errores: `v1.1.1`
+
+## Estrategia de Despliegue
+
+Implementamos la estrategia **Blue-Green Deployment** para asegurar despliegues sin interrupciones y minimizar los riesgos.
+
+### Entornos:
+- **Entorno Blue**: Ambiente en producción con la versión actual.
+- **Entorno Green**: Ambiente de pruebas para las nuevas versiones.
+
+### Proceso de Despliegue:
+1. Desplegar en el entorno Green.
+2. Realizar pruebas exhaustivas.
+3. Hacer el cambio de tráfico a Green si todo está correcto.
+4. Mantener el entorno Blue como respaldo para revertir si es necesario.
+
+## Instalación del Proyecto
+
+### Clonar el repositorio:
+```bash
+git clone https://github.com/WasakaBe/EduControlWebsite.git
+cd proyecto-web-escolar
+
+## Instalar dependencias:
+npm install
+
+## Ejecutar el proyecto:
+npm start

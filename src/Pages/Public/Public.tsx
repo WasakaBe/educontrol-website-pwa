@@ -7,6 +7,7 @@ import {
   About,
   Carreras,
   Activities,
+  Feedback,
 } from '../../Sections/Public'
 import Inscription from '../../Sections/Public/Inscription/Inscription'
 import InforAreas from '../../Sections/Public/InfoAreas/InforAreas'
@@ -26,6 +27,7 @@ const Public: React.FC = () => {
       <Inscription />
       <InforAreas />
       <Contact />
+      <Feedback />
     </div>
   )
 }

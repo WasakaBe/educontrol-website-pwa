@@ -59,6 +59,11 @@ export default defineConfig({
             sizes: '977x1279',
             type: 'image/png',
           },
+          {
+            src: './logocbtapequeno.png',
+            sizes: '144x144',
+            type: 'image/png',
+          },
      
         ],
       },

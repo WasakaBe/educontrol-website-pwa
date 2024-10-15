@@ -1,16 +1,35 @@
 {
- "name":"EDUCONTROL",
- "short_name": "EDUCONTROL",
- "description": "EDUCONTROL",
- "icons": [
-   {
-     "src": "./logo_cbta_5.png",
-     "sizes": "977x1279",
-     "type": "image/png"
-   }
- ],
- "start_url": ".",
- "display": "standalone",
- "theme_color": "#ffffff",
- "background_color": "#074d17"
+  "name": "EDUCONTROL",
+  "short_name": "EDUCONTROL",
+  "description": "EDUCONTROL",
+  "icons": [
+    {
+      "src": "./logo_cbta_5.png",
+      "sizes": "977x1279",
+      "type": "image/png"
+    },
+    {
+      "src": "./logocbtapequeno.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#074d17",
+  "screenshots": [
+    {
+      "src": "./screenshots/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "./screenshots/screenshot-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
 }

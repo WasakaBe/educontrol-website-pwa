@@ -56,14 +56,10 @@ export default defineConfig({
         icons: [
           {
             src: './logo_cbta_5.png',
-            sizes: '192x192',
+            sizes: '977x1279',
             type: 'image/png',
           },
-          {
-            src: './logo_cbta_5.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
+     
         ],
       },
     }),

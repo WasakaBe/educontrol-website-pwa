@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import './Feedback.css';
 import { apiUrl } from '../../../constants/Api'; // Ruta base de tu API
+import { getOfflineData, saveDataOffline } from '../../../db'; // Importar las funciones de IndexedDB
 
 interface FeedbackData {
   id_feedback: number;
@@ -44,16 +45,29 @@ const Feedback: React.FC = () => {
       if (!response.ok) {
         throw new Error('Error al obtener los feedbacks');
       }
-      const data = await response.json();
+      const data: FeedbackData[] = await response.json();
       setFeedbacks(data);
       setLoading(false);
+
+      // Guardar los datos de feedback en IndexedDB usando la clave "feedbackData"
+      saveDataOffline({
+        key: 'feedbackData',
+        value: JSON.stringify(data),
+        timestamp: Date.now(),
+      });
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
+      console.error('Error al obtener feedbacks:', err);
+
+      // Intentar cargar datos desde IndexedDB si no hay conexión
+      const cachedData = await getOfflineData('feedbackData');
+      if (cachedData) {
+        setFeedbacks(JSON.parse(cachedData.value));
+        setLoading(false);
+        console.log('Datos cargados desde IndexedDB:', cachedData);
       } else {
-        setError('Ocurrió un error desconocido');
+        setError('No se pudieron cargar los datos de feedback ni desde la red ni desde IndexedDB.');
+        setLoading(false);
       }
-      setLoading(false);
     }
   };
 
@@ -113,15 +127,13 @@ const Feedback: React.FC = () => {
                 </div>
               </div>
               <div className="feedback-body">
-                <p>
-                  <strong>Emoción:</strong>
-                  <div className="feedback-stars">
-                    {/* Mostrar estrellas según la emoción */}
-                    {Array.from({ length: getStarsForEmotion(feedback.emocion_feedback) }).map((_, index) => (
-                      <FontAwesomeIcon key={index} icon={faStar} color="#ffc107" />
-                    ))}
-                  </div>
-                </p>
+                <p><strong>Emoción:</strong></p>
+                <div className="feedback-stars">
+                  {/* Mostrar estrellas según la emoción */}
+                  {Array.from({ length: getStarsForEmotion(feedback.emocion_feedback) }).map((_, index) => (
+                    <FontAwesomeIcon key={index} icon={faStar} color="#ffc107" />
+                  ))}
+                </div>
                 <p><strong>Motivo:</strong> {feedback.motivo_feedback}</p>
               </div>
             </div>

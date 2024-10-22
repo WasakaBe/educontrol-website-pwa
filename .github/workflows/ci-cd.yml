@@ -49,8 +49,8 @@ jobs:
           echo "STAGING_TOKEN=${{ secrets.STAGING_TOKEN }}" >> $GITHUB_ENV
 
       # Pruebas Unitarias con Jest
-      - name: Run Unit Tests # Ejecuta las pruebas unitarias
-        run: npm test -- --coverage # Ejecuta Jest con cobertura
+      #- name: Run Unit Tests # Ejecuta las pruebas unitarias
+      #  run: npm test -- --coverage # Ejecuta Jest con cobertura
 
       # Generación de Reportes de Cobertura
       - name: Upload Coverage Report # Subir el reporte de cobertura

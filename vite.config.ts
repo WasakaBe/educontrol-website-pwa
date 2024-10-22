@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
@@ -11,14 +11,14 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => {
-              // Verifica si url tiene la propiedad 'pathname', lo cual debería ser el caso esperado
-              if (url && typeof url.pathname === 'string') {
-                return url.pathname.startsWith('/api/');
+            urlPattern: ({ url }: { url: URL | { pathname: string } }) => {
+              if (typeof url.pathname === 'string') {
+                return url.pathname.startsWith('/api/')
               }
-              return false; // Retorna false si la propiedad 'pathname' no está presente
+              return false
             },
-            handler: 'NetworkFirst',  // Intenta cargar desde la red primero, luego desde el caché
+
+            handler: 'NetworkFirst', // Intenta cargar desde la red primero, luego desde el caché
             options: {
               cacheName: 'api-data-cache',
               expiration: {
@@ -40,7 +40,9 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: ({ request }) => request.destination === 'script' || request.destination === 'style',
+            urlPattern: ({ request }) =>
+              request.destination === 'script' ||
+              request.destination === 'style',
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'static-resources-cache',
@@ -70,9 +72,8 @@ export default defineConfig({
             sizes: '144x144',
             type: 'image/png',
           },
-     
         ],
       },
     }),
   ],
-});
+})

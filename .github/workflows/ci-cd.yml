@@ -3,21 +3,24 @@ name: PWA CI/CD Workflow
 on:
   push:
     branches:
-      - main
-      - develop
+      - development         # Para pruebas internas
+      - feature/*           # Ramas de características específicas por desarrollador
+      - main                # Para despliegue en producción
+      - release/*           # Ramas de release para producción
   pull_request:
     branches:
+      - development
       - main
-      - develop
+      - release/*
   workflow_dispatch:
 
 jobs:
-  uno:
-    runs-on: ubuntu-latest  # Sistema operativo especificado
+  build-and-test:
+    runs-on: ubuntu-latest
 
     steps:
       # Comprobación del Checkout del repositorio
-      - name: Checkout repository  # Clona el repositorio
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       # Configuración del Entorno de Node.js
@@ -44,7 +47,7 @@ jobs:
         run: |
           echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
           echo "STAGING_TOKEN=${{ secrets.STAGING_TOKEN }}" >> $GITHUB_ENV
-      
+
       # Mensaje para confirmar el entorno
       - name: Mensaje
         run: echo "Hola mundo!!!"
@@ -66,3 +69,33 @@ jobs:
         run: |
           cat hola.txt
           ls -al
+
+      # Ejecuta pruebas unitarias
+      - name: Run Tests
+        run: npm test
+
+  deploy:
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      # Comprobación del Checkout del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Configuración del Entorno de Node.js
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Instalación de dependencias
+      - name: Install Dependencies
+        run: npm install
+
+      # Despliegue a Producción
+      - name: Deploy to Production
+        run: |
+          echo "Deploying application..."
+          # Aquí agregarías tu lógica de despliegue (ej: script de despliegue)

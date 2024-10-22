@@ -48,31 +48,16 @@ jobs:
           echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
           echo "STAGING_TOKEN=${{ secrets.STAGING_TOKEN }}" >> $GITHUB_ENV
 
-      # Mensaje para confirmar el entorno
-      - name: Mensaje
-        run: echo "Hola mundo!!!"
+      # Compilación del proyecto
+      - name: Build Project # Compila el proyecto
+        run: npm run build
 
-      # Crear un archivo
-      - name: Touch file # Crea el archivo
-        run: |
-          touch hola.txt
-          ls -al
-
-      # Agregar texto al archivo
-      - name: Set text # Agrega texto al archivo
-        run: |
-          echo "Hola mundo" >> hola.txt
-          ls -al
-
-      # Leer el archivo
-      - name: Read file # Lee el archivo
-        run: |
-          cat hola.txt
-          ls -al
-
-      # Ejecuta pruebas unitarias
-      #- name: Run Tests
-      #  run: npm test
+      # Subir el artefacto de compilación
+      - name: Upload Build Artifact # Guarda el artefacto de compilación
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: ./build # Ajustar la ruta según el directorio de salida de tu proyecto
 
   deploy:
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')

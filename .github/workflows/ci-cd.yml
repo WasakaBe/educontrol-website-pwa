@@ -48,13 +48,17 @@ jobs:
           echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
           echo "STAGING_TOKEN=${{ secrets.STAGING_TOKEN }}" >> $GITHUB_ENV
 
-      # Iniciar el Servidor para Pruebas
-      - name: Start Server # Inicia el servidor
-        run: npm start &
-      
-      # Esperar a que el Servidor Esté Listo
-      - name: Wait for Server to be Ready # Espera a que el servidor esté disponible
-        run: npx wait-on http://localhost:50013/api
+      # Pruebas Unitarias con Jest
+      #- name: Run Unit Tests # Ejecuta las pruebas unitarias
+      #  run: npm test -- --coverage # Ejecuta Jest con cobertura
+
+      # Generación de Reportes de Cobertura
+      - name: Upload Coverage Report # Subir el reporte de cobertura
+        if: always()  # Este paso siempre se ejecutará, incluso si las pruebas fallan
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/ # Ajustar la ruta según el directorio de salida del reporte de Jest
 
       # Pruebas de Integración o End-to-End con Cypress
       - name: Install Cypress # Instalación de Cypress

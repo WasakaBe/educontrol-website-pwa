@@ -13,21 +13,55 @@ on:
 
 jobs:
   uno:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Sistema operativo especificado
+
     steps:
+      # Comprobación del Checkout del repositorio
+      - name: Checkout repository  # Clona el repositorio
+        uses: actions/checkout@v3
+
+      # Configuración del Entorno de Node.js
+      - name: Setup Node.js environment  # Instalación de Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Versión específica de Node.js
+          
+      # Restauración de caché para dependencias de Node.js (npm/yarn)
+      - name: Restore npm cache  # Optimiza el caché de dependencias
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      # Instalación de dependencias
+      - name: Install Dependencies  # Instala las dependencias del proyecto
+        run: npm install
+
+      # Configuración de variables de entorno
+      - name: Set environment variables
+        run: |
+          echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+          echo "STAGING_TOKEN=${{ secrets.STAGING_TOKEN }}" >> $GITHUB_ENV
+      
+      # Mensaje para confirmar el entorno
       - name: Mensaje
         run: echo "Hola mundo!!!"
 
+      # Crear un archivo
       - name: Touch file # Crea el archivo
         run: |
           touch hola.txt
           ls -al
 
+      # Agregar texto al archivo
       - name: Set text # Agrega texto al archivo
         run: |
           echo "Hola mundo" >> hola.txt
           ls -al
 
+      # Leer el archivo
       - name: Read file # Lee el archivo
         run: |
           cat hola.txt

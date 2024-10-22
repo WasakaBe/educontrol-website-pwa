@@ -1,6 +1,15 @@
-name: EduControl ci-cd
+name: PWA CI/CD Workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
 
 jobs:
   uno:
@@ -8,19 +17,18 @@ jobs:
     steps:
       - name: Mensaje
         run: echo "Hola mundo!!!"
-        
-      - name: Touch file  # Crea el archivo
+
+      - name: Touch file # Crea el archivo
         run: |
           touch hola.txt
           ls -al
-          
-      - name: Set text  # Agrega texto al archivo
+
+      - name: Set text # Agrega texto al archivo
         run: |
           echo "Hola mundo" >> hola.txt
           ls -al
-          
-      - name: Read file  # Lee el archivo
+
+      - name: Read file # Lee el archivo
         run: |
           cat hola.txt
           ls -al
-

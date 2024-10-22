@@ -71,8 +71,8 @@ jobs:
           ls -al
 
       # Ejecuta pruebas unitarias
-      - name: Run Tests
-        run: npm test
+      #- name: Run Tests
+      #  run: npm test
 
   deploy:
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')

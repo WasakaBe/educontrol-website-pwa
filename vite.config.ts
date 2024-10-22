@@ -11,7 +11,13 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+            urlPattern: ({ url }) => {
+              // Verifica si url tiene la propiedad 'pathname', lo cual debería ser el caso esperado
+              if (url && typeof url.pathname === 'string') {
+                return url.pathname.startsWith('/api/');
+              }
+              return false; // Retorna false si la propiedad 'pathname' no está presente
+            },
             handler: 'NetworkFirst',  // Intenta cargar desde la red primero, luego desde el caché
             options: {
               cacheName: 'api-data-cache',

@@ -54,6 +54,7 @@ jobs:
         run: npm start &
         env:
           PORT: 5173
+          
 
       # Asegurarse de que hay tiempo suficiente para iniciar el servidor
       - name: Wait for Server Initialization

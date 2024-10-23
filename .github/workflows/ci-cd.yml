@@ -42,6 +42,15 @@ jobs:
         run: |
           echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
           echo "STAGING_TOKEN=${{ secrets.STAGING_TOKEN }}" >> $GITHUB_ENV
+      
+      # PASO 9 
+      # Ejecución de linter (ESLint) para verificar la calidad del código
+      - name: Run Linter (ESLint)
+        run: npm run lint
+
+      # Formateo de código con Prettier
+      - name: Run Code Formatter (Prettier)
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 
       - name: Build Project
         run: npm run build

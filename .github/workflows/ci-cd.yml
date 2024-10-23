@@ -64,6 +64,7 @@ jobs:
       - name: Wait for Server to be Ready
         run: npx wait-on http://localhost:5173
 
+        #Etapa de Pruebas 
       - name: Install Cypress
         run: npm install cypress --save-dev
 
@@ -99,6 +100,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_USERNAME: 'CI/CD Bot'
+
 
   deploy:
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')

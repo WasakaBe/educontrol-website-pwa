@@ -47,6 +47,7 @@ export default defineConfig({
             },
           },
         ],
+        
       },
       manifest: {
         name: 'EDUCONTROL',

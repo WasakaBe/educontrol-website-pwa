@@ -10,3 +10,6 @@ module.exports = defineConfig({
     supportFile: false, // Desactiva el archivo de soporte si no necesitas configuraciones avanzadas
   },
 })
+
+
+

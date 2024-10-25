@@ -119,7 +119,7 @@ export default function InfoDocent() {
       const response = await fetch(`${apiUrl}docente`);
       const data = await response.json();
       setDocentes(data);
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener los docentes');
     }
   };
@@ -129,7 +129,7 @@ export default function InfoDocent() {
       const response = await fetch(`${apiUrl}pregunta`);
       const data = await response.json();
       setSecretQuestions(data);
-    } catch {
+    } catch (err) {
       toast.error('Error al obtener las preguntas secretas');
     }
   };
@@ -139,7 +139,7 @@ export default function InfoDocent() {
       const response = await fetch(`${apiUrl}sexo`);
       const data = await response.json();
       setSexOptions(data);
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de sexo');
     }
   };
@@ -299,7 +299,7 @@ export default function InfoDocent() {
         toast.success('Docente actualizado exitosamente');
         closeUpdateModal();
         fetchDocentes(); // Refrescar la lista de docentes después de la actualización
-      } catch{
+      } catch (err) {
         toast.error('Error al actualizar docente');
       }
     };
@@ -319,7 +319,7 @@ export default function InfoDocent() {
         } else {
           toast.success('Correo disponible');
         }
-      } catch {
+      } catch (err) {
         toast.error('Error al verificar el correo');
       }
     };
@@ -429,7 +429,7 @@ export default function InfoDocent() {
           const response = await fetch(`${apiUrl}docentes/nocontrol/${e.target.value}`);
           const data = await response.json();
           setDocentes([data]);
-        } catch  {
+        } catch (error) {
           toast.error('Docente no encontrado');
         }
       }

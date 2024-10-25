@@ -13,12 +13,12 @@
       "sizes": "144x144",
       "type": "image/png"
     }
-    
+
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#fffff0",
-  "background_color": "#074d17",
+  "theme_color": "#ffffff",
+  "background_color": "#074d16",
   
   "screenshots": [
     {

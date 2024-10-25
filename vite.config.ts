@@ -56,12 +56,13 @@ export default defineConfig({
         theme_color: '#000',
         background_color: '#074d17',
         display: 'standalone',
-        icons: [
+        icons: [// Lista de iconos para la aplicación
           {
-            src: './logo_cbta_5.png',
-            sizes: '977x1279',
-            type: 'image/png',
+            src: './logo_cbta_5.png', // Ruta al icono
+            sizes: '977x1279', // Tamaño del icono
+            type: 'image/png', // Tipo de imagen
           },
+
           {
             src: './logocbtapequeno.png',
             sizes: '144x144',

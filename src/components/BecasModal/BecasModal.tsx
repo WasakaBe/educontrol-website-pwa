@@ -4,18 +4,16 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import './BecasModal.css'
 
-// Define la interfaz Beca para representar la estructura de una beca
 interface Beca {
-  id_info_becas: number; // Identificador único de la beca
-  titulo_info_becas: string; // Título de la beca
-  descripcion_info_becas: string; // Descripción de la beca
-  requisitos_info_becas: string; // Requisitos para aplicar a la beca
-  foto_info_becas: string; // URL de la foto asociada a la beca
+  id_info_becas: number
+  titulo_info_becas: string
+  descripcion_info_becas: string
+  requisitos_info_becas: string
+  foto_info_becas: string
 }
 
-// Define la interfaz para las props del modal de becas
 interface BecasModalProps {
-  onClose: () => void; // Función para cerrar el modal
+  onClose: () => void
 }
 
 const BecasModal: React.FC<BecasModalProps> = ({ onClose }) => {

@@ -132,7 +132,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}alumno`)
       const data = await response.json()
       setAlumnos(data)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener los alumnos')
     }
   }
@@ -142,7 +142,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}pregunta`)
       const data = await response.json()
       setSecretQuestions(data)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las preguntas secretas')
     }
   }
@@ -152,7 +152,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}sexo`)
       const data = await response.json()
       setSexOptions(data)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de sexo')
     }
   }
@@ -162,7 +162,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}clinica`)
       const data = await response.json()
       setClinicOptions(data)
-    } catch {
+    } catch (err) {
       toast.error('Error al obtener las opciones de clínicas')
     }
   }
@@ -172,7 +172,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}grado`)
       const data = await response.json()
       setGradoOptions(data)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de grados')
     }
   }
@@ -182,7 +182,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}grupo`)
       const data = await response.json()
       setGrupoOptions(data)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de grupos')
     }
   }
@@ -192,7 +192,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}traslado`)
       const data = await response.json()
       setTrasladoOptions(data)
-    } catch {
+    } catch (err) {
       toast.error('Error al obtener las opciones de traslados')
     }
   }
@@ -201,7 +201,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}traslado_transporte`)
       const data = await response.json()
       setTrasladoTransporteOptions(data)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de traslados de transporte')
     }
   }
@@ -211,7 +211,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}carreras/tecnicas`)
       const data = await response.json()
       setCarreraTecnicaOptions(data.carreras)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de carreras técnicas')
     }
   }
@@ -221,7 +221,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}paises`)
       const data = await response.json()
       setPaisOptions(data.paises)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de países')
     }
   }
@@ -231,7 +231,7 @@ export default function InfoAlumn() {
       const response = await fetch(`${apiUrl}estados`)
       const data = await response.json()
       setEstadoOptions(data.estados)
-    } catch  {
+    } catch (err) {
       toast.error('Error al obtener las opciones de estados')
     }
   }
@@ -440,7 +440,7 @@ export default function InfoAlumn() {
       } else {
         toast.success('Correo disponible')
       }
-    } catch {
+    } catch (err) {
       toast.error('Error al verificar el correo')
     }
   }

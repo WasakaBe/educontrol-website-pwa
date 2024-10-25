@@ -44,7 +44,6 @@ Utilizamos la estrategia de **versionamiento SemVer (Versionado Semántico)** y 
 - Versión inicial: `v1.0.0`
 - Nueva funcionalidad menor: `v1.1.0`
 - Corrección de errores: `v1.1.1`
-- Mejoras menores y nuevas funcionalidades: `v1.2.1`
 
 ## Estrategia de Despliegue
 

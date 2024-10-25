@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+
+
 export default defineConfig({
   plugins: [
     react(),
@@ -11,7 +13,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+            urlPattern: /\/api\//,
             handler: 'NetworkFirst',  // Intenta cargar desde la red primero, luego desde el caché
             options: {
               cacheName: 'api-data-cache',
@@ -45,6 +47,7 @@ export default defineConfig({
             },
           },
         ],
+        
       },
       manifest: {
         name: 'EDUCONTROL',

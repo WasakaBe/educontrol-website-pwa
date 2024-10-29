@@ -7,6 +7,7 @@ interface LocationState {
 }
 
 const AdminDashboard: React.FC = () => {
+  
   const location = useLocation()
   const state = location.state as LocationState
   const { user2 } = state || {}

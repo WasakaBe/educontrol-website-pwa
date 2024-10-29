@@ -1,0 +1,16 @@
+-- este es de la prueba de cypress  es el comando para ejecutar y que se abra su web
+
+npx cypress open
+
+-- este es de la prueba de jest es el comando para ejecutar
+
+npm test
+
+
+Public Key:
+BJEI6FtirsSkzlN0C1TwPOkyvQG9ptkeqHjlroSZndODByYHOQuRH37lDdWfAJn9yPlsQ7B3OjqEKHu7SxIZ1Bw
+
+Private Key:
+ZpM43o6Oa8X07bGQ0nylkHAZtUDXUBx8dY4iVxLFJeQ
+
+

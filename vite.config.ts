@@ -63,9 +63,9 @@ export default defineConfig({
             type: 'image/png',
           },
           {
-            src: './logocbtapequeno.png',
-            sizes: '144x144',
-            type: 'image/png',
+            src: './logocbtapequeno.png', // Ruta al icono más pequeño
+            sizes: '144x144', // Tamaño del icono
+            type: 'image/png', // Tipo de imagen
           },
      
         ],

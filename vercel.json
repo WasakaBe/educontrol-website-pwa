@@ -1,0 +1,11 @@
+{
+ "rewrites": [
+   { "source": "/Administration/:userName", "destination": "/" },
+   { "source": "/Alumn/:userName", "destination": "/" },
+   { "source": "/Docent/:userName", "destination": "/" },
+   { "source": "/Familiar/:userName", "destination": "/" },
+   { "source": "/terms", "destination": "/" },
+   { "source": "/privacy", "destination": "/" },
+   { "source": "/aviso/clientes", "destination": "/" }
+ ]
+}

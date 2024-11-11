@@ -1,1 +1,1 @@
-export const apiUrl: string = "https://educontrolbackend.onrender.com/api/";
+export const apiUrl = process.env.REACT_APP_API_URL || "https://educontrolbackend.onrender.com/api/";

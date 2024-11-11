@@ -75,3 +75,7 @@
   height: 40px;
   margin-right: 10px;
 }
+
+:root{
+  --color-pagina:#5c0325;
+}

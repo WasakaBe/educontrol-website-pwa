@@ -29,7 +29,7 @@
 .inscription-text h1 {
  font-size: 36px;
  margin-bottom: 20px;
- color: #0c5417; /* Color del texto */
+ color: var(--color-pagina); /* Color del texto */
 }
 
 .inscription-text p,
@@ -46,7 +46,7 @@
 
 .inscription-text ul li::before {
  content: '•';
- color: #f0c040; /* Color del punto */
+ color: var(--color-pagina); /* Color del punto */
  font-weight: bold;
  display: inline-block;
  width: 1em;

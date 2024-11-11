@@ -1,7 +1,7 @@
 .container-footer{
   height: auto;
   width: 100%;
-  background-image: linear-gradient(150deg,#222,#222 50%,#165a18 0,#165a18);
+  background-image: linear-gradient(150deg,#222,#222 50%,#5c0325 0,#5c0325);
 }
 .sect-footer{
   display: flex;

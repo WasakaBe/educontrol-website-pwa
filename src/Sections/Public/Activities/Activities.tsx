@@ -40,7 +40,7 @@ const Activities: React.FC = () => {
         toast.info('No hay actividades noticias disponibles.');
       }
     } catch (error) {
-      toast.error('Error fetching actividades noticias: ' + (error as Error).message);
+      console.error('Error fetching actividades noticias: ' + (error as Error).message);
 
       // Intentar cargar datos desde IndexedDB si no hay conexión
       const cachedData = await getOfflineData('activitiesData');
@@ -79,7 +79,7 @@ const Activities: React.FC = () => {
               <br />
               <div className="des">{activity.descripcion_actividad_noticia}</div>
               <br />
-              <button className="save-button">Ver más</button>
+            
             </div>
           </div>
         ))}

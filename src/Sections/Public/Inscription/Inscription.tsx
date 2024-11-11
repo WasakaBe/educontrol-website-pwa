@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { apiUrl } from '../../../constants/Api';
 import './Inscription.css';
 import { getOfflineData, saveDataOffline } from '../../../db';
@@ -13,11 +12,8 @@ interface InscriptionData {
 
 const Inscription: React.FC = () => {
   const [inscriptionData, setInscriptionData] = useState<InscriptionData | null>(null);
-  const navigate = useNavigate();
 
-  const BtnInscripcion = () => {
-    navigate('/Formulario/Inscription');
-  };
+
 
   useEffect(() => {
     fetchInscriptionData();
@@ -27,7 +23,7 @@ const Inscription: React.FC = () => {
     try {
       const response = await fetch(`${apiUrl}info_inscription`);
       if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
+        console.error(`Network response was not ok: ${response.statusText}`);
       }
       const data = await response.json();
       if (data.length > 0) {
@@ -66,9 +62,7 @@ const Inscription: React.FC = () => {
         <ul>{renderRequeriments()}</ul>
         <h1>Periodo:</h1>
         <p>{inscriptionData.periodo_info_inscripcion}</p>
-        <button onClick={BtnInscripcion} className="btn-view">
-          Ver más →
-        </button>
+   
       </div>
       <div className="inscription-image">
         <img src={`data:image/png;base64,${inscriptionData.imagen_info_inscription}`} alt="Inscription" />

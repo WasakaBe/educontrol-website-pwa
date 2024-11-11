@@ -37,7 +37,7 @@ const About: React.FC = () => {
       }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast.error('Error al cargar información sobre nosotros');
+      console.error('Error al cargar información sobre nosotros');
 
       // Intentar cargar datos desde IndexedDB si no hay conexión
       const cachedData = await getOfflineData('aboutData');

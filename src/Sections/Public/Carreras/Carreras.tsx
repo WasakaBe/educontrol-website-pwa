@@ -37,7 +37,7 @@ const Carreras: React.FC = () => {
         toast.error('No se encontraron carreras técnicas');
       }
     } catch {
-      toast.error('Error al cargar carreras técnicas');
+      console.error('Error al cargar carreras técnicas');
 
       // Intentar cargar datos desde IndexedDB si no hay conexión
       const cachedData = await getOfflineData('carrerasTecnicasData');

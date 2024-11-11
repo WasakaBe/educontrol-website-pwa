@@ -1,1 +1,2 @@
-export const apiUrl = process.env.REACT_APP_API_URL || "https://educontrolbackend.onrender.com/api/";
+// Usa esto si estás usando Vite
+export const apiUrl = import.meta.env.VITE_API_URL;

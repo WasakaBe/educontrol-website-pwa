@@ -6,6 +6,7 @@
 .titulo-centrado {
  font-size: 2em;
  margin-bottom: 20px;
+ color: var(--color-pagina);
 }
 
 .carreras-list {

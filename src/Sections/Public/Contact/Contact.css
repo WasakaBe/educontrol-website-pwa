@@ -6,14 +6,13 @@
   flex-direction: column;
   min-height: 80vh;
   padding: 50px;
-  color: #333;
   background: #f7f9fc;
 }
 
 .contact-title {
   font-size: 2.5em;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--color-pagina);
 }
 
 .dates-contacts {
@@ -75,7 +74,7 @@
 }
 
 .contact-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--color-pagina);
 }
 
 .input-container {

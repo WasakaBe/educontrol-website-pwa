@@ -115,7 +115,7 @@ export default function NavbarDashboard ({ setCurrentView }: NavbarDashboardProp
             </button>
           </>
         ) : (
-          <span className="user-name">{user.nombre_usuario}</span>
+          <span onClick={() => setCurrentView('profiledashboardadmin')} className="user-name">{user.nombre_usuario}</span>
         )}
       </div>
     </nav>

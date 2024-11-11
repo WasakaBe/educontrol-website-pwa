@@ -215,15 +215,28 @@ export default function InfoDocent() {
     setIsCsvModalOpen(false);
   };
 
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  
+
   const handleInputChange = async (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    if (name === 'correo_usuario') {
+  
+    // Solo verifica la disponibilidad si el correo es válido
+    setFormData((formData)=>({ ...formData, [name]: value }));
+    if (name === 'correo_usuario' && isValidEmail(value)) {
       await checkEmailAvailability(value);
     } else if (name === 'pwd_usuario') {
       validatePassword(value);
     }
-    setFormData({ ...formData, [name]: value });
+  
+   
   };
+  
+  
 
   const handleUpdateInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -325,14 +338,17 @@ export default function InfoDocent() {
     };
     
     const validatePassword = (password: string) => {
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       if (!passwordRegex.test(password)) {
-        toast.error('El password debe tener al menos 8 caracteres, incluir letras mayúsculas, minúsculas, números y caracteres especiales, y no debe contener espacios');
-        setFormData(prevState => ({ ...prevState, pwd_usuario: '' }));
+        toast.error(
+          'El password debe tener al menos 8 caracteres, incluir letras mayúsculas, minúsculas, números y caracteres especiales, y no debe contener espacios'
+        );
       } else {
         toast.success('Contraseña válida');
       }
     };
+    
     
     const onChangeCaptcha = () => {
       if (captcha.current && captcha.current.getValue()) {
@@ -757,14 +773,15 @@ export default function InfoDocent() {
                 <div className="register-input-container-info-docent-admin">
                   <label htmlFor="pwd_usuario">Contraseña</label>
                   <input
-                    type="password"
-                    id="pwd_usuario"
-                    name="pwd_usuario"
-                    placeholder="Contraseña"
-                    value={formData.pwd_usuario}
-                    onChange={handleInputChange}
-                    required
-                  />
+    type="password"
+    id="pwd_usuario"
+    name="pwd_usuario"
+    placeholder="Contraseña"
+    value={formData.pwd_usuario}
+    onChange={(e) => setFormData({ ...formData, pwd_usuario: e.target.value })}
+    onBlur={(e) => validatePassword(e.target.value)}
+    required
+  />
                 </div>
                 <div className="register-input-container-info-docent-admin">
                   <label htmlFor="phone_usuario">Teléfono</label>

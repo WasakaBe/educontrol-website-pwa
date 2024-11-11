@@ -1,0 +1,70 @@
+.modal-overlay-alumn-manual {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: rgba(0, 0, 0, 0.5);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 999;
+}
+
+.modal-alumn-manual {
+ background-color: white;
+ padding: 20px;
+ border-radius: 8px;
+ width: 90%;
+ max-width: 500px;
+}
+
+.modal-alumn-manual h2 {
+ font-size: 1.5em;
+ font-weight: bold;
+ margin-bottom: 10px;
+ text-align: center;
+}
+
+.form-alumn-manual input,
+.form-alumn-manual select,
+.form-alumn-manual textarea {
+ width: 100%;
+ padding: 8px;
+ margin: 8px 0;
+ border: 1px solid #ddd;
+ border-radius: 4px;
+ box-sizing: border-box;
+}
+
+.button-group-alumn-manual {
+ display: flex;
+ justify-content: space-between;
+ margin-top: 20px;
+}
+
+.save-button-alumn-manual {
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ padding: 10px 20px;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.close-button-alumn-manual {
+ background-color: #f44336;
+ color: white;
+ border: none;
+ padding: 10px 20px;
+ border-radius: 4px;
+ cursor: pointer;
+}
+
+.save-button-alumn-manual:hover {
+ background-color: #45a049;
+}
+
+.close-button-alumn-manual:hover {
+ background-color: #e53935;
+}

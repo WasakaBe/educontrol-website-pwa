@@ -88,13 +88,17 @@
   background-color: #059669;
 }
 
+
 .modal-info-alumn-admin {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 600px;
+  max-width: 90%;
   width: 100%;
+  max-width: 500px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
+  margin: 0 auto;
 }
 
 .modal-overlay-info-alumn-admin {
@@ -113,26 +117,29 @@
 .register-section-info-alumn-admin {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 
 .register-input-container-info-alumn-admin input,
 .register-input-container-info-alumn-admin select,
 .register-input-container-info-alumn-admin textarea {
   width: 100%;
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 .register-input-container-info-alumn-admin label {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .button-group-info-alumn-admin {
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
 }
 
 .save-button-info-alumn-admin,
@@ -155,12 +162,18 @@
   color: white;
 }
 
-.save-button-info-alumn-admin:hover,
+.save-button-info-alumn-admin:hover {
+  background-color: #45a049;
+}
+
 .next-button-info-alumn-admin:hover,
 .previous-button-info-alumn-admin:hover,
 .cancel-button-info-alumn-admin:hover {
-  background-color: #45a049;
+  background-color: #333;
+  color: white;
 }
+
+
 
 .pagination-info-alumn-admin {
   text-align: center;

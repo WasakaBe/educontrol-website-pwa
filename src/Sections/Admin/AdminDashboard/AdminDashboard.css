@@ -40,6 +40,40 @@
  color: black;
 }
 
+.admin-feedbacks {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.admin-feedbacks h3 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 500px; /* Tamaño máximo en pantallas grandes */
+  height: auto;     /* Permite que la gráfica se ajuste en altura */
+  margin: 0 auto;
+}
+
+
+@media (max-width: 768px) {
+  .chart-container {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 576px) {
+  .chart-container {
+    max-width: 300px;
+  }
+}
+
 @media (max-width: 992px) {
  .admin-container-dashboard {
   height: auto !important;

@@ -190,8 +190,11 @@ const InfoBecas: React.FC = () => {
                 type="file"
                 onChange={handleImageChange}
               />
+                 <br />
               <button onClick={handleCreateBeca}>Crear Beca</button>
-              <button className="close-button-becas" onClick={() => setIsCreateModalOpen(false)}>Cerrar</button>
+              <br />
+           <br />
+              <button className="delete-button" onClick={() => setIsCreateModalOpen(false)}>Cerrar</button>
             </div>
           </div>
         </div>

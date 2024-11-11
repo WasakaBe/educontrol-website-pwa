@@ -1,5 +1,6 @@
 import './InfoAlumn.css'
 import './help.css'; 
+import './modal-alumn-manual.css'
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react'
 import { apiUrl } from '../../../../constants/Api'
 import Modal from 'react-modal'
@@ -319,17 +320,25 @@ export default function InfoAlumn() {
     setManualAddStep(1)
   }
 
-  const handleInputChange = async (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target
-    if (name === 'correo_usuario') {
-      await checkEmailAvailability(value)
+  const handleInputChange = async (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+  
+    // Establecer el valor en el estado antes de la validación
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  
+    if (name === 'correo_usuario' && isValidEmail(value)) {
+      await checkEmailAvailability(value);
     } else if (name === 'pwd_usuario') {
-      validatePassword(value)
+      validatePassword(value);
     }
-    setFormData({ ...formData, [name]: value })
-  }
+  };
+  
+  // Función para validar el formato de correo
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  
 
 
   const handleManualAddInputChange = (
@@ -447,16 +456,16 @@ export default function InfoAlumn() {
 
   const validatePassword = (password: string) => {
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       toast.error(
         'El password debe tener al menos 8 caracteres, incluir letras mayúsculas, minúsculas, números y caracteres especiales, y no debe contener espacios'
-      )
-      setFormData((prevState) => ({ ...prevState, pwd_usuario: '' }))
+      );
     } else {
-      toast.success('Contraseña válida')
+      toast.success('Contraseña válida');
     }
-  }
+  };
+  
 
   const onChangeCaptcha = () => {
     if (captcha.current && captcha.current.getValue()) {
@@ -732,7 +741,7 @@ export default function InfoAlumn() {
               <div className="register-input-container-info-alumn-admin">
                 <label htmlFor="correo_usuario">Correo</label>
                 <input
-                  type="email"
+                  type="text"
                   id="correo_usuario"
                   name="correo_usuario"
                   placeholder="Correo"
@@ -744,14 +753,15 @@ export default function InfoAlumn() {
               <div className="register-input-container-info-alumn-admin">
                 <label htmlFor="pwd_usuario">Contraseña</label>
                 <input
-                  type="password"
-                  id="pwd_usuario"
-                  name="pwd_usuario"
-                  placeholder="Contraseña"
-                  value={formData.pwd_usuario}
-                  onChange={handleInputChange}
-                  required
-                />
+    type="password"
+    id="pwd_usuario"
+    name="pwd_usuario"
+    placeholder="Contraseña"
+    value={formData.pwd_usuario}
+    onChange={(e) => setFormData({ ...formData, pwd_usuario: e.target.value })}
+    onBlur={(e) => validatePassword(e.target.value)}
+    required
+  />
               </div>
               <div className="register-input-container-info-alumn-admin">
                 <label htmlFor="phone_usuario">Teléfono</label>
@@ -894,14 +904,14 @@ export default function InfoAlumn() {
       <Modal
         isOpen={isManualAddModalOpen}
         onRequestClose={closeManualAddModal}
-     className="modal-info-alumn-admin"
-        overlayClassName="modal-overlay-info-alumn-admin"
+ className="modal-alumn-manual"
+  overlayClassName="modal-overlay-alumn-manual"
       >
-        <h2>Agregar Alumno Manualmente</h2>
-        <form className="modal-overlay-info-alumn-admin" onSubmit={handleManualAdd}>
+        <h2 className="modal-alumn-manual">Agregar Alumno Manualmente</h2>
+        <form onSubmit={handleManualAdd}>
           {manualAddStep === 1 && (
-            <div className="register-section-info-alumn-admin">
-              <div className="register-input-container-info-alumn-admin">
+            <div className="form-alumn-manual" >
+              <div >
                 <label htmlFor="nombre_alumnos">Nombre</label>
                 <input
                   type="text"
@@ -915,7 +925,7 @@ export default function InfoAlumn() {
                   title="El nombre solo puede contener letras"
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="app_alumnos">Apellido Paterno</label>
                 <input
                   type="text"
@@ -929,7 +939,7 @@ export default function InfoAlumn() {
                   title="El apellido paterno solo puede contener letras"
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="apm_alumnos">Apellido Materno</label>
                 <input
                   type="text"
@@ -943,7 +953,7 @@ export default function InfoAlumn() {
                   title="El apellido materno solo puede contener letras"
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="fecha_nacimiento_alumnos">
                   Fecha de Nacimiento
                 </label>
@@ -958,18 +968,18 @@ export default function InfoAlumn() {
                 />
               </div>
             
-              <div className="button-group-info-alumn-admin">
+              <div className="button-group-alumn-manual">
                 <button
                   type="button"
                   onClick={closeManualAddModal}
-                  className="cancel-button-info-alumn-admin"
+                  className="close-button-alumn-manual"
                 >
                   Cancelar
                 </button>
                 <button
                   type="button"
                   onClick={handleNextManualAddStep}
-                  className="next-button-info-alumn"
+                  className="save-button-alumn-manual"
                 >
                   Siguiente
                 </button>
@@ -978,8 +988,8 @@ export default function InfoAlumn() {
           )}
 
           {manualAddStep === 2 && (
-            <div className="register-section-info-alumn-admin">
-              <div className="register-input-container-info-alumn-admin">
+            <div className="form-alumn-manual">
+              <div >
                 <label htmlFor="curp_alumnos">CURP</label>
                 <input
                   type="text"
@@ -991,7 +1001,7 @@ export default function InfoAlumn() {
                   required
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div>
                 <label htmlFor="nocontrol_alumnos">Número de Control</label>
                 <input
                   type="text"
@@ -1003,7 +1013,7 @@ export default function InfoAlumn() {
                   required
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div>
                 <label htmlFor="telefono_alumnos">Teléfono</label>
                 <input
                   type="tel"
@@ -1015,7 +1025,7 @@ export default function InfoAlumn() {
                   required
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="seguro_social_alumnos">Seguro Social</label>
                 <input
                   type="text"
@@ -1026,18 +1036,18 @@ export default function InfoAlumn() {
                   onChange={handleManualAddInputChange}
                 />
               </div>
-              <div className="button-group-info-alumn-admin">
+              <div className="button-group-alumn-manual">
                 <button
                   type="button"
                   onClick={handlePreviousManualAddStep}
-                  className="previous-button-info-alumn-admin"
+                  className="close-button-alumn-manual"
                 >
                   Anterior
                 </button>
                 <button
                   type="button"
                   onClick={handleNextManualAddStep}
-                  className="next-button-info-alumn-admin"
+                  className="save-button-alumn-manual"
                 >
                   Siguiente
                 </button>
@@ -1046,8 +1056,8 @@ export default function InfoAlumn() {
           )}
 
           {manualAddStep === 3 && (
-            <div className="register-section-info-alumn-admin">
-              <div className="register-input-container-info-alumn-admin">
+            <div className="form-alumn-manual">
+              <div >
                 <label htmlFor="cuentacredencial_alumnos">
                   Cuenta Credencial
                 </label>
@@ -1060,7 +1070,7 @@ export default function InfoAlumn() {
                   onChange={handleManualAddInputChange}
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="idSexo">Sexo</label>
                 <select
                   id="idSexo"
@@ -1077,7 +1087,7 @@ export default function InfoAlumn() {
                   ))}
                 </select>
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="idClinica">Clínica</label>
                 <select
                   id="idClinica"
@@ -1098,7 +1108,7 @@ export default function InfoAlumn() {
                 </select>
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+              <div>
                 <label htmlFor="idGrado">Grado</label>
                 <select
                   id="idGrado"
@@ -1115,7 +1125,31 @@ export default function InfoAlumn() {
                   ))}
                 </select>
               </div>
-              <div className="register-input-container-info-alumn-admin">
+            
+            
+              <div className="button-group-alumn-manual">
+                <button
+                  type="button"
+                  onClick={handlePreviousManualAddStep}
+                  className="close-button-alumn-manual"
+                >
+                  Anterior
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextManualAddStep}
+                  className="save-button-alumn-manual"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {manualAddStep === 4 && (
+            <div className="form-alumn-manual">
+          
+            <div >
                 <label htmlFor="idGrupo">Grupo</label>
                 <select
                   id="idGrupo"
@@ -1132,7 +1166,7 @@ export default function InfoAlumn() {
                   ))}
                 </select>
               </div>
-              <div className="register-input-container-info-alumn-admin">
+            <div >
                 <label htmlFor="idTraslado">Traslado</label>
                 <select
                   id="idTraslado"
@@ -1152,30 +1186,8 @@ export default function InfoAlumn() {
                   ))}
                 </select>
               </div>
-              <div className="button-group-info-alumn-admin">
-                <button
-                  type="button"
-                  onClick={handlePreviousManualAddStep}
-                  className="previous-button-info-alumn-admin"
-                >
-                  Anterior
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNextManualAddStep}
-                  className="next-button-info-alumn-admin"
-                >
-                  Siguiente
-                </button>
-              </div>
-            </div>
-          )}
 
-          {manualAddStep === 4 && (
-            <div className="register-section-info-alumn-admin">
-            
-
-              <div className="register-input-container-info-alumn-admin">
+              <div>
                 <label htmlFor="idTrasladotransporte">
                   Traslado Transporte
                 </label>
@@ -1198,7 +1210,7 @@ export default function InfoAlumn() {
                 </select>
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="idCarreraTecnica">Carrera Técnica</label>
                 <select
                   id="idCarreraTecnica"
@@ -1219,7 +1231,32 @@ export default function InfoAlumn() {
                 </select>
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+            
+
+              <div className="button-group-alumn-manual">
+                <button
+                  type="button"
+                  onClick={handlePreviousManualAddStep}
+                  className="close-button-alumn-manual"
+                >
+                  Anterior
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextManualAddStep}
+                  className="save-button-alumn-manual"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {manualAddStep === 5 && (
+            <div className="form-alumn-manual">
+
+<div>
+              <div >
                 <label htmlFor="idPais">País</label>
                 <select
                   id="idPais"
@@ -1237,7 +1274,7 @@ export default function InfoAlumn() {
                 </select>
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="idEstado">Estado</label>
                 <select
                   id="idEstado"
@@ -1254,8 +1291,6 @@ export default function InfoAlumn() {
                   ))}
                 </select>
               </div>
-
-              <div className="register-input-container-info-alumn-admin">
                 <label htmlFor="municipio_alumnos">Municipio</label>
                 <input
                   type="text"
@@ -1266,7 +1301,7 @@ export default function InfoAlumn() {
                   onChange={handleManualAddInputChange}
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="comunidad_alumnos">Comunidad</label>
                 <input
                   type="text"
@@ -1277,19 +1312,21 @@ export default function InfoAlumn() {
                   onChange={handleManualAddInputChange}
                 />
               </div>
+     
+ 
 
-              <div className="button-group-info-alumn-admin">
+              <div className="button-group-alumn-manual">
                 <button
                   type="button"
                   onClick={handlePreviousManualAddStep}
-                  className="previous-button-info-alumn-admin"
+                  className="close-button-alumn-manual"
                 >
                   Anterior
                 </button>
                 <button
                   type="button"
                   onClick={handleNextManualAddStep}
-                  className="next-button-info-alumn-admin"
+                  className="save-button-alumn-manual"
                 >
                   Siguiente
                 </button>
@@ -1297,10 +1334,13 @@ export default function InfoAlumn() {
             </div>
           )}
 
-          {manualAddStep === 5 && (
-            <div className="register-section-info-alumn-admin">
+{manualAddStep === 6 && (
+            <div className="form-alumn-manual">
+
+
              
-              <div className="register-input-container-info-alumn-admin">
+             
+              <div >
                 <label htmlFor="calle_alumnos">Calle</label>
                 <input
                   type="text"
@@ -1311,7 +1351,7 @@ export default function InfoAlumn() {
                   onChange={handleManualAddInputChange}
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="proc_sec_alumno">Procedencia Secundaria</label>
                 <input
                   type="text"
@@ -1322,7 +1362,7 @@ export default function InfoAlumn() {
                   onChange={handleManualAddInputChange}
                 />
               </div>
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="nombre_completo_familiar">Nombre Completo Familiar</label>
                 <input
                   type="text"
@@ -1334,7 +1374,7 @@ export default function InfoAlumn() {
                 />
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="telefono_familiar">telefono Familiar</label>
                 <input
                   type="text"
@@ -1346,7 +1386,32 @@ export default function InfoAlumn() {
                 />
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+       
+
+
+              <div className="button-group-alumn-manual">
+                <button
+                  type="button"
+                  onClick={handlePreviousManualAddStep}
+                  className="close-button-alumn-manual"
+                >
+                  Anterior
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextManualAddStep}
+                  className="save-button-alumn-manual"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+{manualAddStep === 7 && (
+            <div className="form-alumn-manual">
+
+              <div >
                 <label htmlFor="telefono_trabajo_familiar">telefono trabajo Familiar</label>
                 <input
                   type="text"
@@ -1358,7 +1423,7 @@ export default function InfoAlumn() {
                 />
               </div>
 
-              <div className="register-input-container-info-alumn-admin">
+              <div >
                 <label htmlFor="correo_familiar">correo Familiar</label>
                 <input
                   type="email"
@@ -1370,15 +1435,15 @@ export default function InfoAlumn() {
                 />
               </div>
 
-              <div className="button-group-info-alumn-admin">
+              <div className="button-group-alumn-manual">
                 <button
                   type="button"
                   onClick={handlePreviousManualAddStep}
-                  className="previous-button-info-alumn-admin"
+                  className="close-button-alumn-manual"
                 >
                   Anterior
                 </button>
-                <button type="submit" className="save-button-info-alumn-admin">
+                <button type="submit" className="save-button-alumn-manual">
                   Guardar
                 </button>
               </div>
@@ -1386,6 +1451,7 @@ export default function InfoAlumn() {
           )}
         </form>
       </Modal>
+
 
       <Modal
                 isOpen={isCsvModalOpen}

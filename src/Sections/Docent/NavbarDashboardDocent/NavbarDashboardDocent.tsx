@@ -82,7 +82,7 @@ const NavbarDashboardDocent: React.FC<NavbarDashboardProps> = ({
             </button>
           </>
         ) : (
-          <span className="user-name">{user.nombre_usuario}</span>
+          <span    onClick={() => onButtonClick('profiledashboarddocent')} className="user-name">{user.nombre_usuario}</span>
         )}
       </div>
     </nav>

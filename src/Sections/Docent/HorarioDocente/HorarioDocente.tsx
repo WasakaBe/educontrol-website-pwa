@@ -523,8 +523,8 @@ const HorarioDocente: React.FC = () => {
       <Modal
         isOpen={isAddModalOpen}
         onRequestClose={closeAddModal}
-        className="modal-add-alumno-horario-docente"
-        overlayClassName="modal-overlay-horarios-docente"
+        className="modal-alumn-manual"
+        overlayClassName="modal-overlay-alumn-manual"
       >
         <h2>Agregar Alumno </h2>
         <div className="add-alumno-form-horario-docente">

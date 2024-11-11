@@ -33,10 +33,14 @@ const Navbar: React.FC = () => {
   const handleCloseReinscription = () => {
     setShowReinscription(false);
   };
-
+  if (isMenuOpen === undefined) {
+    setIsMenuOpen(false);
+  }
+  
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen((prev) => !prev);
   };
+  
 
   return (
     <>

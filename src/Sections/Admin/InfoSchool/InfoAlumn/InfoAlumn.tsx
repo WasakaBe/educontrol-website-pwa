@@ -9,7 +9,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { DateTime } from 'luxon'
 import { Alumn,ManualAddFormData,SecretQuestion,SexOption,Clinic,Grado,Grupo,Traslado,TrasladoTransporte,CarreraTecnica,Pais,Estado} from '../../../../constants/interfaces';
-
+import ModalActualizarAlumno from './ModalActualizarAlumno'
 interface FormData {
   nombre_usuario: string
   app_usuario: string
@@ -33,6 +33,21 @@ Modal.setAppElement('#root')
 export default function InfoAlumn() {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false)
 
+// Añadir un nuevo estado para manejar el modal de actualización
+const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
+const [selectedAlumnoToUpdate, setSelectedAlumnoToUpdate] = useState<Alumn | null>(null);
+
+// Función para abrir el modal de actualización
+const openUpdateModal = (alumno: Alumn) => {
+  setSelectedAlumnoToUpdate(alumno);
+  setIsUpdateModalOpen(true);
+};
+
+// Función para cerrar el modal de actualización
+const closeUpdateModal = () => {
+  setIsUpdateModalOpen(false);
+  setSelectedAlumnoToUpdate(null);
+};
 
   const openHelpModal = () => {
     setIsHelpModalOpen(true);
@@ -624,13 +639,15 @@ export default function InfoAlumn() {
                     >
                       Crear Usuario
                     </button>
+
                     <button
-                      className="update-button-info-alumn-admin"
+                      className="save-button-info-alumn-admin"
                       type="button"
-                 
+                      onClick={() => openUpdateModal(alumno)}
                     >
                       Actualizar
                     </button>
+                    
                     <button
     className="info-button-info-alumn-admin"
     type="button"
@@ -871,7 +888,12 @@ export default function InfoAlumn() {
         </form>
       </Modal>
 
- 
+      <ModalActualizarAlumno
+  isOpen={isUpdateModalOpen}
+  onRequestClose={closeUpdateModal}
+  alumno={selectedAlumnoToUpdate}
+/>
+
 
       <Modal
         isOpen={isAddModalOpen}
@@ -1497,9 +1519,7 @@ export default function InfoAlumn() {
             <li>Manual: Llenando el formulario manualmente.</li>
             <li>CSV: Subiendo un archivo CSV con los datos de los alumnos.</li>
           </ul>
-          <p>
-            <strong>En el ID USUARIO PON UN :1</strong>
-          </p>
+    
           <p>
             Puede descargar un archivo CSV de ejemplo desde el siguiente enlace:
           </p>
@@ -1515,19 +1535,11 @@ export default function InfoAlumn() {
   <h2>Información Completa del Alumno</h2>
   {selectedAlumno && (
     <div className="info-alumn-admin-container">
-      <p><strong>Seguro Social:</strong> {selectedAlumno.seguro_social_alumnos || "No disponible"}</p>
-      <p><strong>Cuenta Credencial:</strong> {selectedAlumno.cuentacredencial_alumnos || "No disponible"}</p>
-      <p><strong>Sexo:</strong> {selectedAlumno.sexo || "No disponible"}</p>
+      <p><strong>Seguro Social:</strong> {selectedAlumno.clinica || "No disponible"}: {selectedAlumno.seguro_social_alumnos || "No disponible"}</p>
       <p><strong>Correo de Usuario:</strong> {selectedAlumno.correo_usuario || "No disponible"}</p>
-      <p><strong>Clínica:</strong> {selectedAlumno.clinica || "No disponible"}</p>
-      <p><strong>Grado:</strong> {selectedAlumno.grado || "No disponible"}</p>
-      <p><strong>Grupo:</strong> {selectedAlumno.grupo || "No disponible"}</p>
+      <p><strong>Semestre:</strong> {selectedAlumno.grado || "No disponible"}º{selectedAlumno.grupo || "No disponible"}</p>      
       <p><strong>Carrera Técnica:</strong> {selectedAlumno.carrera_tecnica || "No disponible"}</p>
-      <p><strong>País:</strong> {selectedAlumno.pais || "No disponible"}</p>
-      <p><strong>Estado:</strong> {selectedAlumno.estado || "No disponible"}</p>
-      <p><strong>Municipio:</strong> {selectedAlumno.municipio_alumnos || "No disponible"}</p>
-      <p><strong>Comunidad:</strong> {selectedAlumno.comunidad_alumnos || "No disponible"}</p>
-      <p><strong>Calle:</strong> {selectedAlumno.calle_alumnos || "No disponible"}</p>
+      <p><strong>Ubicación:</strong>{selectedAlumno.calle_alumnos || "No disponible"},{selectedAlumno.comunidad_alumnos || "No disponible"},{selectedAlumno.municipio_alumnos || "No disponible"}, {selectedAlumno.estado || "No disponible"}</p>
       <p><strong>Procedencia Secundaria:</strong> {selectedAlumno.proc_sec_alumno || "No disponible"}</p>
       <p><strong>Nombre Completo del Familiar:</strong> {selectedAlumno.nombre_completo_familiar || "No disponible"}</p>
       <p><strong>Telefono Familiar:</strong> {selectedAlumno.telefono_familiar || "No disponible"}</p>

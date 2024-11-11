@@ -20,8 +20,8 @@
 }
 
 .welcome-admin-table th {
- background-color: #f2f2f2;
- color: black;
+ background-color: var(--color-pagina);
+ color: white;
 }
 
 .welcome-admin-table tr:hover {
@@ -48,7 +48,7 @@
 .add-welcome-admin-form button {
  display: block;
  padding: 10px;
- background-color: #4CAF50;
+ background-color: var(--color-pagina);
  color: white;
  border: none;
  cursor: pointer;

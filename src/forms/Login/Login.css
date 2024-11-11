@@ -90,7 +90,7 @@
 }
 
 .login-button{
- background-color: #17682c;
+ background-color: var(--color-pagina);
  color: #fff;
  border: none;
  padding: 15px;

@@ -22,7 +22,7 @@
 .admin-welcome {
  width: 100%;
  padding: 20px;
- background-color: #8fbc8f;
+ background-color: var(--color-pagina);
  border-radius: 15px;
  color: white;
  display: flex;

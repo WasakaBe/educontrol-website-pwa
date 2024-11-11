@@ -2,9 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background-color: rgb(21, 64, 34);
+  background-color: var(--color-pagina);
   padding: 20px 10px;
-  color: #ecf0f1;
   position: relative;
   width: 100%;
   z-index: 1000;
@@ -35,6 +34,7 @@
 
 .navbar-admin-menu a:hover {
   color: #f39c12;
+  font-weight: bold;
 }
 
 .navbar-admin-user {
@@ -76,7 +76,7 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #444;
+  background-color:  var(--color-pagina);
   padding: 10px;
   list-style: none;
   border-radius: 4px;
@@ -89,6 +89,7 @@
 
 .navbar-admin-menu li:hover .dropdown-menu-admin {
   display: flex;
+  
 }
 
 .dropdown-menu-admin li {
@@ -98,12 +99,11 @@
 }
 
 .dropdown-menu-admin li:hover {
-  background-color: green;
   border-radius: 10px;
 }
 
 .dropdown-menu-admin li a {
-  color: white;
+  color: gray;
   text-decoration: none;
 }
 

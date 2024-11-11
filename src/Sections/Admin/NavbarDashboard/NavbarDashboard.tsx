@@ -12,9 +12,14 @@ export default function NavbarDashboard ({ setCurrentView }: NavbarDashboardProp
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  if (isMenuOpen === undefined) {
+    setIsMenuOpen(false);
+  }
+  
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen((prev) => !prev);
   };
+  
 
   // Verifica que el contexto y el usuario estén disponibles
   if (!authContext || !authContext.user) {

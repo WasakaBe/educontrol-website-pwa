@@ -28,7 +28,7 @@
 }
 
 .container-asignaturas .button-insert {
-  background-color: #004d00;
+  background-color: var(--color-pagina);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -43,7 +43,7 @@
 }
 
 .container-asignaturas thead {
-  background-color: #004d00;
+  background-color: var(--color-pagina);
   color: #fff;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .button-update {
-  background-color: #004d00;
+  background-color: var(--color-pagina);
   color: white;
   border: none;
   padding: 8px 16px;

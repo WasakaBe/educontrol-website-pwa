@@ -37,7 +37,7 @@
 
 .mision-table th,
 .vision-table th {
- background-color: #4CAF50;
+ background-color: var(--color-pagina);
  color: white;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .page-button.active {
- background-color: #45a049;
+ background-color: var(--color-pagina);
 }
 
 .page-button:hover {

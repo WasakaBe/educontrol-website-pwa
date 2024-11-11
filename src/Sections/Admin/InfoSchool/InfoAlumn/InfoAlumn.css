@@ -23,7 +23,7 @@
 }
 
 .info-alumn-admin-table th {
-  background-color: #4CAF50;
+  background-color: var(--color-pagina);
   color: white;
 }
 

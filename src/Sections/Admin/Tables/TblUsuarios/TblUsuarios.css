@@ -27,8 +27,8 @@
 }
 
 .table--table-users th {
- background-color: #f4f4f4;
- color: #333;
+ background-color: var(--color-pagina);
+ color: white;
 }
 
 .pagination--table-users {
@@ -40,14 +40,14 @@
 .page-button--table-users {
  margin: 0 5px;
  padding: 5px 10px;
- background-color: #007bff;
+ background-color: var(--color-pagina);
  color: #fff;
  border: none;
  cursor: pointer;
 }
 
 .page-button--table-users.active--table-users {
- background-color: #0056b3;
+ background-color: var(--color-pagina);
 }
 
 .page-button--table-users:hover {

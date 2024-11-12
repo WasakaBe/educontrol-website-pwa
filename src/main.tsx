@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useContext } from 'react'; 
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import SplashScreen from './SplashScreen';
@@ -6,12 +6,13 @@ import './index.css';
 import { apiUrl } from './constants/Api.tsx';
 import { toast } from 'react-toastify'; // Importa el toast
 import 'react-toastify/dist/ReactToastify.css'; // Asegúrate de incluir los estilos de Toastify
-
+import { AuthContext } from './Auto/Auth';  // Importa el contexto de autenticación
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [isAppLoaded, setIsAppLoaded] = useState(false);
+  const authContext = useContext(AuthContext);  // Obtiene el contexto de autenticación
 
   useEffect(() => {
     // Timer para el SplashScreen
@@ -23,7 +24,58 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
-    if (isAppLoaded) {
+    if (isAppLoaded && authContext?.user) {
+      const subscribeUserToPush = async (registration: ServiceWorkerRegistration, email: string) => {
+        const publicVapidKey = 'BGzVgsHrD4pKaSPANqC6IEOpFTnaoTLKj7YPTJ8tRh0i2uWPakuumZt7o7Vb_oJdnTAyjEKl5yawQReEkVOZTOA';
+
+        const urlBase64ToUint8Array = (base64String: string) => {
+          const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+          const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+          const rawData = window.atob(base64);
+          const outputArray = new Uint8Array(rawData.length);
+          for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+          }
+          return outputArray;
+        };
+
+        try {
+          const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+          });
+          toast.success('Suscripción exitosa.');
+
+          const keys = {
+            p256dh: subscription.getKey('p256dh') ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(subscription.getKey('p256dh')!)))) : null,
+            auth: subscription.getKey('auth') ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(subscription.getKey('auth')!)))) : null,
+          };
+
+          const response = await fetch(`${apiUrl}subscribe`, {
+            method: 'POST',
+            body: JSON.stringify({
+              endpoint: subscription.endpoint,
+              keys: keys,
+              email: email,  // Enviando el email del usuario
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            toast.success(result.message || 'Suscripción almacenada con éxito');
+            sendNotificationToUser(email);
+          } else {
+            toast.error(result.error || 'Error al almacenar la suscripción.');
+          }
+        } catch (error) {
+          console.error('Error al suscribir al usuario:', error);
+          toast.error('Error al suscribir al usuario.');
+        }
+      };
+
       // Registrar el Service Worker y suscribir al usuario al servicio Push
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker
@@ -32,9 +84,9 @@ const Main = () => {
             console.log('Service Worker registrado con éxito.');
             // Solicitar permisos de notificaciones después de que el SW esté registrado
             requestNotificationPermission().then((permission) => {
-              if (permission === 'granted') {
+              if (permission === 'granted' && authContext.user?.correo_usuario) {
                 // Si el permiso se concede, se suscribe al usuario al servicio Push
-                subscribeUserToPush(registration);
+                subscribeUserToPush(registration, authContext.user.correo_usuario);
               }
             });
           })
@@ -43,7 +95,7 @@ const Main = () => {
           });
       }
     }
-  }, [isAppLoaded]); // Solo se ejecuta cuando la aplicación está cargada
+  }, [isAppLoaded, authContext]); // Solo se ejecuta cuando la aplicación está cargada y el contexto está disponible
 
   // Función para solicitar permisos de notificación
   const requestNotificationPermission = async (): Promise<NotificationPermission> => {
@@ -59,61 +111,31 @@ const Main = () => {
     return permission;
   };
 
-// Función para suscribir al usuario al servicio Push
-// Función para suscribir al usuario al servicio Push
-const subscribeUserToPush = async (registration: ServiceWorkerRegistration) => {
-  const publicVapidKey = 'BGzVgsHrD4pKaSPANqC6IEOpFTnaoTLKj7YPTJ8tRh0i2uWPakuumZt7o7Vb_oJdnTAyjEKl5yawQReEkVOZTOA';
+  // Función para enviar una notificación al usuario después de la suscripción
+  const sendNotificationToUser = async (email: string) => {
+    try {
+      const response = await fetch(`${apiUrl}notify`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email,
+          message: "¡Gracias por suscribirte a nuestras notificaciones!",
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  // Convierte la clave VAPID a Uint8Array
-  const urlBase64ToUint8Array = (base64String: string) => {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
+      const result = await response.json();
+      if (response.ok) {
+        toast.success(result.message || 'Notificación enviada con éxito');
+      } else {
+        toast.error(result.error || 'Error al enviar la notificación.');
+      }
+    } catch (error) {
+      console.error('Error al enviar la notificación:', error);
+      toast.error('Error al enviar la notificación.');
     }
-    return outputArray;
   };
-
-  try {
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
-    });
-    toast.success('Suscripción exitosa.');
-
-    // Convertir las claves del subscription a base64
-    const keys = {
-      p256dh: subscription.getKey('p256dh') ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(subscription.getKey('p256dh')!)))) : null,
-      auth: subscription.getKey('auth') ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(subscription.getKey('auth')!)))) : null,
-    };
-
-    // Envía la suscripción al backend para almacenarla y manejar la respuesta
-    const response = await fetch(`${apiUrl}subscribe`, {
-      method: 'POST',
-      body: JSON.stringify({
-        endpoint: subscription.endpoint,
-        keys: keys,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      toast.success(result.message || 'Suscripción almacenada con éxito');
-    } else {
-      toast.error(result.error || 'Error al almacenar la suscripción.');
-    }
-  } catch (error) {
-    console.error('Error al suscribir al usuario:', error);
-    toast.error('Error al suscribir al usuario.');
-  }
-};
-
-
 
   return (
     <>

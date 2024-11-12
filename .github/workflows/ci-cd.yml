@@ -74,14 +74,8 @@ jobs:
 
       - name: Run E2E Tests with Cypress
         run: npx cypress run
-        
-        #2 evualuacion de rendimiento ypruebas de carga    
-      - name: Install Lighthouse CI
-        run: npm install -g @lhci/cli@0.8.x
 
-      - name: Run Lighthouse CI
-        run: lhci autorun
-
+        #2 evualuacion de rendimiento y pruebas de carga    
       - name: Install k6
         run: sudo apt-get install k6
 

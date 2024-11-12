@@ -5,3 +5,4 @@ export default function () {
   http.get('https://educontrol-website-pwa.vercel.app/');
   sleep(1);
 }
+

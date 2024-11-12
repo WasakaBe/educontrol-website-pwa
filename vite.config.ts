@@ -2,8 +2,8 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-
-
+import * as dotenv from 'dotenv';
+dotenv.config(); 
 
 export default defineConfig({
   plugins: [react(), VitePWA({
@@ -69,10 +69,15 @@ export default defineConfig({
    
       ],
     },
-  }), sentryVitePlugin({
+  }), 
+  sentryVitePlugin({
     org: "universidad-tecnologica-de--2z",
-    project: "javascript-react"
-  })],
+    project: "javascript-react",
+    authToken: process.env.SENTRY_AUTH_TOKEN, // Usar el token de Sentry desde las variables de entorno,
+   
+  })
+
+],
 
   build: {
     sourcemap: true

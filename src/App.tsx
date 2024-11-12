@@ -16,7 +16,7 @@ const App: React.FC = () => {
       });
     };
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("wheel", handleWheel, { passive: true });
     return () => {
       window.removeEventListener("wheel", handleWheel);
     };

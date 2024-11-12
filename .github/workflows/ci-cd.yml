@@ -93,12 +93,22 @@ jobs:
           npx sentry-cli releases files $(git rev-parse --short HEAD) upload-sourcemaps ./dist --validate --rewrite --project javascript-react
           # Finalizar el release
           npx sentry-cli releases finalize $(git rev-parse --short HEAD) --project javascript-react
-  
+      
+      - name: Install k6
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y curl
+            curl -s https://dl.k6.io/key.gpg | sudo apt-key add -
+            echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+            sudo apt-get update
+            sudo apt-get install -y k6
+     
+      - name: Verify k6 Installation
+        run: k6 version
+     
       - name: Run Load Test
         run: k6 run load-test.js
-
-
-
+     
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:

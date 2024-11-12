@@ -1,6 +1,5 @@
+//sentry es monitoreo de software
 import * as Sentry from "@sentry/react";
-
-
 Sentry.init({
   dsn: "https://cce2df658b1444eb3b430b42c42e31e4@o4508286180196352.ingest.us.sentry.io/4508286183079936",
   integrations: [

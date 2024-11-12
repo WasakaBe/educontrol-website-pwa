@@ -105,7 +105,7 @@ const subscribeUserToPush = async (registration: ServiceWorkerRegistration) => {
     if (response.ok) {
       toast.success(result.message || 'Suscripción almacenada con éxito');
     } else {
-      toast.error(result.error || 'Error al almacenar la suscripción.');
+      console.error(result.error || 'Error al almacenar la suscripción.');
     }
   } catch (error) {
     console.error('Error al suscribir al usuario:', error);

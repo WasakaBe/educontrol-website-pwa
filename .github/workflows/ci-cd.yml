@@ -77,16 +77,16 @@ jobs:
         run: npx cypress run
 
         #2 evualuacion de rendimiento y pruebas de carga    
-      - name: Install k6
+      - name: Build Project
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gnupg software-properties-common
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C7B9D13E21FF3C90
-          echo "deb https://dl.k6.io/deb stable main" | sudo tee -a /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install -y k6
-      
-
+          npm run build
+          # Comando para crear un release con el proyecto especificado
+          npx sentry-cli releases new --project javascript-react $(git rev-parse --short HEAD)
+          # Subir los source maps
+          npx sentry-cli releases files $(git rev-parse --short HEAD) upload-sourcemaps ./dist --validate --rewrite --project javascript-react
+          # Finalizar el release
+          npx sentry-cli releases finalize $(git rev-parse --short HEAD) --project javascript-react
+  
       - name: Run Load Test
         run: k6 run load-test.js
 

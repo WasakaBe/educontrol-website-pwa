@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../../Auto/Auth';
 import { apiUrl } from '../../../../constants/Api';
 import './Escolar.css';
-import Modal from 'react-modal'
+import Modal from 'react-modal';
+import { saveDataOffline, getOfflineData } from '../../../../db';
 
 interface Alumno {
   id_alumnos: number;
@@ -33,8 +34,7 @@ interface Alumno {
 }
 
 const Escolar: React.FC = () => {
-  const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false)
-
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
 
   const openHelpModal = () => {
     setIsHelpModalOpen(true);
@@ -57,19 +57,33 @@ const Escolar: React.FC = () => {
         const data = await response.json();
         if (response.ok) {
           setAlumno(data);
+
+          // Guardar los datos del alumno en IndexedDB usando la clave "alumnoData"
+          saveDataOffline({
+            key: `alumnoData-${user.id_usuario}`,
+            value: JSON.stringify(data),
+            timestamp: Date.now(),
+          });
         } else {
           setError(data.error);
         }
-      } catch {
+      } catch (e) {
+        console.error('Error al obtener la información del alumno desde la API', e);
         setError('Error al obtener la información del alumno');
+
+        // Intentar cargar datos desde IndexedDB en caso de que falle la conexión
+        const cachedData = await getOfflineData(`alumnoData-${user.id_usuario}`);
+        if (cachedData) {
+          setAlumno(JSON.parse(cachedData.value));
+          console.log('Datos cargados desde IndexedDB:', cachedData);
+        }
       }
     }
   };
 
   useEffect(() => {
     fetchAlumno();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, );
 
   const nextSection = () => {
     setCurrentSection(currentSection + 1);
@@ -82,7 +96,7 @@ const Escolar: React.FC = () => {
   return (
     <div className="escolar-container-view">
       <div className="escolar-container">
-        <h2>Información del Alumno </h2>
+        <h2>Información del Alumno</h2>
         {alumno ? (
           <>
             {currentSection === 1 && (
@@ -92,7 +106,7 @@ const Escolar: React.FC = () => {
                 <p><strong>Apellido Paterno:</strong> {alumno.app_alumnos}</p>
                 <p><strong>Apellido Materno:</strong> {alumno.apm_alumnos}</p>
                 <p><strong>Sexo:</strong> {alumno.sexo}</p>
-                <p><strong>Fecha de Nacimiento:</strong> {new Date(alumno.fecha_nacimiento_alumnos).toLocaleDateString()}</p>   
+                <p><strong>Fecha de Nacimiento:</strong> {new Date(alumno.fecha_nacimiento_alumnos).toLocaleDateString()}</p>
                 <p><strong>CURP:</strong> {alumno.curp_alumnos}</p>
                 <p><strong>Número de Control:</strong> {alumno.nocontrol_alumnos}</p>
                 <p><strong>Teléfono:</strong> {alumno.telefono_alumnos}</p>
@@ -117,7 +131,7 @@ const Escolar: React.FC = () => {
 
             {currentSection === 3 && (
               <div className="section">
-                <h3>Información de Proveniencia del Alumno</h3>        
+                <h3>Información de Proveniencia del Alumno</h3>
                 <p><strong>Pais:</strong> {alumno.pais}</p>
                 <p><strong>Estado:</strong> {alumno.estado}</p>
                 <p><strong>Municipio:</strong> {alumno.municipio_alumnos}</p>
@@ -132,7 +146,6 @@ const Escolar: React.FC = () => {
         ) : (
           error ? <p className="error-message">{error}</p> : <p className="loading-message">Cargando información del alumno...</p>
         )}
-
       </div>
 
       <Modal
@@ -142,23 +155,17 @@ const Escolar: React.FC = () => {
         overlayClassName="modal-overlay-info-alumn"
       >
         <div className="help-modal-content">
-        <button className="help-modal-close" onClick={closeHelpModal}>
+          <button className="help-modal-close" onClick={closeHelpModal}>
             &times;
           </button>
-          <h2>Ayuda </h2>
-        
-          
-          <p> Si deseas actualizar tus datos debes de ir a las 
-             <strong> Oficinas correspondientes</strong> para realizar los cambios.
-          </p>
-        
+          <h2>Ayuda</h2>
+          <p>Si deseas actualizar tus datos debes ir a las <strong>Oficinas correspondientes</strong> para realizar los cambios.</p>
         </div>
       </Modal>
 
       <button className="floating-help-button" onClick={openHelpModal}>
         ?
       </button>
-
     </div>
   );
 };

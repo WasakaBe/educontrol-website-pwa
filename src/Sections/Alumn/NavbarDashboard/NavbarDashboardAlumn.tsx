@@ -15,9 +15,9 @@ const NavbarDashboardAlumn: React.FC<NavbarDashboardAlumnProps> = ({
   const authContext = useContext(AuthContext)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   if (isMenuOpen === undefined) {
-    setIsMenuOpen(false);
-  }
-  
+  setIsMenuOpen(false);
+}
+
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };

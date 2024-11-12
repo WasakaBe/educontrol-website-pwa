@@ -1,51 +1,68 @@
-import React, { useState, useContext, useRef } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { AuthContext } from '../../../Auto/Auth'
-import { apiUrl } from '../../../constants/Api' // Importa apiUrl
+import React, { useState, useContext, useRef, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from '../../../Auto/Auth';
+import { apiUrl } from '../../../constants/Api';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 const ProfileAlumnnDashboard: React.FC = () => {
-  const authContext = useContext(AuthContext)
+  const authContext = useContext(AuthContext);
 
   if (!authContext) {
-    throw new Error('AuthContext must be used within an AuthProvider')
+    throw new Error('AuthContext must be used within an AuthProvider');
   }
 
-  const { user, login } = authContext
+  const { user, login } = authContext;
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [nombre, setNombre] = useState(user?.nombre_usuario || '')
-  const [app, setApp] = useState(user?.app_usuario || '')
-  const [apm, setApm] = useState(user?.apm_usuario || '')
-  const [email, setEmail] = useState(user?.correo_usuario || '')
-  const [password, setPassword] = useState(user?.pwd_usuario || '')
+  const [isEditing, setIsEditing] = useState(false);
+  const [nombre, setNombre] = useState(user?.nombre_usuario || '');
+  const [app, setApp] = useState(user?.app_usuario || '');
+  const [apm, setApm] = useState(user?.apm_usuario || '');
+  const [email, setEmail] = useState(user?.correo_usuario || '');
+  const [password, setPassword] = useState(user?.pwd_usuario || '');
   const [foto, setFoto] = useState<string | ArrayBuffer | null>(
     user?.foto_usuario ? `data:image/jpeg;base64,${user.foto_usuario}` : ''
-  )
-  const [showCamera, setShowCamera] = useState(false) // Para mostrar la cámara
-  const videoRef = useRef<HTMLVideoElement | null>(null) // Referencia del video para la cámara
-  const canvasRef = useRef<HTMLCanvasElement | null>(null) // Para capturar la foto
-  const streamRef = useRef<MediaStream | null>(null) // Referencia para detener el stream
+  );
+  const [showCamera, setShowCamera] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  useEffect(() => {
+    const loadProfileFromIndexedDB = async () => {
+      const cachedData = await getOfflineData(`userProfile-${user?.id_usuario}`);
+      if (cachedData) {
+        const parsedData = JSON.parse(cachedData.value);
+        setNombre(parsedData.nombre_usuario || '');
+        setApp(parsedData.app_usuario || '');
+        setApm(parsedData.apm_usuario || '');
+        setEmail(parsedData.correo_usuario || '');
+        setPassword(parsedData.pwd_usuario || '');
+        setFoto(parsedData.foto_usuario ? `data:image/jpeg;base64,${parsedData.foto_usuario}` : '');
+        console.log('Perfil cargado desde IndexedDB:', parsedData);
+      }
+    };
+
+    loadProfileFromIndexedDB();
+  }, [user]);
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing)
-    toast.info(isEditing ? 'Modo edición desactivado' : 'Modo edición activado')
-  }
-
- 
+    setIsEditing(!isEditing);
+    toast.info(isEditing ? 'Modo edición desactivado' : 'Modo edición activado');
+  };
 
   const handleCancel = () => {
-    setIsEditing(false)
-    setNombre(user?.nombre_usuario || '')
-    setApp(user?.app_usuario || '')
-    setApm(user?.apm_usuario || '')
-    setEmail(user?.correo_usuario || '')
-    setPassword(user?.pwd_usuario || '')
+    setIsEditing(false);
+    setNombre(user?.nombre_usuario || '');
+    setApp(user?.app_usuario || '');
+    setApm(user?.apm_usuario || '');
+    setEmail(user?.correo_usuario || '');
+    setPassword(user?.pwd_usuario || '');
     setFoto(
       user?.foto_usuario ? `data:image/jpeg;base64,${user.foto_usuario}` : ''
-    )
-    toast.info('Modo edición desactivado')
-  }
+    );
+    toast.info('Modo edición desactivado');
+  };
 
   const handleSave = async () => {
     if (user) {
@@ -56,11 +73,11 @@ const ProfileAlumnnDashboard: React.FC = () => {
         correo_usuario: email,
         pwd_usuario: password,
         foto_usuario: foto ? (foto as string).split(',')[1] : '',
-      }
+      };
 
       try {
         const response = await fetch(
-          `${apiUrl}update-profile/${user.id_usuario}`, // Usa apiUrl aquí
+          `${apiUrl}update-profile/${user.id_usuario}`,
           {
             method: 'PUT',
             headers: {
@@ -68,72 +85,75 @@ const ProfileAlumnnDashboard: React.FC = () => {
             },
             body: JSON.stringify(updatedUser),
           }
-        )
+        );
 
         if (response.ok) {
-          login({ ...user, ...updatedUser })
-          setIsEditing(false)
-          toast.success('Perfil actualizado con éxito')
-          stopCamera() // Detener la cámara después de guardar
+          login({ ...user, ...updatedUser });
+          setIsEditing(false);
+          toast.success('Perfil actualizado con éxito');
+          stopCamera();
+
+          // Guardar el perfil actualizado en IndexedDB
+          saveDataOffline({
+            key: `userProfile-${user.id_usuario}`,
+            value: JSON.stringify(updatedUser),
+            timestamp: Date.now(),
+          });
         } else {
-          toast.error('Error al actualizar el perfil')
+          toast.error('Error al actualizar el perfil');
         }
-      } catch  {
-        toast.error('Error al actualizar el perfil')
+      } catch {
+        toast.error('Error al actualizar el perfil');
       }
     }
-  }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setFoto(reader.result)
-      }
-      reader.readAsDataURL(file)
+        setFoto(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
-   // Función para abrir la cámara
-   const openCamera = () => {
-    setShowCamera(true)
+  const openCamera = () => {
+    setShowCamera(true);
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
         if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          videoRef.current.play()
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
         }
-        streamRef.current = stream // Guardar el stream para detenerlo más tarde
+        streamRef.current = stream;
       })
       .catch((err) => {
         toast.error(`Error al acceder a la cámara: ${err.message}`);
-      })
-  }
+      });
+  };
 
-  // Función para tomar la foto desde la cámara
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext('2d')
+      const context = canvasRef.current.getContext('2d');
       if (context) {
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height)
-        const imageData = canvasRef.current.toDataURL('image/jpeg')
-        setFoto(imageData) // Guardar la foto tomada como base64
+        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        const imageData = canvasRef.current.toDataURL('image/jpeg');
+        setFoto(imageData);
       }
-      setShowCamera(false) // Ocultar la cámara
-      stopCamera() // Detener la cámara después de capturar la foto
+      setShowCamera(false);
+      stopCamera();
     }
-  }
+  };
 
-    // Función para detener la cámara
-    const stopCamera = () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop()) // Detener todas las pistas del stream
-        streamRef.current = null // Limpiar la referencia del stream
-      }
-      setShowCamera(false); // Asegurarse de ocultar el feed de la cámara
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
-
+    setShowCamera(false);
+  };
 
   return (
     <div className="container-profile-admin">
@@ -152,8 +172,8 @@ const ProfileAlumnnDashboard: React.FC = () => {
         />
 
         {isEditing && (
-         <>
-            <input type="file" accept="image/*" onChange={handleFileChange} className="save-button-profile-admin"/>
+          <>
+            <input type="file" accept="image/*" onChange={handleFileChange} className="save-button-profile-admin" />
             <button onClick={openCamera} className="save-camera-button-profile-admin">
               📷 Tomar foto
             </button>
@@ -177,64 +197,36 @@ const ProfileAlumnnDashboard: React.FC = () => {
           <>
             <label>
               Nombre completo
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
+              <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
             </label>
             <label>
               Apellido paterno
-              <input
-                type="text"
-                value={app}
-                onChange={(e) => setApp(e.target.value)}
-              />
+              <input type="text" value={app} onChange={(e) => setApp(e.target.value)} />
             </label>
             <label>
               Apellido materno
-              <input
-                type="text"
-                value={apm}
-                onChange={(e) => setApm(e.target.value)}
-              />
+              <input type="text" value={apm} onChange={(e) => setApm(e.target.value)} />
             </label>
             <label>
               Correo electrónico
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
             <label>
               Contraseña
               <div className="password-container-profile-admin">
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <span className="show-password-icon-profile-admin">
-                  &#128065;
-                </span>
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <span className="show-password-icon-profile-admin">&#128065;</span>
               </div>
             </label>
             <div className="align">
-              <button onClick={handleSave} className="save-button">
-                GUARDAR
-              </button>
-              <button onClick={handleCancel} className="exit-button">
-                CANCELAR
-              </button>
+              <button onClick={handleSave} className="save-button">GUARDAR</button>
+              <button onClick={handleCancel} className="exit-button">CANCELAR</button>
             </div>
           </>
         ) : (
           <>
             <div className="credentials-view-container">
-              <h3>
-                {nombre} {app} {apm}
-              </h3>
+              <h3>{nombre} {app} {apm}</h3>
               <p>Correo electrónico: {email}</p>
               <p>Contraseña: {password}</p>
             </div>
@@ -247,7 +239,7 @@ const ProfileAlumnnDashboard: React.FC = () => {
         </button>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProfileAlumnnDashboard
+export default ProfileAlumnnDashboard;

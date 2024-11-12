@@ -4,6 +4,7 @@ import './NotificationAlumn.css';
 import { AuthContext } from '../../../Auto/Auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 interface Notificacion {
   id_notificacion: number;
@@ -36,7 +37,7 @@ const NotificationAlumn: React.FC = () => {
       try {
         const response = await fetch(`${apiUrl}/alumno/usuario/${authContext.user.id_usuario}`);
         if (!response.ok) {
-          throw new Error('Error al obtener el ID del alumno');
+          console.log('Error al obtener el ID del alumno');
         }
         const data = await response.json();
         setAlumnoId(data.id_alumnos);
@@ -56,13 +57,30 @@ const NotificationAlumn: React.FC = () => {
       try {
         const response = await fetch(`${apiUrl}/notificaciones/${alumnoId}`);
         if (!response.ok) {
-          throw new Error('Error al obtener las notificaciones');
+          console.log('Error al obtener las notificaciones');
         }
         const data: Notificacion[] = await response.json();
         setNotificaciones(data);
         setFilteredNotificaciones(data);
+
+        // Guardar las notificaciones en IndexedDB
+        saveDataOffline({
+          key: `notificacionesData-${alumnoId}`,
+          value: JSON.stringify(data),
+          timestamp: Date.now(),
+        });
       } catch (error) {
+        console.error('Error al obtener las notificaciones:', error);
         setError((error as Error).message);
+
+        // Intentar cargar las notificaciones desde IndexedDB en caso de error
+        const cachedData = await getOfflineData(`notificacionesData-${alumnoId}`);
+        if (cachedData) {
+          const parsedData = JSON.parse(cachedData.value);
+          setNotificaciones(parsedData);
+          setFilteredNotificaciones(parsedData);
+          console.log('Notificaciones cargadas desde IndexedDB:', cachedData);
+        }
       } finally {
         setLoading(false);
       }
@@ -135,7 +153,6 @@ const NotificationAlumn: React.FC = () => {
                   <h3>{notificacion.subject_notificacion}</h3>
                   <p>{notificacion.message_notificacion}</p>
                 </div>
-             
               </div>
             ))}
           </div>

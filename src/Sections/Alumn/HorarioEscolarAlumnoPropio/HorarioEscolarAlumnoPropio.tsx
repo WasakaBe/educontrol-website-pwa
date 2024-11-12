@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { apiUrl } from '../../../constants/Api'
-import { Asignatura } from '../../../constants/interfaces'
-import { AuthContext } from '../../../Auto/Auth'
-
+import React, { useEffect, useState, useContext } from 'react';
+import { apiUrl } from '../../../constants/Api';
+import { Asignatura } from '../../../constants/interfaces';
+import { AuthContext } from '../../../Auto/Auth';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 const HorarioEscolarAlumnoPropio: React.FC = () => {
-  const authContext = useContext(AuthContext)
-  const user = authContext?.user
-  const [asignaturas, setAsignaturas] = useState<Asignatura[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const asignaturasPerPage = 4
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user;
+  const [asignaturas, setAsignaturas] = useState<Asignatura[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const asignaturasPerPage = 4;
 
   useEffect(() => {
     const fetchAsignaturas = async () => {
@@ -19,41 +19,56 @@ const HorarioEscolarAlumnoPropio: React.FC = () => {
         try {
           const response = await fetch(
             `${apiUrl}asignaturas/alumno/id/${user.id_usuario}`
-          )
-          const data = await response.json()
-          console.log('Asignaturas data:', data)
+          );
+          const data = await response.json();
+          console.log('Asignaturas data:', data);
           if (response.ok) {
-            setAsignaturas(data)
+            setAsignaturas(data);
+
+            // Guardar los datos de asignaturas en IndexedDB usando la clave única
+            saveDataOffline({
+              key: `asignaturasData-${user.id_usuario}`,
+              value: JSON.stringify(data),
+              timestamp: Date.now(),
+            });
           } else {
-            setError(data.error)
+            setError(data.error);
           }
-        } catch {
-          setError('Error al obtener las asignaturas del alumno')
+        } catch (e) {
+          console.error('Error al obtener las asignaturas del alumno desde la API', e);
+          setError('Error al obtener las asignaturas del alumno');
+
+          // Intentar cargar datos desde IndexedDB si no hay conexión
+          const cachedData = await getOfflineData(`asignaturasData-${user.id_usuario}`);
+          if (cachedData) {
+            setAsignaturas(JSON.parse(cachedData.value));
+            console.log('Datos de asignaturas cargados desde IndexedDB:', cachedData);
+          }
         } finally {
-          setLoading(false)
+          setLoading(false);
         }
       }
-    }
+    };
 
-    fetchAsignaturas()
-  }, [user])
+    fetchAsignaturas();
+  }, [user]);
 
-  const indexOfLastAsignatura = currentPage * asignaturasPerPage
-  const indexOfFirstAsignatura = indexOfLastAsignatura - asignaturasPerPage
+  const indexOfLastAsignatura = currentPage * asignaturasPerPage;
+  const indexOfFirstAsignatura = indexOfLastAsignatura - asignaturasPerPage;
   const currentAsignaturas = asignaturas.slice(
     indexOfFirstAsignatura,
     indexOfLastAsignatura
-  )
-  const totalPages = Math.ceil(asignaturas.length / asignaturasPerPage)
+  );
+  const totalPages = Math.ceil(asignaturas.length / asignaturasPerPage);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   if (loading) {
-    return <p className="loading-message">Cargando asignaturas...</p>
+    return <p className="loading-message">Cargando asignaturas...</p>;
   }
 
   if (error) {
-    return <p className="error-message">{error}</p>
+    return <p className="error-message">{error}</p>;
   }
 
   return (
@@ -109,7 +124,7 @@ const HorarioEscolarAlumnoPropio: React.FC = () => {
         <p>No hay asignaturas asignadas</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default HorarioEscolarAlumnoPropio
+export default HorarioEscolarAlumnoPropio;

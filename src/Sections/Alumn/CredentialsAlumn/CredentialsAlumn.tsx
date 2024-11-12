@@ -3,6 +3,7 @@ import { AuthContext } from '../../../Auto/Auth';
 import { apiUrl } from '../../../constants/Api';
 import './CredentialsAlumn.css';
 import { logo_cbta, logoeducacion } from '../../../assets/logos';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 interface Alumno {
   id_alumnos: number;
@@ -47,11 +48,26 @@ const CredentialsAlumn: React.FC = () => {
           const data = await response.json();
           if (response.ok) {
             setAlumno(data);
+
+            // Guardar los datos del alumno en IndexedDB usando la clave única
+            saveDataOffline({
+              key: `alumnoData-${user.id_usuario}`,
+              value: JSON.stringify(data),
+              timestamp: Date.now(),
+            });
           } else {
             setError(data.error);
           }
-        } catch {
+        } catch (e) {
+          console.error('Error al obtener la información del alumno desde la API', e);
           setError('Error al obtener la información del alumno');
+
+          // Intentar cargar datos desde IndexedDB si no hay conexión
+          const cachedData = await getOfflineData(`alumnoData-${user.id_usuario}`);
+          if (cachedData) {
+            setAlumno(JSON.parse(cachedData.value));
+            console.log('Datos cargados desde IndexedDB:', cachedData);
+          }
         }
       }
     };
@@ -78,7 +94,7 @@ const CredentialsAlumn: React.FC = () => {
                 alt="Foto del Alumno"
                 className="student-photo-alumn"
               />
-              <div className='name-logo-credential'>
+              <div className="name-logo-credential">
                 <h2 className="student-name">
                   {alumno.nombre_alumnos} {alumno.app_alumnos} {alumno.apm_alumnos}
                 </h2>
@@ -100,7 +116,6 @@ const CredentialsAlumn: React.FC = () => {
               <p><strong>MATRÍCULA:</strong> {alumno.nocontrol_alumnos}</p>
               <p><strong>SEGURO SOCIAL:</strong> {alumno.seguro_social_alumnos}</p>
             </div>
-         
           </div>
         </div>
       ) : error ? (

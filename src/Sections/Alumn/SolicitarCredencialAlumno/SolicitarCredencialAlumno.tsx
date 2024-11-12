@@ -4,14 +4,13 @@ import { apiUrl } from '../../../constants/Api';
 import { AuthContext } from '../../../Auto/Auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
-// Definimos la interfaz para los motivos de credencial
 interface MotivoCredencial {
   id_motivo_credencial: number;
   nombre_motivo_credencial: string;
 }
 
-// Definimos la interfaz para el alumno
 interface Alumno {
   id_alumnos: number;
   nombre_alumnos: string;
@@ -46,8 +45,27 @@ export default function SolicitarCredencialAlumno() {
             ...prevFormData,
             idalumno: result.id_alumnos.toString()
           }));
+
+          // Guardar los datos del alumno en IndexedDB
+          saveDataOffline({
+            key: `alumnoData-${user.id_usuario}`,
+            value: JSON.stringify(result),
+            timestamp: Date.now(),
+          });
         } catch {
-          toast.error('Error al obtener la información del alumno');
+          // Intentar cargar los datos del alumno desde IndexedDB si falla la conexión
+          const cachedData = await getOfflineData(`alumnoData-${user.id_usuario}`);
+          if (cachedData) {
+            const parsedData = JSON.parse(cachedData.value);
+            setAlumno(parsedData);
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              idalumno: parsedData.id_alumnos.toString()
+            }));
+            console.log('Datos del alumno cargados desde IndexedDB:', parsedData);
+          } else {
+            toast.error('Error al obtener la información del alumno');
+          }
         }
       };
 
@@ -61,8 +79,23 @@ export default function SolicitarCredencialAlumno() {
         const response = await fetch(`${apiUrl}motivos_credencial`);
         const result = await response.json();
         setMotivos(result.motivos_credencial);
-      } catch{
-        toast.error('Error al obtener los motivos de credencial');
+
+        // Guardar los motivos en IndexedDB
+        saveDataOffline({
+          key: 'motivosCredencial',
+          value: JSON.stringify(result.motivos_credencial),
+          timestamp: Date.now(),
+        });
+      } catch {
+        // Intentar cargar los motivos desde IndexedDB si falla la conexión
+        const cachedData = await getOfflineData('motivosCredencial');
+        if (cachedData) {
+          const parsedMotivos = JSON.parse(cachedData.value);
+          setMotivos(parsedMotivos);
+          console.log('Motivos cargados desde IndexedDB:', parsedMotivos);
+        } else {
+          toast.error('Error al obtener los motivos de credencial');
+        }
       }
     };
 
@@ -94,7 +127,7 @@ export default function SolicitarCredencialAlumno() {
         const error = await response.json();
         toast.error(error.error);
       }
-    } catch  {
+    } catch {
       toast.error('Error al conectar con el servidor');
     }
   };

@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, ReactNode, FC } from 'react'
 
 interface AuthContextProps {
+  setUser(arg0: any): unknown
   user: User | null
   isAuthenticated: boolean
   login: (user: User) => void

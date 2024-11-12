@@ -3,6 +3,7 @@ import { apiUrl } from '../../../constants/Api';
 import './ChatAdmin.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { saveDataOffline, getOfflineData } from '../../../db'; // Importar funciones de IndexedDB
 import {
   MensajeContacto,
   MensajeContactoAPI,
@@ -31,7 +32,6 @@ const ChatAdmin: React.FC = () => {
         const data: T[] = await response.json();
         const mappedData = mapFunction(data);
 
-        // Elimina duplicados antes de actualizar el estado
         setMensajes((prevMensajes) => {
           const newMensajes = [...prevMensajes, ...mappedData];
           const uniqueMensajes = newMensajes.filter(
@@ -42,10 +42,25 @@ const ChatAdmin: React.FC = () => {
           );
           return uniqueMensajes;
         });
+
+        // Guardar en IndexedDB para acceso offline
+        await saveDataOffline({
+          key: 'chatMessages',
+          value: JSON.stringify(mappedData),
+          timestamp: Date.now(),
+        });
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
           toast.error(error.message);
+
+          // Cargar desde IndexedDB en caso de error
+          const offlineData = await getOfflineData('chatMessages');
+          if (offlineData) {
+            const cachedMessages = JSON.parse(offlineData.value);
+            setMensajes(cachedMessages);
+            toast.info('Cargando mensajes desde IndexedDB');
+          }
         }
       } finally {
         setLoading(false);
@@ -98,7 +113,6 @@ const ChatAdmin: React.FC = () => {
         (message) => message.id === messageToDelete
       );
 
-      // Asegúrate de que el mensaje que quieres eliminar sea el correcto
       if (!messageToDeleteObj) return;
 
       const apiEndpoint =
@@ -114,7 +128,6 @@ const ChatAdmin: React.FC = () => {
           throw new Error('Network response was not ok');
         }
 
-        // Elimina solo el mensaje que seleccionaste
         setMensajes((prevMensajes) =>
           prevMensajes.filter((message) => message.id !== messageToDelete)
         );

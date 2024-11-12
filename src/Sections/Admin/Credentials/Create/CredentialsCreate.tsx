@@ -1,14 +1,37 @@
-import { useState } from 'react'
-import { apiUrl } from '../../../../constants/Api'
-import './CredentialsCreate.css'
-import { logo_cbta, logoeducacion } from '../../../../assets/logos'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { Alumnos } from '../../../../constants/interfaces'
-import Modal from 'react-modal'
-export default function CredentialsCreateCustom() {
-  const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false)
+import { useState, useEffect } from 'react';
+import { apiUrl } from '../../../../constants/Api';
+import './CredentialsCreate.css';
+import { logo_cbta, logoeducacion } from '../../../../assets/logos';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Alumnos } from '../../../../constants/interfaces';
+import Modal from 'react-modal';
+import { saveDataOffline, getOfflineData } from '../../../../db'; // Importar funciones de IndexedDB
 
+export default function CredentialsCreateCustom() {
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
+  const [controlNumber, setControlNumber] = useState<string>('');
+  const [alumno, setAlumno] = useState<Alumnos | null>(null);
+  const [, setError] = useState<string | null>(null);
+  const [, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Intentar cargar los datos del alumno desde IndexedDB si está offline
+    loadAlumnoOffline();
+  }, []);
+
+  const loadAlumnoOffline = async () => {
+    try {
+      const cachedAlumno = await getOfflineData('alumnoData');
+      if (cachedAlumno) {
+        const alumnoData = JSON.parse(cachedAlumno.value);
+        setAlumno(alumnoData);
+        toast.info('Datos del alumno cargados desde IndexedDB');
+      }
+    } catch (error) {
+      console.error('Error al cargar los datos del alumno desde IndexedDB:', error);
+    }
+  };
 
   const openHelpModal = () => {
     setIsHelpModalOpen(true);
@@ -18,36 +41,36 @@ export default function CredentialsCreateCustom() {
     setIsHelpModalOpen(false);
   };
 
-  const [controlNumber, setControlNumber] = useState<string>('')
-  const [alumno, setAlumno] = useState<Alumnos | null>(null)
-  const [, setError] = useState<string | null>(null)
-  const [, setSuccess] = useState<string | null>(null)
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
+    const { value } = event.target;
     if (/^\d*$/.test(value)) {
-      setControlNumber(value)
+      setControlNumber(value);
     }
-  }
+  };
 
   const handleFetchAlumno = async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}alumnos/nocontrol/${controlNumber}`
-      )
+      const response = await fetch(`${apiUrl}alumnos/nocontrol/${controlNumber}`);
       if (!response.ok) {
-        throw new Error('Alumno no encontrado')
+        throw new Error('Alumno no encontrado');
       }
-      const data: Alumnos = await response.json()
-      setAlumno(data)
-      setError(null)
-      toast.success('Alumno encontrado exitosamente')
+      const data: Alumnos = await response.json();
+      setAlumno(data);
+      setError(null);
+      toast.success('Alumno encontrado exitosamente');
+
+      // Guardar los datos del alumno en IndexedDB para acceso offline
+      await saveDataOffline({
+        key: 'alumnoData',
+        value: JSON.stringify(data),
+        timestamp: Date.now(),
+      });
     } catch (error) {
-      setError((error as Error).message)
-      setAlumno(null)
-      toast.error('Error al buscar el alumno')
+      setError((error as Error).message);
+      setAlumno(null);
+      toast.error('Error al buscar el alumno');
     }
-  }
+  };
 
   const handleAddCredencial = async () => {
     if (alumno) {
@@ -62,7 +85,7 @@ export default function CredentialsCreateCustom() {
         segsocial_credencial_escolar: alumno.seguro_social_alumnos,
         foto_credencial_escolar: alumno.foto_usuario,
         idalumnocrede: alumno.id_alumnos,
-      }
+      };
 
       try {
         const response = await fetch(`${apiUrl}credencial_escolar/insert`, {
@@ -71,33 +94,33 @@ export default function CredentialsCreateCustom() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(credencialData),
-        })
+        });
 
         if (!response.ok) {
-          throw new Error('Error al agregar la credencial escolar')
+          throw new Error('Error al agregar la credencial escolar');
         }
 
         // Limpiar el estado y reiniciar el campo de entrada
-        setSuccess('Credencial escolar agregada exitosamente')
-        setAlumno(null)
-        setControlNumber('')
-        setError(null)
-        toast.success('Credencial escolar agregada exitosamente')
+        setSuccess('Credencial escolar agregada exitosamente');
+        setAlumno(null);
+        setControlNumber('');
+        setError(null);
+        toast.success('Credencial escolar agregada exitosamente');
       } catch (error) {
-        setError((error as Error).message)
-        setSuccess(null)
-        toast.error('Error al agregar la credencial escolar')
+        setError((error as Error).message);
+        setSuccess(null);
+        toast.error('Error al agregar la credencial escolar');
       }
     }
-  }
+  };
 
   const handleCancel = () => {
-    setControlNumber('')
-    setAlumno(null)
-    setError(null)
-    setSuccess(null)
-    toast.info('Operación cancelada')
-  }
+    setControlNumber('');
+    setAlumno(null);
+    setError(null);
+    setSuccess(null);
+    toast.info('Operación cancelada');
+  };
 
   return (
     <div className="credentials-create-custom-container">
@@ -105,8 +128,8 @@ export default function CredentialsCreateCustom() {
       <form
         className="credentials-create-custom-form"
         onSubmit={(e) => {
-          e.preventDefault()
-          handleFetchAlumno()
+          e.preventDefault();
+          handleFetchAlumno();
         }}
       >
         <label htmlFor="controlNumber">Ingrese el número de control:</label>
@@ -200,28 +223,27 @@ export default function CredentialsCreateCustom() {
         </div>
       )}
 
-<Modal
+      <Modal
         isOpen={isHelpModalOpen}
         onRequestClose={closeHelpModal}
         className="modal-info-alumn"
         overlayClassName="modal-overlay-info-alumn"
       >
         <div className="help-modal-content">
-        <button className="help-modal-close" onClick={closeHelpModal}>
+          <button className="help-modal-close" onClick={closeHelpModal}>
             &times;
           </button>
-          <h2>Ayuda para la Inserción de Credencial Escolar del Alumnos</h2>
+          <h2>Ayuda para la Inserción de Credencial Escolar del Alumno</h2>
           <p>
             Para insertar alumnos, debes hacerlo de esta manera:
           </p>
           
           <p>
-            <strong>Debes Ingresar el No Control del alumno en el campo de texo</strong>
+            <strong>Debes Ingresar el No Control del alumno en el campo de texto</strong>
           </p>
           <p>
-            posteriormente dar clic en el boton de Agregar
+            Posteriormente, dar clic en el botón de "Agregar"
           </p>
-        
         </div>
       </Modal>
 
@@ -229,5 +251,5 @@ export default function CredentialsCreateCustom() {
         ?
       </button>
     </div>
-  )
+  );
 }

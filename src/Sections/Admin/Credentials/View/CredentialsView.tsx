@@ -5,6 +5,7 @@ import { apiUrl } from '../../../../constants/Api';
 import './CredentialsView.css';
 import { Credencial, Grupo } from '../../../../constants/interfaces';
 import Modal from 'react-modal';
+import { saveDataOffline, getOfflineData } from '../../../../db'; 
 
 const CredentialsView: React.FC = () => {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
@@ -42,9 +43,19 @@ const CredentialsView: React.FC = () => {
         const data: Credencial[] = await response.json();
         setCredenciales(data);
         setFilteredCredenciales(data);
+
+        // Guardar los datos de credenciales en IndexedDB para acceso offline
+        await saveDataOffline({
+          key: 'credencialesData',
+          value: JSON.stringify(data),
+          timestamp: Date.now(),
+        });
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Error fetching data: ', error);
         toast.error('Error al cargar las credenciales');
+
+        // Intentar cargar datos desde IndexedDB si no hay conexión
+        loadCredencialesOffline();
       }
     };
 
@@ -56,8 +67,15 @@ const CredentialsView: React.FC = () => {
         }
         const data: Grupo[] = await response.json();
         setGrupos(data);
+
+        // Guardar los datos de grupos en IndexedDB para acceso offline
+        await saveDataOffline({
+          key: 'gruposData',
+          value: JSON.stringify(data),
+          timestamp: Date.now(),
+        });
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Error fetching data: ', error);
         toast.error('Error al cargar los grupos');
       }
     };
@@ -65,6 +83,20 @@ const CredentialsView: React.FC = () => {
     fetchCredenciales();
     fetchGrupos();
   }, []);
+  
+  const loadCredencialesOffline = async () => {
+    try {
+      const cachedCredenciales = await getOfflineData('credencialesData');
+      if (cachedCredenciales) {
+        const credencialesData = JSON.parse(cachedCredenciales.value);
+        setCredenciales(credencialesData);
+        setFilteredCredenciales(credencialesData);
+        toast.info('Datos de credenciales cargados desde IndexedDB');
+      }
+    } catch (error) {
+      console.error('Error al cargar los datos de credenciales desde IndexedDB:', error);
+    }
+  };
 
   useEffect(() => {
     const filtered = credenciales.filter((credencial) => {

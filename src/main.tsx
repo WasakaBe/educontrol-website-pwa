@@ -83,10 +83,10 @@ const subscribeUserToPush = async (registration: ServiceWorkerRegistration) => {
     });
     toast.success('Suscripción exitosa.');
 
-    // Extraer las claves p256dh y auth en formato base64
+    // Convertir las claves del subscription a base64
     const keys = {
-      p256dh: subscription.getKey("p256dh") ? btoa(String.fromCharCode(...new Uint8Array(subscription.getKey("p256dh")!))) : null,
-      auth: subscription.getKey("auth") ? btoa(String.fromCharCode(...new Uint8Array(subscription.getKey("auth")!))) : null
+      p256dh: subscription.getKey('p256dh') ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(subscription.getKey('p256dh')!)))) : null,
+      auth: subscription.getKey('auth') ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(subscription.getKey('auth')!)))) : null,
     };
 
     // Envía la suscripción al backend para almacenarla y manejar la respuesta
@@ -105,13 +105,15 @@ const subscribeUserToPush = async (registration: ServiceWorkerRegistration) => {
     if (response.ok) {
       toast.success(result.message || 'Suscripción almacenada con éxito');
     } else {
-      console.error(result.error || 'Error al almacenar la suscripción.');
+      toast.error(result.error || 'Error al almacenar la suscripción.');
     }
   } catch (error) {
     console.error('Error al suscribir al usuario:', error);
     toast.error('Error al suscribir al usuario.');
   }
 };
+
+
 
   return (
     <>

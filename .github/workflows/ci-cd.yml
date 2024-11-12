@@ -47,6 +47,13 @@ jobs:
 
       - name: Build Project
         run: npm run build
+        
+      - name: Create Sentry Release
+        run: |
+            npx sentry-cli releases new --project javascript-react $(git rev-parse --short HEAD)
+            npx sentry-cli releases files $(git rev-parse --short HEAD) upload-sourcemaps ./dist --validate --rewrite --project javascript-react
+            npx sentry-cli releases finalize $(git rev-parse --short HEAD) --project javascript-react
+        
 
       - name: Run Unit Tests with Coverage
         run: npm test -- --coverage --passWithNoTests

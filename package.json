@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "tsc -b && vite build && npx sentry-cli releases new -p javascript-react $(git rev-parse --short HEAD) --project javascript-react && npx sentry-cli releases files $(git rev-parse --short HEAD) upload-sourcemaps ./dist --validate --rewrite && npx sentry-cli releases finalize $(git rev-parse --short HEAD) --project javascript-react",
+"build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest --config jest.config.cjs --coverage"

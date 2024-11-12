@@ -74,9 +74,13 @@ export default defineConfig({
     org: "universidad-tecnologica-de--2z",
     project: "javascript-react",
     authToken: process.env.SENTRY_AUTH_TOKEN, // Usar el token de Sentry desde las variables de entorno,
-   
-  })
-
+    release: {
+      name: process.env.SENTRY_RELEASE || `educontrol-web-pwa@${new Date().toISOString()}`,
+      inject: true, // Asegura que Sentry inyecte la versión del release en el bundle para identificar errores correctamente
+      finalize: true, // Finaliza el release automáticamente
+    },
+  }),
+  
 ],
 
   build: {

@@ -8,6 +8,7 @@ import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import './HorarioDocente.css'
 import { Horario, Alumno } from '../../../constants/interfaces'
+import { saveDataOffline, getOfflineData } from '../../../db'; 
 
 const HorarioDocente: React.FC = () => {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false)
@@ -40,47 +41,75 @@ const HorarioDocente: React.FC = () => {
   }>({})
   const alumnosPerPage = 5
 
-  useEffect(() => {
-    const fetchHorarios = async () => {
-      if (user) {
-        try {
-          const response = await fetch(
-            `${apiUrl}horarios_escolares/docente/${user.id_usuario}`
-          )
-          const data = await response.json()
-          if (response.ok) {
-            setHorarios(data)
-          } else {
-            setError(data.error)
-          }
-        } catch  {
-          setError('Error al obtener los horarios del docente')
-        } finally {
-          setLoading(false)
+// Carga de horarios del docente y almacenamiento en IndexedDB
+useEffect(() => {
+  const fetchHorarios = async () => {
+    if (user) {
+      try {
+        const response = await fetch(`${apiUrl}horarios_escolares/docente/${user.id_usuario}`);
+        const data = await response.json();
+        if (response.ok) {
+          setHorarios(data);
+
+          // Guardar los horarios en IndexedDB
+          saveDataOffline({
+            key: `horariosDocente-${user.id_usuario}`,
+            value: JSON.stringify(data),
+            timestamp: Date.now(),
+          });
+        } else {
+          setError(data.error);
         }
+      } catch {
+        setError('Error al obtener los horarios del docente');
+
+        // Intentar cargar datos desde IndexedDB en caso de fallo en la red
+        const cachedHorarios = await getOfflineData(`horariosDocente-${user.id_usuario}`);
+        if (cachedHorarios) {
+          const parsedData = JSON.parse(cachedHorarios.value);
+          setHorarios(parsedData);
+          console.log('Horarios cargados desde IndexedDB:', parsedData);
+        }
+      } finally {
+        setLoading(false);
       }
     }
+  };
 
-    fetchHorarios()
-  }, [user])
+  fetchHorarios();
+}, [user]);
 
-  const openModal = async (horario: Horario) => {
-    setSelectedHorario(horario)
-    try {
-      const response = await fetch(
-        `${apiUrl}alumnos/horario/${horario.id_horario}`
-      )
-      const data = await response.json()
-      if (response.ok) {
-        setAlumnos(data)
-      } else {
-        setAlumnos([])
-      }
-    } catch {
-      setAlumnos([])
+// Cargar alumnos de un horario específico y almacenar en IndexedDB
+const openModal = async (horario: Horario) => {
+  setSelectedHorario(horario);
+  try {
+    const response = await fetch(`${apiUrl}alumnos/horario/${horario.id_horario}`);
+    const data = await response.json();
+    if (response.ok) {
+      setAlumnos(data);
+
+      // Guardar los alumnos en IndexedDB usando el id del horario como clave
+      saveDataOffline({
+        key: `alumnosHorario-${horario.id_horario}`,
+        value: JSON.stringify(data),
+        timestamp: Date.now(),
+      });
+    } else {
+      setAlumnos([]);
     }
-    setIsModalOpen(true)
+  } catch {
+    setAlumnos([]);
+
+    // Intentar cargar alumnos desde IndexedDB en caso de fallo en la red
+    const cachedAlumnos = await getOfflineData(`alumnosHorario-${horario.id_horario}`);
+    if (cachedAlumnos) {
+      const parsedData = JSON.parse(cachedAlumnos.value);
+      setAlumnos(parsedData);
+      console.log('Alumnos cargados desde IndexedDB:', parsedData);
+    }
   }
+  setIsModalOpen(true);
+};
 
   const closeModal = () => {
     setIsModalOpen(false)
@@ -110,22 +139,39 @@ const HorarioDocente: React.FC = () => {
   const openAttendanceModal = async () => {
     if (selectedHorario) {
       try {
-        const response = await fetch(
-          `${apiUrl}alumnos/horario/${selectedHorario.id_horario}`
-        )
-        const data = await response.json()
+        const response = await fetch(`${apiUrl}alumnos/horario/${selectedHorario.id_horario}`);
+        const data = await response.json();
         if (response.ok) {
-          setAlumnos(data)
-          setIsInitialModalOpen(false)
-          setIsAttendanceModalOpen(true)
+          setAlumnos(data);
+          setIsInitialModalOpen(false);
+          setIsAttendanceModalOpen(true);
+  
+          // Guardar los alumnos en IndexedDB para acceso offline
+          saveDataOffline({
+            key: `alumnosHorario-${selectedHorario.id_horario}`,
+            value: JSON.stringify(data),
+            timestamp: Date.now(),
+          });
         } else {
-          setAlumnos([])
+          setAlumnos([]);
         }
-      } catch  {
-        setAlumnos([])
+      } catch {
+        // Intentar cargar alumnos desde IndexedDB si hay un fallo en la red
+        const cachedAlumnos = await getOfflineData(`alumnosHorario-${selectedHorario.id_horario}`);
+        if (cachedAlumnos) {
+          const parsedData = JSON.parse(cachedAlumnos.value);
+          setAlumnos(parsedData);
+          setIsInitialModalOpen(false);
+          setIsAttendanceModalOpen(true);
+          console.log('Alumnos cargados desde IndexedDB para asistencia:', parsedData);
+        } else {
+          setAlumnos([]);
+          toast.error('No se pudieron cargar los alumnos para el horario seleccionado.');
+        }
       }
     }
-  }
+  };
+  
 
   const closeAttendanceModal = () => {
     setIsAttendanceModalOpen(false)
@@ -135,10 +181,10 @@ const HorarioDocente: React.FC = () => {
 
   const handleAddAlumno = async () => {
     if (!nocontrolAlumno) {
-      toast.error('Por favor, ingrese el número de control del alumno.')
-      return
+      toast.error('Por favor, ingrese el número de control del alumno.');
+      return;
     }
-
+  
     try {
       const response = await fetch(
         `${apiUrl}horarios_escolares/${selectedHorario?.id_horario}/agregar_alumno`,
@@ -147,23 +193,31 @@ const HorarioDocente: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ nocontrol_alumnos: nocontrolAlumno }), // Verifica que el nombre coincide
+          body: JSON.stringify({ nocontrol_alumnos: nocontrolAlumno }),
         }
-      )
-
+      );
+  
       if (response.ok) {
-        const newAlumno = await response.json()
-        setAlumnos((prevAlumnos) => [...prevAlumnos, newAlumno])
-        toast.success('Alumno agregado exitosamente.')
-        closeAddModal()
+        const newAlumno = await response.json();
+        setAlumnos((prevAlumnos) => [...prevAlumnos, newAlumno]);
+        toast.success('Alumno agregado exitosamente.');
+        closeAddModal();
+  
+        // Guardar los alumnos actualizados en IndexedDB
+        saveDataOffline({
+          key: `alumnosHorario-${selectedHorario?.id_horario}`,
+          value: JSON.stringify([...alumnos, newAlumno]),
+          timestamp: Date.now(),
+        });
       } else {
-        const errorData = await response.json()
-        toast.error(errorData.message || 'Error al agregar el alumno.')
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Error al agregar el alumno.');
       }
-    } catch{
-      toast.error('Error al agregar el alumno.')
+    } catch {
+      toast.error('Error al agregar el alumno.');
     }
-  }
+  };
+  
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
@@ -230,35 +284,36 @@ const HorarioDocente: React.FC = () => {
 
   const handleSaveAttendance = async () => {
     if (!selectedHorario || !currentDate) {
-      toast.error('Horario o fecha no seleccionados.')
-      return
+      toast.error('Horario o fecha no seleccionados.');
+      return;
     }
-
+  
     try {
-      const alumno = alumnos[currentAlumnoIndex]
-      const attendanceRecord = attendance[alumno.id_alumnos]
-      const attendanceStatus =
-        attendanceRecord && attendanceRecord.attended ? 'Asistió' : 'No asistió'
+      const alumno = alumnos[currentAlumnoIndex];
+      const attendanceRecord = attendance[alumno.id_alumnos];
+      const attendanceStatus = attendanceRecord && attendanceRecord.attended ? 'Asistió' : 'No asistió';
+  
+      const attendanceData = {
+        id_alumno: alumno.id_alumnos,
+        id_horario: selectedHorario.id_horario,
+        fecha: new Date(currentDate).toISOString().replace('T', ' ').substring(0, 19),
+        estado_asistencia: attendanceStatus,
+        comentarios: attendanceRecord ? attendanceRecord.comment : '',
+      };
+  
+      // Intentar guardar la asistencia en el servidor
       const response = await fetch(`${apiUrl}asistencias/registrar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          id_alumno: alumno.id_alumnos,
-          id_horario: selectedHorario.id_horario,
-          fecha: new Date(currentDate)
-            .toISOString()
-            .replace('T', ' ')
-            .substring(0, 19),
-          estado_asistencia: attendanceStatus,
-          comentarios: attendanceRecord ? attendanceRecord.comment : '',
-        }),
-      })
-
+        body: JSON.stringify(attendanceData),
+      });
+  
       if (response.ok) {
-        toast.success('Asistencia guardada exitosamente.')
-
+        toast.success('Asistencia guardada exitosamente.');
+  
+        // Intentar enviar la notificación
         const notificationResponse = await fetch(`${apiUrl}send_notification`, {
           method: 'POST',
           headers: {
@@ -269,94 +324,107 @@ const HorarioDocente: React.FC = () => {
             subject: 'Notificación de Asistencia',
             message: `Hola ${alumno.nombre_alumnos}, tu estado de asistencia en la asignatura: ${selectedHorario.nombre_asignatura} de hoy es: ${attendanceStatus} \n `,
           }),
-        })
-
+        });
+  
         if (notificationResponse.ok) {
-          toast.success('Notificación enviada exitosamente.')
+          toast.success('Notificación enviada exitosamente.');
         } else {
-          const errorData = await notificationResponse.json()
-          toast.error(errorData.message || 'Error al enviar la notificación.')
+          const errorData = await notificationResponse.json();
+          toast.error(errorData.message || 'Error al enviar la notificación.');
         }
-
+  
         if (currentAlumnoIndex < alumnos.length - 1) {
-          setCurrentAlumnoIndex(currentAlumnoIndex + 1)
+          setCurrentAlumnoIndex(currentAlumnoIndex + 1);
         }
       } else {
-        const errorData = await response.json()
-        toast.error(errorData.message || 'Error al guardar la asistencia.')
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Error al guardar la asistencia.');
       }
     } catch {
-      toast.error('Error al guardar la asistencia.')
+      // Guardar la asistencia en IndexedDB si la conexión falla
+      await saveDataOffline({
+        key: `attendance-${alumnos[currentAlumnoIndex].id_alumnos}-${selectedHorario.id_horario}-${currentDate}`,
+        value: JSON.stringify({
+          id_alumno: alumnos[currentAlumnoIndex].id_alumnos,
+          id_horario: selectedHorario.id_horario,
+          fecha: currentDate,
+          estado_asistencia: attendance[alumnos[currentAlumnoIndex].id_alumnos]?.attended ? 'Asistió' : 'No asistió',
+          comentarios: attendance[alumnos[currentAlumnoIndex].id_alumnos]?.comment || '',
+        }),
+        timestamp: Date.now(),
+      });
+  
+      toast.info('Asistencia guardada localmente para sincronización posterior.');
     }
-  }
+  };
+  
 
-  const generatePdf = () => {
+  const generatePdf = async () => {
     if (!selectedHorario) {
-      toast.error('No se ha seleccionado un horario.')
-      return
+      toast.error('No se ha seleccionado un horario.');
+      return;
     }
-
-    const doc = new jsPDF()
+  
+    const doc = new jsPDF();
     const tableColumn = [
       'Nombre Completo',
       'Número de Control',
       'Asistencia',
       'Comentario',
-    ]
-    const tableRows: string[][] = []
-
+    ];
+    const tableRows: string[][] = [];
+  
     alumnos.forEach((alumno) => {
-      const attendanceRecord = attendance[alumno.id_alumnos]
-      const attendanceStatus =
-        attendanceRecord && attendanceRecord.attended ? 'Asistió' : 'No asistió'
-      const comment = attendanceRecord ? attendanceRecord.comment : ''
+      const attendanceRecord = attendance[alumno.id_alumnos];
+      const attendanceStatus = attendanceRecord && attendanceRecord.attended ? 'Asistió' : 'No asistió';
+      const comment = attendanceRecord ? attendanceRecord.comment : '';
       const alumnoData = [
         `${alumno.nombre_alumnos} ${alumno.app_alumnos} ${alumno.apm_alumnos}`,
         alumno.nocontrol_alumnos,
         attendanceStatus,
         comment,
-      ]
-      tableRows.push(alumnoData)
-    })
-
+      ];
+      tableRows.push(alumnoData);
+    });
+  
     const {
       nombre_asignatura,
       nombre_docente,
       nombre_grado,
       nombre_grupo,
       nombre_carrera_tecnica,
-    } = selectedHorario
-
+    } = selectedHorario;
+  
     // Dibujar el encabezado
-    doc.setFillColor(0, 118, 0) // Verde fuerte para el encabezado
-    doc.rect(0, 0, 210, 20, 'F') // Rectángulo para el encabezado
-
+    doc.setFillColor(0, 118, 0); // Verde fuerte para el encabezado
+    doc.rect(0, 0, 210, 20, 'F'); // Rectángulo para el encabezado
+  
     // Texto del encabezado
-    doc.setFontSize(22)
-    doc.setTextColor(255, 255, 255)
-    doc.text('INFORME DIARIO', 105, 12, { align: 'center' })
-
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text('INFORME DIARIO', 105, 12, { align: 'center' });
+  
     // Texto adicional con separaciones
-    doc.setFontSize(12)
-    doc.setTextColor(0, 0, 0)
-
-    let yOffset = 30 // Inicialización del desplazamiento en Y
-    const lineSpacing = 10 // Espacio entre líneas
-
-    doc.text(`Asignatura: ${nombre_asignatura}`, 14, yOffset)
-    yOffset += lineSpacing
-    doc.text(`Docente: ${nombre_docente}`, 14, yOffset)
-    yOffset += lineSpacing
-    doc.text(`Grado: ${nombre_grado}`, 14, yOffset)
-    yOffset += lineSpacing
-    doc.text(`Grupo: ${nombre_grupo}`, 14, yOffset)
-    yOffset += lineSpacing
-    doc.text(`Carrera Técnica: ${nombre_carrera_tecnica}`, 14, yOffset)
-    yOffset += lineSpacing
-
-    const date = new Date().toLocaleDateString()
-    doc.text(`Fecha: ${date}`, 14, yOffset)
-
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+  
+    let yOffset = 30; // Inicialización del desplazamiento en Y
+    const lineSpacing = 10; // Espacio entre líneas
+  
+    doc.text(`Asignatura: ${nombre_asignatura}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Docente: ${nombre_docente}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Grado: ${nombre_grado}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Grupo: ${nombre_grupo}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Carrera Técnica: ${nombre_carrera_tecnica}`, 14, yOffset);
+    yOffset += lineSpacing;
+  
+    const date = new Date().toLocaleDateString();
+    doc.text(`Fecha: ${date}`, 14, yOffset);
+  
     // Agregar la tabla
     doc.autoTable({
       head: [tableColumn],
@@ -369,11 +437,29 @@ const HorarioDocente: React.FC = () => {
         fillColor: [0, 118, 0],
         textColor: [255, 255, 255],
       },
-    })
-
+    });
+  
     // Guardar el documento
-    doc.save(`reporte_asistencia_${date}.pdf`)
-  }
+    const pdfFileName = `reporte_asistencia_${date}.pdf`;
+    doc.save(pdfFileName);
+  
+    // Convertir el PDF a un blob y guardarlo en IndexedDB
+    const pdfBlob = doc.output('blob');
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64data = reader.result?.toString().split(',')[1]; // Convertir el blob a base64
+      if (base64data) {
+        await saveDataOffline({
+          key: pdfFileName,
+          value: base64data,
+          timestamp: Date.now(),
+        });
+        toast.success('Informe PDF guardado para acceso offline.');
+      }
+    };
+    reader.readAsDataURL(pdfBlob);
+  };
+  
 
   if (loading) {
     return <p className="loading-message-horario-docente">Cargando horarios del docente...</p>

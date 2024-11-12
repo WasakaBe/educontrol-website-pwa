@@ -59,44 +59,59 @@ const Main = () => {
     return permission;
   };
 
-  // Función para suscribir al usuario al servicio Push
-  const subscribeUserToPush = async (registration: ServiceWorkerRegistration) => {
-    const publicVapidKey = 'BGzVgsHrD4pKaSPANqC6IEOpFTnaoTLKj7YPTJ8tRh0i2uWPakuumZt7o7Vb_oJdnTAyjEKl5yawQReEkVOZTOA'; // Reemplaza con tu clave pública VAPID
+// Función para suscribir al usuario al servicio Push
+// Función para suscribir al usuario al servicio Push
+const subscribeUserToPush = async (registration: ServiceWorkerRegistration) => {
+  const publicVapidKey = 'BGzVgsHrD4pKaSPANqC6IEOpFTnaoTLKj7YPTJ8tRh0i2uWPakuumZt7o7Vb_oJdnTAyjEKl5yawQReEkVOZTOA';
 
-    // Convierte la clave VAPID a Uint8Array
-    const urlBase64ToUint8Array = (base64String: string) => {
-      const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-      const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  // Convierte la clave VAPID a Uint8Array
+  const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
 
-      const rawData = window.atob(base64);
-      const outputArray = new Uint8Array(rawData.length);
+  try {
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+    });
+    toast.success('Suscripción exitosa.');
 
-      for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
-      }
-      return outputArray;
+    // Extraer las claves p256dh y auth en formato base64
+    const keys = {
+      p256dh: subscription.getKey("p256dh") ? btoa(String.fromCharCode(...new Uint8Array(subscription.getKey("p256dh")!))) : null,
+      auth: subscription.getKey("auth") ? btoa(String.fromCharCode(...new Uint8Array(subscription.getKey("auth")!))) : null
     };
 
-    try {
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
-      });
-      toast.success('Suscripción exitosa.');
+    // Envía la suscripción al backend para almacenarla y manejar la respuesta
+    const response = await fetch(`${apiUrl}subscribe`, {
+      method: 'POST',
+      body: JSON.stringify({
+        endpoint: subscription.endpoint,
+        keys: keys,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-      // Aquí podrías enviar la suscripción a tu backend para almacenarla y poder usarla luego.
-      // Ejemplo:
-      await fetch(`${apiUrl}subscribe`, {
-        method: 'POST',
-        body: JSON.stringify(subscription),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch  {
-      toast.error('Error al suscribir al usuario.');
+    const result = await response.json();
+    if (response.ok) {
+      toast.success(result.message || 'Suscripción almacenada con éxito');
+    } else {
+      toast.error(result.error || 'Error al almacenar la suscripción.');
     }
-  };
+  } catch (error) {
+    console.error('Error al suscribir al usuario:', error);
+    toast.error('Error al suscribir al usuario.');
+  }
+};
 
   return (
     <>

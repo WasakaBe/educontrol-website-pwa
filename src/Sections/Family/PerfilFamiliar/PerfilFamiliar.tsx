@@ -2,8 +2,8 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from '../../../Auto/Auth';
-import { apiUrl } from '../../../constants/Api'; // Importa apiUrl
-import { saveDataOffline, getOfflineData } from '../../../db'; // Importamos las funciones para IndexedDB
+import { apiUrl } from '../../../constants/Api';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 const PerfilFamiliar: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -23,10 +23,10 @@ const PerfilFamiliar: React.FC = () => {
   const [foto, setFoto] = useState<string | ArrayBuffer | null>(
     user?.foto_usuario ? `data:image/jpeg;base64,${user.foto_usuario}` : ''
   );
-  const [showCamera, setShowCamera] = useState(false); // Para mostrar la cámara
-  const videoRef = useRef<HTMLVideoElement | null>(null); // Referencia del video para la cámara
-  const canvasRef = useRef<HTMLCanvasElement | null>(null); // Para capturar la foto
-  const streamRef = useRef<MediaStream | null>(null); // Referencia para detener el stream
+  const [showCamera, setShowCamera] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     // Intentar cargar el perfil guardado desde IndexedDB si está offline
@@ -80,7 +80,7 @@ const PerfilFamiliar: React.FC = () => {
 
       try {
         const response = await fetch(
-          `${apiUrl}update-profile-familiar/${user.id_usuario}`, // Usa apiUrl aquí
+          `${apiUrl}update-profile-familiar/${user.id_usuario}`,
           {
             method: 'PUT',
             headers: {
@@ -121,7 +121,6 @@ const PerfilFamiliar: React.FC = () => {
     }
   };
 
-  // Función para abrir la cámara
   const openCamera = () => {
     setShowCamera(true);
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -130,34 +129,32 @@ const PerfilFamiliar: React.FC = () => {
           videoRef.current.srcObject = stream;
           videoRef.current.play();
         }
-        streamRef.current = stream; // Guardar el stream para detenerlo más tarde
+        streamRef.current = stream;
       })
       .catch((err) => {
         toast.error(`Error al acceder a la cámara: ${err.message}`);
       });
   };
 
-  // Función para tomar la foto desde la cámara
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext('2d');
       if (context) {
         context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
         const imageData = canvasRef.current.toDataURL('image/jpeg');
-        setFoto(imageData); // Guardar la foto tomada como base64
+        setFoto(imageData);
       }
-      setShowCamera(false); // Ocultar la cámara
-      stopCamera(); // Detener la cámara después de capturar la foto
+      setShowCamera(false);
+      stopCamera();
     }
   };
 
-  // Función para detener la cámara
   const stopCamera = () => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop()); // Detener todas las pistas del stream
-      streamRef.current = null; // Limpiar la referencia del stream
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
-    setShowCamera(false); // Asegurarse de ocultar el feed de la cámara
+    setShowCamera(false);
   };
 
   return (

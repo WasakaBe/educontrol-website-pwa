@@ -7,6 +7,7 @@ import './InfoAlumnoFamiliar.css';
 import { apiUrl } from '../../../constants/Api';
 import { Alumnos, Notificacion_Alumno, HorarioAlumno } from '../../../constants/interfaces'; // Importar las interfaces
 import { AuthContext } from '../../../Auto/Auth';
+import { saveDataOffline, getOfflineData } from '../../../db';
 
 Modal.setAppElement('#root'); // Ajusta el selector al contenedor principal de tu aplicación
 
@@ -33,16 +34,36 @@ export default function InfoAlumnoFamiliar() {
 
   useEffect(() => {
     if (user) {
-      fetch(`${apiUrl}alumnos_agregados/view/${user.id_usuario}`)
-        .then(response => response.json())
-        .then(data => {
+      const fetchAlumnosAgregados = async () => {
+        try {
+          const response = await fetch(`${apiUrl}alumnos_agregados/view/${user.id_usuario}`);
+          const data = await response.json();
           if (Array.isArray(data)) {
             setAlumnosAgregados(data);
+
+            // Guardar los alumnos agregados en IndexedDB
+            saveDataOffline({
+              key: `alumnosAgregados-${user.id_usuario}`,
+              value: JSON.stringify(data),
+              timestamp: Date.now(),
+            });
           } else {
             console.error('Data received is not an array', data);
           }
-        })
-        .catch(error => console.error('Error al cargar alumnos agregados:', error));
+        } catch (error) {
+          console.error('Error al cargar alumnos agregados:', error);
+
+          // Intentar cargar datos desde IndexedDB en caso de error
+          const cachedData = await getOfflineData(`alumnosAgregados-${user.id_usuario}`);
+          if (cachedData) {
+            const parsedData = JSON.parse(cachedData.value);
+            setAlumnosAgregados(parsedData);
+            console.log('Alumnos agregados cargados desde IndexedDB:', parsedData);
+          }
+        }
+      };
+
+      fetchAlumnosAgregados();
     }
   }, [user]);
 
@@ -99,50 +120,77 @@ export default function InfoAlumnoFamiliar() {
     setDetailsModalIsOpen(false);
   };
 
-  const openNotificacionesModal = (al: Alumnos) => {
+  const openNotificacionesModal = async (al: Alumnos) => {
     setAlumno(al);
-    fetch(`${apiUrl}notificaciones/${al.id_alumnos}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('No se encontraron notificaciones');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Filtrar solo las notificaciones de asistencia
-        const notificacionesAsistencia = data.filter((notificacion: Notificacion_Alumno) => notificacion.subject_notificacion.includes('Asistencia'));
-        setNotificaciones(notificacionesAsistencia);
-        setNotificacionesModalIsOpen(true);
-      })
-      .catch(error => {
-        console.error('Error al obtener notificaciones:', error);
-        setNotificaciones([]);
-        setNotificacionesModalIsOpen(true);
+    try {
+      const response = await fetch(`${apiUrl}notificaciones/${al.id_alumnos}`);
+      if (!response.ok) {
+        throw new Error('No se encontraron notificaciones');
+      }
+      const data = await response.json();
+      const notificacionesAsistencia = data.filter((notificacion: Notificacion_Alumno) =>
+        notificacion.subject_notificacion.includes('Asistencia')
+      );
+      setNotificaciones(notificacionesAsistencia);
+
+      // Guardar las notificaciones en IndexedDB
+      saveDataOffline({
+        key: `notificaciones-${al.id_alumnos}`,
+        value: JSON.stringify(notificacionesAsistencia),
+        timestamp: Date.now(),
       });
+
+      setNotificacionesModalIsOpen(true);
+    } catch (error) {
+      console.error('Error al obtener notificaciones:', error);
+
+      // Intentar cargar datos desde IndexedDB en caso de error
+      const cachedData = await getOfflineData(`notificaciones-${al.id_alumnos}`);
+      if (cachedData) {
+        const parsedData = JSON.parse(cachedData.value);
+        setNotificaciones(parsedData);
+        console.log('Notificaciones cargadas desde IndexedDB:', parsedData);
+      }
+      setNotificacionesModalIsOpen(true);
+    }
   };
+
 
   const closeNotificacionesModal = () => {
     setNotificacionesModalIsOpen(false);
   };
 
-  const obtenerAsignaturas = (id_alumno: number) => {
-    fetch(`${apiUrl}asignatura/horario/escolar/${id_alumno}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('No se encontraron asignaturas');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setAsignaturas(data.asignaturas);
-        setHorarioModalIsOpen(true);
-      })
-      .catch(error => {
-        console.error('Error al obtener asignaturas:', error);
-        setAsignaturas([]);
-        setHorarioModalIsOpen(true);
+  const obtenerAsignaturas = async (id_alumno: number) => {
+    try {
+      const response = await fetch(`${apiUrl}asignatura/horario/escolar/${id_alumno}`);
+      if (!response.ok) {
+        throw new Error('No se encontraron asignaturas');
+      }
+      const data = await response.json();
+      setAsignaturas(data.asignaturas);
+
+      // Guardar asignaturas en IndexedDB
+      saveDataOffline({
+        key: `asignaturas-${id_alumno}`,
+        value: JSON.stringify(data.asignaturas),
+        timestamp: Date.now(),
       });
+
+      setHorarioModalIsOpen(true);
+    } catch (error) {
+      console.error('Error al obtener asignaturas:', error);
+
+      // Intentar cargar datos desde IndexedDB en caso de error
+      const cachedData = await getOfflineData(`asignaturas-${id_alumno}`);
+      if (cachedData) {
+        const parsedData = JSON.parse(cachedData.value);
+        setAsignaturas(parsedData);
+        console.log('Asignaturas cargadas desde IndexedDB:', parsedData);
+      }
+      setHorarioModalIsOpen(true);
+    }
   };
+
 
   const closeHorarioModal = () => {
     setHorarioModalIsOpen(false);

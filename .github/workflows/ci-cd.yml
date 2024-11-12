@@ -74,6 +74,21 @@ jobs:
 
       - name: Run E2E Tests with Cypress
         run: npx cypress run
+        
+        #2 evualuacion de rendimiento ypruebas de carga    
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.8.x
+
+      - name: Run Lighthouse CI
+        run: lhci autorun
+
+      - name: Install k6
+        run: sudo apt-get install k6
+
+      - name: Run Load Test
+        run: k6 run load-test.js
+
+
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3

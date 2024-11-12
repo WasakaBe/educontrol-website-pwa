@@ -26,6 +26,37 @@ import { apiUrl } from './constants/Api.tsx';
 import { toast } from 'react-toastify'; // Importa el toast
 import 'react-toastify/dist/ReactToastify.css'; // Asegúrate de incluir los estilos de Toastify
 import { AuthContext } from './Auto/Auth';  // Importa el contexto de autenticación
+import { onCLS, onFID, onLCP , Metric} from 'web-vitals';
+
+// Función para enviar las métricas a Sentry y consola// Función para enviar las métricas a Sentry y consola
+// Función para enviar las métricas a Sentry y consola
+function sendToAnalytics(metric: Metric) {
+  console.log(metric);
+  
+  // Simplificar el objeto metric para enviarlo a Sentry
+  const simplifiedMetric = {
+    name: metric.name,
+    value: metric.value,
+    id: metric.id,
+    delta: metric.delta,
+  };
+
+  Sentry.captureMessage(`Web Vital Metric: ${metric.name}`, {
+    level: 'info',
+    extra: simplifiedMetric,
+  });
+
+  // Puedes enviar estos datos a una API, por ejemplo:
+  // fetch('/analytics', { method: 'POST', body: JSON.stringify(metric) });
+}
+
+// Utilizando las métricas
+onCLS(sendToAnalytics);
+onFID(sendToAnalytics);
+onLCP(sendToAnalytics);
+
+
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {

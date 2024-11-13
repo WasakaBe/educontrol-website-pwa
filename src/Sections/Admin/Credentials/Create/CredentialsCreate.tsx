@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { apiUrl } from '../../../../constants/Api';
 import './CredentialsCreate.css';
 import { logo_cbta, logoeducacion } from '../../../../assets/logos';
@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Alumnos } from '../../../../constants/interfaces';
 import Modal from 'react-modal';
-import { saveDataOffline, getOfflineData } from '../../../../db'; // Importar funciones de IndexedDB
 
 export default function CredentialsCreateCustom() {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
@@ -14,24 +13,6 @@ export default function CredentialsCreateCustom() {
   const [alumno, setAlumno] = useState<Alumnos | null>(null);
   const [, setError] = useState<string | null>(null);
   const [, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Intentar cargar los datos del alumno desde IndexedDB si está offline
-    loadAlumnoOffline();
-  }, []);
-
-  const loadAlumnoOffline = async () => {
-    try {
-      const cachedAlumno = await getOfflineData('alumnoData');
-      if (cachedAlumno) {
-        const alumnoData = JSON.parse(cachedAlumno.value);
-        setAlumno(alumnoData);
-        toast.info('Datos del alumno cargados desde IndexedDB');
-      }
-    } catch (error) {
-      console.error('Error al cargar los datos del alumno desde IndexedDB:', error);
-    }
-  };
 
   const openHelpModal = () => {
     setIsHelpModalOpen(true);
@@ -58,13 +39,6 @@ export default function CredentialsCreateCustom() {
       setAlumno(data);
       setError(null);
       toast.success('Alumno encontrado exitosamente');
-
-      // Guardar los datos del alumno en IndexedDB para acceso offline
-      await saveDataOffline({
-        key: 'alumnoData',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      });
     } catch (error) {
       setError((error as Error).message);
       setAlumno(null);
@@ -234,16 +208,11 @@ export default function CredentialsCreateCustom() {
             &times;
           </button>
           <h2>Ayuda para la Inserción de Credencial Escolar del Alumno</h2>
-          <p>
-            Para insertar alumnos, debes hacerlo de esta manera:
-          </p>
-          
+          <p>Para insertar alumnos, debes hacerlo de esta manera:</p>
           <p>
             <strong>Debes Ingresar el No Control del alumno en el campo de texto</strong>
           </p>
-          <p>
-            Posteriormente, dar clic en el botón de "Agregar"
-          </p>
+          <p>Posteriormente, dar clic en el botón de "Agregar"</p>
         </div>
       </Modal>
 

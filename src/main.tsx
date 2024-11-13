@@ -1,9 +1,4 @@
-import Hotjar from '@hotjar/browser';
 
-const siteId = 5206504;
-const hotjarVersion = 6;
-
-Hotjar.init(siteId, hotjarVersion);
 
 //sentry es monitoreo de software
 import * as Sentry from "@sentry/react";

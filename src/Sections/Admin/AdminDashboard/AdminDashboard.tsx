@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { apiUrl } from '../../../constants/Api';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { saveDataOffline, getOfflineData } from '../../../db'; // IndexedDB functions
 
 // Registrar componentes de Chart.js
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -38,25 +37,12 @@ const AdminDashboard: React.FC = () => {
           const data = await response.json();
           setFeedbacks(data);
 
-          // Guardar los datos en IndexedDB para acceso offline
-          await saveDataOffline({
-            key: 'feedbackData',
-            value: JSON.stringify(data),
-            timestamp: Date.now(),
-          });
         } else {
           console.error('Error fetching feedbacks');
         }
       } catch (error) {
         console.error('Error fetching feedbacks:', error);
 
-        // Intentar cargar los datos de IndexedDB en modo offline
-        const offlineData = await getOfflineData('feedbackData');
-        if (offlineData) {
-          const cachedFeedbacks = JSON.parse(offlineData.value);
-          setFeedbacks(cachedFeedbacks);
-          console.info('Cargando datos de feedback desde IndexedDB');
-        }
       }
     };
     fetchFeedbacks();

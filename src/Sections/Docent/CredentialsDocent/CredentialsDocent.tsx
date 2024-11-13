@@ -4,7 +4,6 @@ import { apiUrl } from '../../../constants/Api';
 import './CredentialsDocent.css';
 import { logo_cbta, logoeducacion } from '../../../assets/logos';
 import { Docente } from '../../../constants/interfaces';
-import { saveDataOffline, getOfflineData } from '../../../db';
 
 const CredentialsDocent: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -20,26 +19,11 @@ const CredentialsDocent: React.FC = () => {
           const data = await response.json();
           if (response.ok) {
             setDocente(data);
-
-            // Guardar los datos del docente en IndexedDB
-            saveDataOffline({
-              key: `docenteData-${user.id_usuario}`,
-              value: JSON.stringify(data),
-              timestamp: Date.now(),
-            });
           } else {
             setError(data.error);
           }
         } catch {
           setError('Error al obtener la información del docente');
-
-          // Intentar cargar datos del docente desde IndexedDB si falla la conexión
-          const cachedData = await getOfflineData(`docenteData-${user.id_usuario}`);
-          if (cachedData) {
-            const parsedData = JSON.parse(cachedData.value);
-            setDocente(parsedData);
-            console.log('Datos del docente cargados desde IndexedDB:', parsedData);
-          }
         }
       }
     };

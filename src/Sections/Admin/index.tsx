@@ -7,7 +7,7 @@ import CredentialsCreate from './Credentials/Create/CredentialsCreate'
 import SchedulesView from './Schedules/View/SchedulesView'
 import SchedulesCreate from './Schedules/Create/SchedulesCreate'
 //TODO: INFO
-import InfoAlumn from './InfoSchool/InfoAlumn/InfoAlumn'
+import InfoAlumn from './InfoSchool/InfoAlumn/InformacionAlumno'
 import InfoDocent from './InfoSchool/InfoDocent/InfoDocent'
 import InfoBecas from './InfoSchool/InfoBecas/InfoBecas'
 //TODO: WEBSITE

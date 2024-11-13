@@ -3,7 +3,7 @@ import { apiUrl } from '../../../constants/Api';
 import './ChatAdmin.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { saveDataOffline, getOfflineData } from '../../../db'; // Importar funciones de IndexedDB
+
 import {
   MensajeContacto,
   MensajeContactoAPI,
@@ -43,24 +43,11 @@ const ChatAdmin: React.FC = () => {
           return uniqueMensajes;
         });
 
-        // Guardar en IndexedDB para acceso offline
-        await saveDataOffline({
-          key: 'chatMessages',
-          value: JSON.stringify(mappedData),
-          timestamp: Date.now(),
-        });
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
           toast.error(error.message);
 
-          // Cargar desde IndexedDB en caso de error
-          const offlineData = await getOfflineData('chatMessages');
-          if (offlineData) {
-            const cachedMessages = JSON.parse(offlineData.value);
-            setMensajes(cachedMessages);
-            toast.info('Cargando mensajes desde IndexedDB');
-          }
         }
       } finally {
         setLoading(false);
@@ -153,8 +140,8 @@ const ChatAdmin: React.FC = () => {
       ) : (
         <>
           {currentMessages.length > 0 ? (
-            currentMessages.map((mensaje) => (
-              <div key={mensaje.id} className="message-item">
+            currentMessages.map((mensaje, index) => (
+              <div key={`${mensaje.id}-${mensaje.tipo}-${index}`} className="message-item">
                 <span className="message-icon">
                   {mensaje.tipo === 'contacto' ? '✉️' : '🎫'}
                 </span>
@@ -182,7 +169,7 @@ const ChatAdmin: React.FC = () => {
           <div className="pagination">
             {[...Array(totalPages)].map((_, index) => (
               <span
-                key={index + 1}
+                key={`page-${index}`}
                 onClick={() => paginate(index + 1)}
                 className={`page-link ${index + 1 === currentPage ? 'active' : ''}`}
               >

@@ -132,7 +132,7 @@ const Contact: React.FC = () => {
             <label className="contact-label" htmlFor="email">Correo</label>
             <input
               className="contact-input"
-              id="email"
+              id="contact-email"
               type="email"
               placeholder="Correo"
               value={email}

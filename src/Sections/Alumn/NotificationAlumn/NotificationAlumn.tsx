@@ -4,6 +4,7 @@ import './NotificationAlumn.css';
 import { AuthContext } from '../../../Auto/Auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 interface Notificacion {
   id_notificacion: number;
   subject_notificacion: string;
@@ -35,10 +36,14 @@ const NotificationAlumn: React.FC = () => {
       try {
         const response = await fetch(`${apiUrl}/alumno/usuario/${authContext.user.id_usuario}`);
         if (!response.ok) {
-          console.log('Error al obtener el ID del alumno');
+          throw new Error('Error al obtener el ID del alumno');
         }
         const data = await response.json();
-        setAlumnoId(data.id_alumnos);
+        if (data && data.id_alumnos) {
+          setAlumnoId(data.id_alumnos);
+        } else {
+          throw new Error('El ID del alumno no se pudo encontrar en la respuesta');
+        }
       } catch (error) {
         setError((error as Error).message);
         setLoading(false);
@@ -55,11 +60,16 @@ const NotificationAlumn: React.FC = () => {
       try {
         const response = await fetch(`${apiUrl}/notificaciones/${alumnoId}`);
         if (!response.ok) {
-          console.log('Error al obtener las notificaciones');
+          throw new Error('Error al obtener las notificaciones');
         }
-        const data: Notificacion[] = await response.json();
-        setNotificaciones(data);
-        setFilteredNotificaciones(data);
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+          setNotificaciones(data);
+          setFilteredNotificaciones(data);
+        } else {
+          throw new Error('Los datos de notificaciones no son un array.');
+        }
       } catch (error) {
         console.error('Error al obtener las notificaciones:', error);
         setError((error as Error).message);

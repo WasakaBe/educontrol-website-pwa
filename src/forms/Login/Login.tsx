@@ -167,6 +167,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   className={passwordError ? 'error' : password && 'success'}
                   required
+                  autoComplete="current-password" 
                 />
                 {passwordError && <p className="error-text">{passwordError}</p>}
                 <div className="buttons">
@@ -196,12 +197,13 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
-                  id="email"
+                  id="email-login"
                   placeholder="example@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={emailError ? 'error' : email && 'success'}
                   required
+                   autoComplete="username"
                 />
                 {emailError && <p className="error-text">{emailError}</p>}
                 <button type="submit" className="login-button">

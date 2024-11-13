@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { DateTime } from 'luxon'
 import { Alumn,ManualAddFormData,SecretQuestion,SexOption,Clinic,Grado,Grupo,Traslado,TrasladoTransporte,CarreraTecnica,Pais,Estado} from '../../../../constants/interfaces';
 import ModalActualizarAlumno from './ModalActualizarAlumno'
-import { saveDataOffline, getOfflineData } from '../../../../db' 
 
 interface FormData {
   nombre_usuario: string
@@ -132,273 +131,65 @@ const closeUpdateModal = () => {
 
 
   useEffect(() => {
-    fetchAlumnos()
-    fetchSecretQuestions()
-    fetchSexOptions()
-    fetchClinicOptions()
-    fetchGradoOptions()
-    fetchGrupoOptions()
-    fetchTrasladoOptions()
-    fetchTrasladoTransporteOptions()
-    fetchCarreraTecnicaOptions()
-    fetchPaisOptions()
-    fetchEstadoOptions()
-  }, )
-
-  const fetchAlumnos = async () => {
-    try {
-      const response = await fetch(`${apiUrl}alumno`)
-      if (!response.ok) {
-        throw new Error('Error al obtener los alumnos')
-      }
-      const data = await response.json()
-      setAlumnos(data)
-
-      // Guardar datos en IndexedDB para acceso offline
-      await saveDataOffline({
-        key: 'alumnosData',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener los alumnos desde el servidor. Cargando desde IndexedDB.')
-      loadAlumnosFromIndexedDB() // Cargar desde IndexedDB
-    }
-  }
-
-   // Cargar datos de alumnos desde IndexedDB
-   const loadAlumnosFromIndexedDB = async () => {
-    try {
-      const cachedData = await getOfflineData('alumnosData')
-      if (cachedData) {
-        const offlineAlumnos = JSON.parse(cachedData.value)
-        setAlumnos(offlineAlumnos)
-        toast.info('Datos cargados desde IndexedDB')
-      }
-    } catch (error) {
-      console.error('Error al cargar los datos desde IndexedDB:', error)
-    }
-  }
-
-  const fetchSecretQuestions = async () => {
-    try {
-      const response = await fetch(`${apiUrl}pregunta`)
-      const data = await response.json()
-      setSecretQuestions(data)
-      await saveDataOffline({
-        key: 'secretQuestions',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener las preguntas secretas. Cargando desde IndexedDB.')
-      loadSecretQuestionsFromIndexedDB()
-    }
-  }
-
-  const loadSecretQuestionsFromIndexedDB = async () => {
-    const cachedData = await getOfflineData('secretQuestions')
-    if (cachedData) {
-      setSecretQuestions(JSON.parse(cachedData.value))
-    }
-  }
-
-  const fetchSexOptions = async () => {
-    try {
-      const response = await fetch(`${apiUrl}sexo`)
-      const data = await response.json()
-      setSexOptions(data)
-      await saveDataOffline({
-        key: 'sexOptions',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener las opciones de sexo. Cargando desde IndexedDB.')
-      loadSexOptionsFromIndexedDB()
-    }
-  }
-
-  const loadSexOptionsFromIndexedDB = async () => {
-    const cachedData = await getOfflineData('sexOptions')
-    if (cachedData) {
-      setSexOptions(JSON.parse(cachedData.value))
-    }
-  }
-
-  const fetchClinicOptions = async () => {
-    try {
-      const response = await fetch(`${apiUrl}clinica`)
-      const data = await response.json()
-      setClinicOptions(data)
-      await saveDataOffline({
-        key: 'clinicOptions',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener las opciones de clínicas. Cargando desde IndexedDB.')
-      loadClinicOptionsFromIndexedDB()
-    }
-  }
-
-  const loadClinicOptionsFromIndexedDB = async () => {
-    const cachedData = await getOfflineData('clinicOptions')
-    if (cachedData) {
-      setClinicOptions(JSON.parse(cachedData.value))
-    }
-  }
-
-  const fetchGradoOptions = async () => {
-    try {
-      const response = await fetch(`${apiUrl}grado`)
-      const data = await response.json()
-      setGradoOptions(data)
-      await saveDataOffline({
-        key: 'gradoOptions',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener las opciones de grados. Cargando desde IndexedDB.')
-      loadGradoOptionsFromIndexedDB()
-    }
-  }
-
-  const loadGradoOptionsFromIndexedDB = async () => {
-    const cachedData = await getOfflineData('gradoOptions')
-    if (cachedData) {
-      setGradoOptions(JSON.parse(cachedData.value))
-    }
-  }
-
-  const fetchGrupoOptions = async () => {
-    try {
-      const response = await fetch(`${apiUrl}grupo`)
-      const data = await response.json()
-      setGrupoOptions(data)
-      await saveDataOffline({
-        key: 'grupoOptions',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener las opciones de grupos. Cargando desde IndexedDB.')
-      loadGrupoOptionsFromIndexedDB()
-    }
-  }
-
-  const loadGrupoOptionsFromIndexedDB = async () => {
-    const cachedData = await getOfflineData('grupoOptions')
-    if (cachedData) {
-      setGrupoOptions(JSON.parse(cachedData.value))
-    }
-  }
-
+   fetchData();
+ }, );
  
-  const fetchTrasladoOptions = async () => {
-    try {
-      const response = await fetch(`${apiUrl}traslado`)
-      const data = await response.json()
-      setTrasladoOptions(data)
-      await saveDataOffline({
-        key: 'trasladoOptions',
-        value: JSON.stringify(data),
-        timestamp: Date.now(),
-      })
-    } catch {
-      toast.error('Error al obtener las opciones de traslados. Cargando desde IndexedDB.')
-      loadTrasladoOptionsFromIndexedDB()
-    }
-  }
-
-  const loadTrasladoOptionsFromIndexedDB = async () => {
-    const cachedData = await getOfflineData('trasladoOptions')
-    if (cachedData) {
-      setTrasladoOptions(JSON.parse(cachedData.value))
-    }
-  }
-
-// Fetch y Load para opciones de Traslado Transporte
-const fetchTrasladoTransporteOptions = async () => {
-  try {
-    const response = await fetch(`${apiUrl}traslado_transporte`)
-    const data = await response.json()
-    setTrasladoTransporteOptions(data)
-    await saveDataOffline({ key: 'trasladoTransporteOptions', value: JSON.stringify(data), timestamp: Date.now() })
-  } catch {
-    toast.error('Error al obtener las opciones de traslados de transporte. Cargando desde IndexedDB.')
-    loadTrasladoTransporteOptionsFromIndexedDB()
-  }
-}
-
-const loadTrasladoTransporteOptionsFromIndexedDB = async () => {
-  const cachedData = await getOfflineData('trasladoTransporteOptions')
-  if (cachedData) {
-    setTrasladoTransporteOptions(JSON.parse(cachedData.value))
-  }
-}
-
-// Fetch y Load para opciones de Carreras Técnicas
-const fetchCarreraTecnicaOptions = async () => {
-  try {
-    const response = await fetch(`${apiUrl}carreras/tecnicas`)
-    const data = await response.json()
-    setCarreraTecnicaOptions(data.carreras)
-    await saveDataOffline({ key: 'carreraTecnicaOptions', value: JSON.stringify(data.carreras), timestamp: Date.now() })
-  } catch {
-    toast.error('Error al obtener las opciones de carreras técnicas. Cargando desde IndexedDB.')
-    loadCarreraTecnicaOptionsFromIndexedDB()
-  }
-}
-
-const loadCarreraTecnicaOptionsFromIndexedDB = async () => {
-  const cachedData = await getOfflineData('carreraTecnicaOptions')
-  if (cachedData) {
-    setCarreraTecnicaOptions(JSON.parse(cachedData.value))
-  }
-}
-
-// Fetch y Load para opciones de Países
-const fetchPaisOptions = async () => {
-  try {
-    const response = await fetch(`${apiUrl}paises`)
-    const data = await response.json()
-    setPaisOptions(data.paises)
-    await saveDataOffline({ key: 'paisOptions', value: JSON.stringify(data.paises), timestamp: Date.now() })
-  } catch {
-    toast.error('Error al obtener las opciones de países. Cargando desde IndexedDB.')
-    loadPaisOptionsFromIndexedDB()
-  }
-}
-
-const loadPaisOptionsFromIndexedDB = async () => {
-  const cachedData = await getOfflineData('paisOptions')
-  if (cachedData) {
-    setPaisOptions(JSON.parse(cachedData.value))
-  }
-}
-
-// Fetch y Load para opciones de Estados
-const fetchEstadoOptions = async () => {
-  try {
-    const response = await fetch(`${apiUrl}estados`)
-    const data = await response.json()
-    setEstadoOptions(data.estados)
-    await saveDataOffline({ key: 'estadoOptions', value: JSON.stringify(data.estados), timestamp: Date.now() })
-  } catch {
-    toast.error('Error al obtener las opciones de estados. Cargando desde IndexedDB.')
-    loadEstadoOptionsFromIndexedDB()
-  }
-}
-
-const loadEstadoOptionsFromIndexedDB = async () => {
-  const cachedData = await getOfflineData('estadoOptions')
-  if (cachedData) {
-    setEstadoOptions(JSON.parse(cachedData.value))
-  }
-}
-
+ const fetchData = async () => {
+   try {
+     await fetchAlumnos(); // Llamar a esta función para obtener los alumnos.
+     const [
+       secretQuestionsResponse,
+       sexOptionsResponse,
+       clinicOptionsResponse,
+       gradoOptionsResponse,
+       grupoOptionsResponse,
+       trasladoOptionsResponse,
+       trasladoTransporteOptionsResponse,
+       carreraTecnicaOptionsResponse,
+       paisOptionsResponse,
+       estadoOptionsResponse,
+     ] = await Promise.all([
+       fetch(`${apiUrl}pregunta`),
+       fetch(`${apiUrl}sexo`),
+       fetch(`${apiUrl}clinica`),
+       fetch(`${apiUrl}grado`),
+       fetch(`${apiUrl}grupo`),
+       fetch(`${apiUrl}traslado`),
+       fetch(`${apiUrl}traslado_transporte`),
+       fetch(`${apiUrl}carreras/tecnicas`),
+       fetch(`${apiUrl}paises`),
+       fetch(`${apiUrl}estados`),
+     ]);
+ 
+     const data = await Promise.all([
+       secretQuestionsResponse.json(),
+       sexOptionsResponse.json(),
+       clinicOptionsResponse.json(),
+       gradoOptionsResponse.json(),
+       grupoOptionsResponse.json(),
+       trasladoOptionsResponse.json(),
+       trasladoTransporteOptionsResponse.json(),
+       carreraTecnicaOptionsResponse.json(),
+       paisOptionsResponse.json(),
+       estadoOptionsResponse.json(),
+     ]);
+ 
+     setSecretQuestions(data[0]);
+     setSexOptions(data[1]);
+     setClinicOptions(data[2]);
+     setGradoOptions(data[3]);
+     setGrupoOptions(data[4]);
+     setTrasladoOptions(data[5]);
+     setTrasladoTransporteOptions(data[6]);
+     setCarreraTecnicaOptions(data[7].carreras);
+     setPaisOptions(data[8].paises);
+     setEstadoOptions(data[9].estados);
+   } catch (error) {
+     console.error('Error al obtener los datos:', error);
+     toast.error('Error al obtener los datos, por favor intente más tarde.');
+   }
+ };
+ 
 
   const openModal = (alumno: Alumn) => {
     setFormData({
@@ -564,6 +355,21 @@ const loadEstadoOptionsFromIndexedDB = async () => {
     }
   }
 
+  // Crear una función separada para obtener los alumnos
+const fetchAlumnos = async () => {
+ try {
+   const response = await fetch(`${apiUrl}alumno`);
+   if (!response.ok) {
+     throw new Error('Error al obtener los alumnos');
+   }
+   const data = await response.json();
+   setAlumnos(data);
+ } catch (error) {
+   console.error('Error al obtener los alumnos:', error);
+   toast.error('Error al obtener los alumnos desde el servidor.');
+ }
+};
+
   const handleManualAdd = async (e: FormEvent) => {
     e.preventDefault()
 
@@ -583,7 +389,7 @@ const loadEstadoOptionsFromIndexedDB = async () => {
 
       toast.success('Alumno agregado exitosamente')
       closeManualAddModal()
-      fetchAlumnos() // Refrescar la lista de alumnos después de la inserción
+      await fetchAlumnos(); // Refrescar la lista de alumnos después de la inserción
     } catch (err) {
       let errorMessage = 'Error desconocido'
       if (err instanceof Error) {

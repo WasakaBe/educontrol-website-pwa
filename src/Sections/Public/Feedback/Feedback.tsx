@@ -41,7 +41,7 @@ const Feedback: React.FC = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const response = await fetch(`${apiUrl}/view/feedbacks`);
+      const response = await fetch(`${apiUrl}view/feedbacks`);
       if (!response.ok) {
         throw new Error('Error al obtener los feedbacks');
       }

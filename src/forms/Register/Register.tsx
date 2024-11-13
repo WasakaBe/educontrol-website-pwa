@@ -556,7 +556,7 @@ const Register = ({ onClose }: RegisterProps) => {
                   <div className="recaptcha">
                     <ReCAPTCHA
                       ref={captcha}
-                      sitekey="6LfV0X0qAAAAANw_SfLQ9D0coN0ygUSq8WGIJMHx"
+                      sitekey="6LfV0X0qAAAAAOZ2VH07veJkyhZv4VF6-mwTUoeX"
                       onChange={onChangeCaptcha}
                     />
                   </div>

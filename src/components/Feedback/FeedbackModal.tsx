@@ -64,7 +64,9 @@ const Feedback: React.FC<FeedbackModalProps> = ({ isOpen, onRequestClose, idUsua
       <button className="close-button-feedback" onClick={onRequestClose}>Cerrar</button>
       <form className="feedback-form-feedback" onSubmit={handleSubmit}>
         <div className="form-group-feedback">
-          <label htmlFor="emocion_feedback">Selecciona una emoción:</label>
+        <label htmlFor="emocion_feedback">
+    Por favor califique su experiencia utilizando los siguientes emojis y comparta cualquier sugerencia sobre cómo podemos mejorar.
+  </label>
           <div className="emojis-feedback">
             <button
               type="button"

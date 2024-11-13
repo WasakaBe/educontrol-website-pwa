@@ -4,8 +4,6 @@ import './NotificationAlumn.css';
 import { AuthContext } from '../../../Auto/Auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { saveDataOffline, getOfflineData } from '../../../db';
-
 interface Notificacion {
   id_notificacion: number;
   subject_notificacion: string;
@@ -62,25 +60,9 @@ const NotificationAlumn: React.FC = () => {
         const data: Notificacion[] = await response.json();
         setNotificaciones(data);
         setFilteredNotificaciones(data);
-
-        // Guardar las notificaciones en IndexedDB
-        saveDataOffline({
-          key: `notificacionesData-${alumnoId}`,
-          value: JSON.stringify(data),
-          timestamp: Date.now(),
-        });
       } catch (error) {
         console.error('Error al obtener las notificaciones:', error);
         setError((error as Error).message);
-
-        // Intentar cargar las notificaciones desde IndexedDB en caso de error
-        const cachedData = await getOfflineData(`notificacionesData-${alumnoId}`);
-        if (cachedData) {
-          const parsedData = JSON.parse(cachedData.value);
-          setNotificaciones(parsedData);
-          setFilteredNotificaciones(parsedData);
-          console.log('Notificaciones cargadas desde IndexedDB:', cachedData);
-        }
       } finally {
         setLoading(false);
       }

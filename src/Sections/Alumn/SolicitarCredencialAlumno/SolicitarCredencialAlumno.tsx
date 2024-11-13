@@ -5,6 +5,7 @@ import { AuthContext } from '../../../Auto/Auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { saveDataOffline, getOfflineData } from '../../../db';
+import Feedback from '../../../components/Feedback/FeedbackModal';
 
 interface MotivoCredencial {
   id_motivo_credencial: number;
@@ -33,6 +34,7 @@ export default function SolicitarCredencialAlumno() {
 
   const [motivos, setMotivos] = useState<MotivoCredencial[]>([]);
   const [, setAlumno] = useState<Alumno | null>(null);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false); // Estado para controlar el modal de feedback
 
   useEffect(() => {
     if (user) {
@@ -123,6 +125,8 @@ export default function SolicitarCredencialAlumno() {
 
       if (response.ok) {
         toast.success('Mensaje enviado correctamente');
+        // Mostrar el modal de feedback después de un envío exitoso
+        setShowFeedbackModal(true);
       } else {
         const error = await response.json();
         toast.error(error.error);
@@ -130,6 +134,10 @@ export default function SolicitarCredencialAlumno() {
     } catch {
       toast.error('Error al conectar con el servidor');
     }
+  };
+
+  const handleFeedbackClose = () => {
+    setShowFeedbackModal(false);
   };
 
   return (
@@ -172,6 +180,14 @@ export default function SolicitarCredencialAlumno() {
         <button className="solicitar-button" type="submit">Enviar</button>
       </form>
       <ToastContainer />
+
+      {/* Modal para agregar feedback */}
+      <Feedback
+  isOpen={showFeedbackModal}
+  onRequestClose={handleFeedbackClose}
+  idUsuario={user?.id_usuario || 0} // Si user es null, idUsuario será 0
+/>
+
     </div>
   );
 }

@@ -36,13 +36,11 @@ const AdminDashboard: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setFeedbacks(data);
-
         } else {
           console.error('Error fetching feedbacks');
         }
       } catch (error) {
         console.error('Error fetching feedbacks:', error);
-
       }
     };
     fetchFeedbacks();
@@ -112,7 +110,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="admin-container-dashboard">
       <div className="admin-header">
-        <h2>Dashboard Administrador</h2>
+        <h2>Panel de Control del Administrador</h2>
         <p>{formattedTime}</p>
       </div>
       <div className="admin-welcome">
@@ -122,9 +120,12 @@ const AdminDashboard: React.FC = () => {
         <p>Es un gusto tenerte con nosotros. ¡Ánimo!</p>
       </div>
       <div className="admin-feedbacks">
-        <h3>Distribución de Feedbacks por Emoción</h3>
+        <h3>Análisis de Opiniones de los Usuarios sobre el Sitio Web</h3>
+        <p>
+          A continuación, se muestra un análisis detallado de los comentarios recibidos por parte de nuestros usuarios. Este análisis nos ayuda a comprender mejor sus experiencias y a identificar áreas clave de mejora para proporcionar un servicio de mayor calidad.
+        </p>
         {Object.keys(emotionCounts).length === 0 ? (
-          <p>No hay feedbacks disponibles.</p>
+          <p>No se han recibido comentarios de los usuarios hasta el momento.</p>
         ) : (
           <div className="chart-container">
             <Bar data={barChartData} options={barChartOptions} />

@@ -7,7 +7,7 @@ import './InfoAlumnoFamiliar.css';
 import { apiUrl } from '../../../constants/Api';
 import { Alumnos, Notificacion_Alumno, HorarioAlumno } from '../../../constants/interfaces'; // Importar las interfaces
 import { AuthContext } from '../../../Auto/Auth';
-
+import Feedback from '../../../components/Feedback/FeedbackModal';
 Modal.setAppElement('#root'); // Ajusta el selector al contenedor principal de tu aplicación
 
 export default function InfoAlumnoFamiliar() {
@@ -30,6 +30,7 @@ export default function InfoAlumnoFamiliar() {
   const [notificaciones, setNotificaciones] = useState<Notificacion_Alumno[]>([]);
   const [asignaturas, setAsignaturas] = useState<HorarioAlumno[]>([]);
   const [alumnoToDelete, setAlumnoToDelete] = useState<Alumnos | null>(null); // Estado para el alumno a eliminar
+  const [feedbackModalIsOpen, setFeedbackModalIsOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -128,6 +129,7 @@ export default function InfoAlumnoFamiliar() {
 
   const closeNotificacionesModal = () => {
     setNotificacionesModalIsOpen(false);
+    setFeedbackModalIsOpen(true);
   };
 
   const obtenerAsignaturas = async (id_alumno: number) => {
@@ -148,9 +150,13 @@ export default function InfoAlumnoFamiliar() {
     }
   };
 
+  const closeFeedbackModal = () => {
+    setFeedbackModalIsOpen(false);
+  };
 
   const closeHorarioModal = () => {
     setHorarioModalIsOpen(false);
+    setFeedbackModalIsOpen(true);
   };
 
   const confirmDeleteAlumno = (al: Alumnos) => {
@@ -352,6 +358,14 @@ export default function InfoAlumnoFamiliar() {
           </div>
         )}
       </Modal>
+
+
+      {/* Modal para agregar feedback */}
+      <Feedback
+        isOpen={feedbackModalIsOpen}
+        onRequestClose={closeFeedbackModal}
+        idUsuario={user?.id_usuario || 0}
+      />
     </div>
   );
 }

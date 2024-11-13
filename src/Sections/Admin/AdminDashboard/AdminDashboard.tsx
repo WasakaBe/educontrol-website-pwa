@@ -32,7 +32,7 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await fetch(`${apiUrl}/view/feedbacks`);
+        const response = await fetch(`${apiUrl}view/feedbacks`);
         if (response.ok) {
           const data = await response.json();
           setFeedbacks(data);

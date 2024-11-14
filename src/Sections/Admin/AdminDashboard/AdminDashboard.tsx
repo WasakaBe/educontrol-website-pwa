@@ -19,7 +19,6 @@ interface Feedback {
   correo_usuario: string;
   foto_usuario: string | null;
   emocion_feedback: string;
-  motivo_feedback: string;
 }
 
 const AdminDashboard: React.FC = () => {
@@ -32,7 +31,7 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await fetch(`${apiUrl}/view/feedbacks`);
+        const response = await fetch(`${apiUrl}view/feedbacks`);
         if (response.ok) {
           const data = await response.json();
           setFeedbacks(data);
@@ -68,8 +67,18 @@ const AdminDashboard: React.FC = () => {
     return acc;
   }, {} as { [key: string]: number });
 
+  // Definición de los emojis correspondientes a cada emoción
+  const emotionLabelsWithEmojis: { [key: string]: string } = {
+    'satisfecho': '😃',
+    'medio satisfecho': '🙂',
+    'bien': '😐',
+    'mal': '🙁',
+    'peor': '😡',
+  };
+
+  // Preparar las etiquetas con emojis para el gráfico
   const barChartData = {
-    labels: Object.keys(emotionCounts),
+    labels: Object.keys(emotionCounts).map((emotion) => emotionLabelsWithEmojis[emotion] || emotion),
     datasets: [
       {
         label: 'Cantidad de Feedbacks',
@@ -124,12 +133,21 @@ const AdminDashboard: React.FC = () => {
         <p>
           A continuación, se muestra un análisis detallado de los comentarios recibidos por parte de nuestros usuarios. Este análisis nos ayuda a comprender mejor sus experiencias y a identificar áreas clave de mejora para proporcionar un servicio de mayor calidad.
         </p>
+      
         {Object.keys(emotionCounts).length === 0 ? (
           <p>No se han recibido comentarios de los usuarios hasta el momento.</p>
         ) : (
-          <div className="chart-container">
-            <Bar data={barChartData} options={barChartOptions} />
-          </div>
+          <>
+            <div className="chart-container">
+              <Bar data={barChartData} options={barChartOptions} />
+            </div>
+            <div className="feedback-message">
+            <span>Pregunta: </span>
+              <p>
+                Tu opinión es importante para nosotros. ¿Te resultó útil la información que consultaste?
+              </p>
+            </div>
+          </>
         )}
       </div>
     </div>

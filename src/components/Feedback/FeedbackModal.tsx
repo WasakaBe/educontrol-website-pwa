@@ -14,13 +14,12 @@ Modal.setAppElement('#root'); // Configuración para accesibilidad del modal
 
 const Feedback: React.FC<FeedbackModalProps> = ({ isOpen, onRequestClose, idUsuario }) => {
   const [emocionFeedback, setEmocionFeedback] = useState('');
-  const [motivoFeedback, setMotivoFeedback] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!emocionFeedback || !motivoFeedback) {
-      toast.error('Todos los campos son obligatorios');
+    if (!emocionFeedback) {
+      toast.error('Debe seleccionar una emoción');
       return;
     }
 
@@ -33,7 +32,6 @@ const Feedback: React.FC<FeedbackModalProps> = ({ isOpen, onRequestClose, idUsua
         body: JSON.stringify({
           idusuario: idUsuario,
           emocion_feedback: emocionFeedback,
-          motivo_feedback: motivoFeedback,
         })
       });
 
@@ -41,7 +39,6 @@ const Feedback: React.FC<FeedbackModalProps> = ({ isOpen, onRequestClose, idUsua
         toast.success('Feedback enviado correctamente');
         // Limpiar el formulario
         setEmocionFeedback('');
-        setMotivoFeedback('');
         onRequestClose(); // Cerrar el modal después de enviar
       } else {
         const errorData = await response.json();
@@ -55,18 +52,18 @@ const Feedback: React.FC<FeedbackModalProps> = ({ isOpen, onRequestClose, idUsua
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
       contentLabel="Feedback Modal"
       className="feedback-modal-feedback"
       overlayClassName="feedback-modal-overlay-feedback"
+      shouldCloseOnOverlayClick={false} // Evitar que el modal se cierre haciendo clic fuera de él
     >
       <h2>Agregar Feedback</h2>
-      <button className="close-button-feedback" onClick={onRequestClose}>Cerrar</button>
       <form className="feedback-form-feedback" onSubmit={handleSubmit}>
         <div className="form-group-feedback">
-        <label htmlFor="emocion_feedback">
-    Por favor califique su experiencia utilizando los siguientes emojis y comparta cualquier sugerencia sobre cómo podemos mejorar el sitio web.
-  </label>
+          <label htmlFor="emocion_feedback">
+            Tu opinión es importante para nosotros. ¿Te resultó útil la información que consultaste?
+            Selecciona una opción para valorar la información mostrada:
+          </label>
           <div className="emojis-feedback">
             <button
               type="button"
@@ -104,15 +101,6 @@ const Feedback: React.FC<FeedbackModalProps> = ({ isOpen, onRequestClose, idUsua
               😡
             </button>
           </div>
-        </div>
-        <div className="form-group-feedback">
-          <label htmlFor="motivo_feedback">Motivo del Feedback</label>
-          <textarea
-            id="motivo_feedback"
-            value={motivoFeedback}
-            onChange={(e) => setMotivoFeedback(e.target.value)}
-            required
-          />
         </div>
         <button type="submit" className="submit-button-feedback">Enviar Feedback</button>
       </form>

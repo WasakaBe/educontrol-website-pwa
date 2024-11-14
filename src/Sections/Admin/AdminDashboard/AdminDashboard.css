@@ -61,6 +61,14 @@
   margin: 0 auto;
 }
 
+.feedback-message {
+  text-align: center;
+}
+
+.feedback-message span{
+  color:black;
+  font-weight: bold;
+}
 
 @media (max-width: 768px) {
   .chart-container {

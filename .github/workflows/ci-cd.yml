@@ -83,7 +83,7 @@ jobs:
       - name: Run E2E Tests with Cypress
         run: npx cypress run
 
-        #2 evualuacion de rendimiento y pruebas de carga    
+        #2 evualuacion de rendimiento y monitoreo
       - name: Build Project
         run: |
           npm run build
@@ -93,6 +93,7 @@ jobs:
           npx sentry-cli releases files $(git rev-parse --short HEAD) upload-sourcemaps ./dist --validate --rewrite --project javascript-react
           # Finalizar el release
           npx sentry-cli releases finalize $(git rev-parse --short HEAD) --project javascript-react
+      
       
       - name: Install k6
         run: |

@@ -85,27 +85,13 @@ const Feedback: React.FC = () => {
 
   const settings = {
     dots: true,
-    infinite: true, // Carrusel infinito
+    infinite: false, // Desactivar el carrusel infinito para evitar repeticiones
     speed: 500,
-    slidesToShow: 3, // Mostrar 3 slides por vez
+    slidesToShow: 1, // Mostrar solo 1 slide por vez
     slidesToScroll: 1, // Desplazar 1 slide a la vez
     autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-        }
-      }
-    ]
   };
 
   return (
@@ -134,7 +120,6 @@ const Feedback: React.FC = () => {
                     <FontAwesomeIcon key={index} icon={faStar} color="#ffc107" />
                   ))}
                 </div>
-               
               </div>
             </div>
           </div>

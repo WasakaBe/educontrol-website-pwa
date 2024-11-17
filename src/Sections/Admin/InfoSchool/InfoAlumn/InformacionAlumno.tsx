@@ -1,10 +1,9 @@
 import './InfoAlumn.css'
 import './help.css'; 
 import './modal-alumn-manual.css'
-import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react'
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { apiUrl } from '../../../../constants/Api'
 import Modal from 'react-modal'
-import ReCAPTCHA from 'react-google-recaptcha'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { DateTime } from 'luxon'
@@ -123,8 +122,6 @@ const closeUpdateModal = () => {
   const [paisOptions, setPaisOptions] = useState<Pais[]>([])
   const [estadoOptions, setEstadoOptions] = useState<Estado[]>([])
   const [step, setStep] = useState<number>(1)
-  const [captchaValido, cambiarEstado] = useState<boolean | null>(null)
-  const captcha = useRef<ReCAPTCHA>(null)
   const [selectedAlumno, setSelectedAlumno] = useState<Alumn | null>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState<boolean>(false);
   
@@ -305,11 +302,7 @@ const closeUpdateModal = () => {
 
   const handleInsert = async (e: FormEvent) => {
     e.preventDefault()
-    if (!captchaValido) {
-      toast.error('Por favor, completa correctamente el CAPTCHA.')
-      return
-    }
-
+   
     try {
       const response = await fetch(`${apiUrl}usuario/alumno/insert`, {
         method: 'POST',
@@ -437,13 +430,6 @@ const fetchAlumnos = async () => {
   };
   
 
-  const onChangeCaptcha = () => {
-    if (captcha.current && captcha.current.getValue()) {
-      cambiarEstado(true)
-    } else {
-      cambiarEstado(false)
-    }
-  }
 
   const generateToken = () => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -819,13 +805,6 @@ const fetchAlumnos = async () => {
               </div>
 
               
-              <div className="recaptcha-info-alumn">
-                <ReCAPTCHA
-                  ref={captcha}
-                  sitekey="6LdYfJspAAAAAAxTWQY68WAEX6JTgnysv3NxAMzd"
-                  onChange={onChangeCaptcha}
-                />
-              </div>
               <div className="button-group-info-alumn-admin">
                 <button
                   type="button"

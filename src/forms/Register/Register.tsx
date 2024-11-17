@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { DateTime } from 'luxon';
 import './Register.css'; // Importa el archivo CSS
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { apiUrl } from '../../constants/Api';
-import ReCAPTCHA from "react-google-recaptcha";
 
 interface RegisterProps {
   onClose: () => void;
@@ -33,6 +32,8 @@ interface FormData {
   sexo: string;
   preguntaSecreta: string;
   respuestaSecreta: string;
+  captchaInput: string;
+  captchaGenerated: string;
 }
 
 interface SecretQuestion {
@@ -46,6 +47,15 @@ interface SexOption {
 }
 
 const Register = ({ onClose }: RegisterProps) => {
+  const generateCaptcha = () => {
+    const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    let captcha = '';
+    for (let i = 0; i < 5; i++) {
+      captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return captcha;
+  };
+
   const [step, setStep] = useState<number>(2); // Inicializar en el paso 2
   const [formData, setFormData] = useState<FormData>({
     nombre: '',
@@ -70,12 +80,12 @@ const Register = ({ onClose }: RegisterProps) => {
     sexo: '',
     preguntaSecreta: '',
     respuestaSecreta: '',
+    captchaInput: '',
+    captchaGenerated: generateCaptcha(),
   });
   const [secretQuestions, setSecretQuestions] = useState<SecretQuestion[]>([]);
   const [sexOptions, setSexOptions] = useState<SexOption[]>([]);
   const [error, setError] = useState<string>('');
-  const [captchaValido, cambiarEstado] = useState<boolean | null>(null);
-  const captcha = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     fetchSecretQuestions();
@@ -87,8 +97,7 @@ const Register = ({ onClose }: RegisterProps) => {
       const response = await fetch(`${apiUrl}pregunta`);
       const data = await response.json();
       setSecretQuestions(data);
-
-    } catch  {
+    } catch {
       toast.error('Error al obtener las preguntas secretas');
     }
   };
@@ -98,8 +107,7 @@ const Register = ({ onClose }: RegisterProps) => {
       const response = await fetch(`${apiUrl}sexo`);
       const data = await response.json();
       setSexOptions(data);
-
-    } catch{
+    } catch {
       toast.error('Error al obtener las opciones de sexo');
     }
   };
@@ -216,7 +224,6 @@ const Register = ({ onClose }: RegisterProps) => {
         }));
         toast.success('Correo validado');
       }
-
     } catch {
       setFormData((prevData) => ({
         ...prevData,
@@ -263,7 +270,7 @@ const Register = ({ onClose }: RegisterProps) => {
   };
 
   const validateSection2 = () => {
-    const { correo, pwd, preguntaSecreta, respuestaSecreta } = formData;
+    const { correo, pwd, preguntaSecreta, respuestaSecreta, captchaInput, captchaGenerated } = formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -277,6 +284,10 @@ const Register = ({ onClose }: RegisterProps) => {
     }
     if (!preguntaSecreta || !respuestaSecreta) {
       toast.error('Todos los campos son obligatorios');
+      return false;
+    }
+    if (captchaInput !== captchaGenerated) {
+      toast.error('El captcha ingresado es incorrecto');
       return false;
     }
     setError('');
@@ -297,16 +308,6 @@ const Register = ({ onClose }: RegisterProps) => {
     }
     setError('');
     return true;
-  };
-
-  const onChangeCaptcha = () => {
-    if (captcha.current && captcha.current.getValue()) {
-      console.log("No eres un robot");
-      cambiarEstado(true);
-    } else {
-      console.log("Realiza el captcha correctamente");
-      cambiarEstado(false);
-    }
   };
 
   const handleNextStep = () => {
@@ -342,8 +343,8 @@ const Register = ({ onClose }: RegisterProps) => {
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-    if (!validateSection3() || !captchaValido) {
-      toast.error('Por favor, completa todos los campos y realiza correctamente el CAPTCHA.');
+    if (!validateSection3()) {
+      toast.error('Por favor, completa todos los campos correctamente.');
       return;
     }
 
@@ -380,7 +381,7 @@ const Register = ({ onClose }: RegisterProps) => {
       } else {
         toast.error(data.message || 'Error al crear el usuario');
       }
-    } catch  {
+    } catch {
       toast.error('Error al conectar con el servidor');
     }
   };
@@ -511,6 +512,29 @@ const Register = ({ onClose }: RegisterProps) => {
                       required
                     />
                   </div>
+                  <div className="register-input-container">
+                    <label htmlFor="captchaInput">Captcha</label>
+                    <div className="captcha-display" style={{
+                      fontFamily: 'cursive',
+                      fontSize: '32px',
+                      fontWeight: 'bold',
+                      letterSpacing: '3px',
+                      color: '#000000',
+                      backgroundColor: '#F8E8A0',
+                      padding: '10px',
+                      borderRadius: '8px',
+                      display: 'inline-block'
+                    }}>{formData.captchaGenerated}</div>
+                    <input
+                      type="text"
+                      id="captchaInput"
+                      name="captchaInput"
+                      placeholder="Ingrese el texto mostrado"
+                      value={formData.captchaInput}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
                   {error && <p className="register-error-text">{error}</p>}
                   <div className="button-group">
                     <button className="previous-button" onClick={handlePreviousStep}>Anterior</button>
@@ -552,13 +576,6 @@ const Register = ({ onClose }: RegisterProps) => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                  <div className="recaptcha">
-                    <ReCAPTCHA
-                      ref={captcha}
-                      sitekey="6LfV0X0qAAAAAOZ2VH07veJkyhZv4VF6-mwTUoeX"
-                      onChange={onChangeCaptcha}
-                    />
                   </div>
                   {error && <p className="register-error-text">{error}</p>}
                   <div className="button-group">

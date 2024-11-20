@@ -298,6 +298,15 @@
   outline: none;
 }
 
+.download-button{
+  background-color: gray;
+  padding: 10px 12px;
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
 /* Estilo responsive adaptado desde 1000px hasta 120px */
 @media (max-width: 1000px) {
   .container-horario-docente th,

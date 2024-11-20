@@ -1,1 +1,1 @@
-export const apiUrl: string = "https://educontrolbackend-1.onrender.com/api/";
+export const apiUrl = import.meta.env.VITE_API_URL;

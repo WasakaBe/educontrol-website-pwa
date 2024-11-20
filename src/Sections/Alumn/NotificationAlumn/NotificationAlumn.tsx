@@ -34,7 +34,7 @@ const NotificationAlumn: React.FC = () => {
       }
 
       try {
-        const response = await fetch(`${apiUrl}/alumno/usuario/${authContext.user.id_usuario}`);
+        const response = await fetch(`${apiUrl}alumno/usuario/${authContext.user.id_usuario}`);
         if (!response.ok) {
           throw new Error('Error al obtener el ID del alumno');
         }
@@ -58,7 +58,7 @@ const NotificationAlumn: React.FC = () => {
       if (!alumnoId) return;
 
       try {
-        const response = await fetch(`${apiUrl}/notificaciones/${alumnoId}`);
+        const response = await fetch(`${apiUrl}notificaciones/${alumnoId}`);
         if (!response.ok) {
           throw new Error('Error al obtener las notificaciones');
         }

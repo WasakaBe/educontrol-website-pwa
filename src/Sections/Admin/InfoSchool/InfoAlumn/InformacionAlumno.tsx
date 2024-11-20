@@ -184,7 +184,7 @@ const closeUpdateModal = () => {
      setEstadoOptions(data[9].estados);
    } catch (error) {
      console.error('Error al obtener los datos:', error);
-     toast.error('Error al obtener los datos, por favor intente más tarde.');
+     console.error('Error al obtener los datos, por favor intente más tarde.');
    }
  };
  

@@ -113,7 +113,7 @@ export default function SolicitarCredencialAlumno() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch(`${apiUrl}mensaje_motivo_credencial/insert`, {
         method: 'POST',
@@ -122,11 +122,23 @@ export default function SolicitarCredencialAlumno() {
         },
         body: JSON.stringify(formData)
       });
-
+  
       if (response.ok) {
         toast.success('Mensaje enviado correctamente');
-        // Mostrar el modal de feedback después de un envío exitoso
-        setShowFeedbackModal(true);
+  
+        // Verificar si el modal de feedback puede mostrarse solo si user no es null
+        if (user) {
+          const feedbackResponse = await fetch(`${apiUrl}can-show-feedback/${user.id_usuario}`);
+          const feedbackResult = await feedbackResponse.json();
+  
+          if (feedbackResult.canShowFeedback) {
+            setShowFeedbackModal(true); // Mostrar el modal solo si la API lo permite
+          } else {
+            toast.info(feedbackResult.message); // Mostrar mensaje si no es posible enviar feedback
+          }
+        } else {
+          toast.error('El usuario no está autenticado.');
+        }
       } else {
         const error = await response.json();
         toast.error(error.error);
@@ -135,6 +147,7 @@ export default function SolicitarCredencialAlumno() {
       toast.error('Error al conectar con el servidor');
     }
   };
+  
 
   const handleFeedbackClose = () => {
     setShowFeedbackModal(false);
@@ -183,11 +196,10 @@ export default function SolicitarCredencialAlumno() {
 
       {/* Modal para agregar feedback */}
       <Feedback
-  isOpen={showFeedbackModal}
-  onRequestClose={handleFeedbackClose}
-  idUsuario={user?.id_usuario || 0} // Si user es null, idUsuario será 0
-/>
-
+        isOpen={showFeedbackModal}
+        onRequestClose={handleFeedbackClose}
+        idUsuario={user?.id_usuario || 0} // Si user es null, idUsuario será 0
+      />
     </div>
   );
 }

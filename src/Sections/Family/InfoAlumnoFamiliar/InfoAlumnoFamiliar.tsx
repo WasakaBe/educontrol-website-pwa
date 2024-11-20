@@ -9,7 +9,7 @@ import { Alumnos, Notificacion_Alumno, HorarioAlumno } from '../../../constants/
 import { AuthContext } from '../../../Auto/Auth';
 import Feedback from '../../../components/Feedback/FeedbackModal';
 Modal.setAppElement('#root'); // Ajusta el selector al contenedor principal de tu aplicación
-
+import { toast,ToastContainer } from 'react-toastify';
 export default function InfoAlumnoFamiliar() {
   const authContext = useContext(AuthContext);
 
@@ -69,6 +69,26 @@ export default function InfoAlumnoFamiliar() {
     }
   };
 
+  const openFeedbackModal = async () => {
+    if (!user) {
+      toast.error('El usuario no está autenticado.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}can-show-feedback/${user.id_usuario}`);
+      const result = await response.json();
+
+      if (result.canShowFeedback) {
+        setFeedbackModalIsOpen(true); // Abrir el modal de feedback
+      } else {
+        toast.info(result.message); // Mostrar mensaje si el feedback no puede enviarse
+      }
+    } catch  {
+      toast.error('Error al verificar si se puede mostrar el feedback.');
+    }
+  };
+
   const closeModal = () => {
     setModalIsOpen(false);
   };
@@ -91,6 +111,7 @@ export default function InfoAlumnoFamiliar() {
         }
         setAlumnosAgregados([...alumnosAgregados, alumno]);
         closeModal();
+        openFeedbackModal();
       })
       .catch(error => console.error('Error al agregar alumno:', error));
     }
@@ -129,26 +150,56 @@ export default function InfoAlumnoFamiliar() {
 
   const closeNotificacionesModal = () => {
     setNotificacionesModalIsOpen(false);
-    setFeedbackModalIsOpen(true);
+    openFeedbackModal();
   };
 
   const obtenerAsignaturas = async (id_alumno: number) => {
     try {
       const response = await fetch(`${apiUrl}asignatura/horario/escolar/${id_alumno}`);
+      
       if (!response.ok) {
-        throw new Error('No se encontraron asignaturas');
+        if (response.status === 404) {
+          // Caso específico para 404: Recurso no encontrado
+          toast.error('Este alumno no cuenta aún con horarios escolares.');
+          console.log('Este alumno no cuenta aún con horarios escolares.');
+          return;
+        }
+        // Manejo genérico para otros errores
+        throw new Error(`Error ${response.status}: No se pudo obtener información del horario.`);
       }
+  
       const data = await response.json();
+  
+      // Validar si la respuesta contiene asignaturas
+      if (!data.asignaturas || data.asignaturas.length === 0) {
+        toast.info('Este alumno no cuenta aún con horarios escolares.');
+        return;
+      }
+  
       setAsignaturas(data.asignaturas);
-
-
-      setHorarioModalIsOpen(true);
+      setHorarioModalIsOpen(true); // Abrir el modal de horario
+  
+      // Verificar si se puede mostrar el feedback
+      if (user) {
+        const feedbackResponse = await fetch(`${apiUrl}can-show-feedback/${user.id_usuario}`);
+        const feedbackResult = await feedbackResponse.json();
+  
+        if (feedbackResult.canShowFeedback) {
+          setFeedbackModalIsOpen(true); // Mostrar el modal de feedback si la API lo permite
+        } else {
+          toast.info(feedbackResult.message); // Mostrar mensaje si el feedback no puede enviarse
+          console.log(feedbackResult.message); // Mostrar mensaje si el feedback no puede enviarse
+        }
+      } else {
+        toast.error('El usuario no está autenticado.');
+      }
     } catch (error) {
+      // Manejar errores genéricos
       console.error('Error al obtener asignaturas:', error);
-
-      setHorarioModalIsOpen(true);
+      toast.error('Ocurrió un error al obtener las asignaturas.');
     }
   };
+  
 
   const closeFeedbackModal = () => {
     setFeedbackModalIsOpen(false);
@@ -156,7 +207,6 @@ export default function InfoAlumnoFamiliar() {
 
   const closeHorarioModal = () => {
     setHorarioModalIsOpen(false);
-    setFeedbackModalIsOpen(true);
   };
 
   const confirmDeleteAlumno = (al: Alumnos) => {
@@ -366,6 +416,9 @@ export default function InfoAlumnoFamiliar() {
         onRequestClose={closeFeedbackModal}
         idUsuario={user?.id_usuario || 0}
       />
+
+
+      <ToastContainer/>
     </div>
   );
 }

@@ -40,6 +40,68 @@ const HorarioDocente: React.FC = () => {
   }>({})
   const alumnosPerPage = 5
 
+  const generateAlumnosPdf = (horario: Horario | null, alumnos: Alumno[]) => {
+    if (!horario) {
+      toast.error("No se ha seleccionado un horario.");
+      return;
+    }
+  
+    const doc = new jsPDF();
+    const tableColumn = ["Nombre Completo", "Número de Control"];
+    const tableRows: string[][] = [];
+  
+    alumnos.forEach((alumno) => {
+      const alumnoData = [
+        `${alumno.nombre_alumnos} ${alumno.app_alumnos} ${alumno.apm_alumnos}`,
+        alumno.nocontrol_alumnos,
+      ];
+      tableRows.push(alumnoData);
+    });
+  
+    const { nombre_asignatura, nombre_docente, nombre_grado, nombre_grupo, nombre_carrera_tecnica } =
+      horario;
+  
+    doc.setFillColor(0, 118, 0);
+    doc.rect(0, 0, 210, 20, "F");
+  
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text("LISTA DE ALUMNOS", 105, 12, { align: "center" });
+  
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+  
+    let yOffset = 30;
+    const lineSpacing = 10;
+  
+    doc.text(`Asignatura: ${nombre_asignatura}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Docente: ${nombre_docente}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Grado: ${nombre_grado}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Grupo: ${nombre_grupo}`, 14, yOffset);
+    yOffset += lineSpacing;
+    doc.text(`Carrera Técnica: ${nombre_carrera_tecnica}`, 14, yOffset);
+  
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: yOffset + 12,
+      styles: {
+        fontSize: 10,
+      },
+      headStyles: {
+        fillColor: [0, 118, 0],
+        textColor: [255, 255, 255],
+      },
+    });
+  
+    const pdfFileName = `lista_alumnos_horario_${horario.id_horario}.pdf`;
+    doc.save(pdfFileName);
+  };
+  
+
   useEffect(() => {
     const fetchHorarios = async () => {
       if (user) {
@@ -507,6 +569,15 @@ const HorarioDocente: React.FC = () => {
         <button className="save-button" type="button" onClick={openAddModal}>
           Agregar Alumno
         </button>
+        {alumnos.length > 0 && (
+    <button
+      className="download-button"
+      type="button"
+      onClick={() => generateAlumnosPdf(selectedHorario, alumnos)}
+    >
+      Descargar PDF alumnos del horario
+    </button>
+  )}
       </Modal>
 
       <Modal
